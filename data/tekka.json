@@ -1,0 +1,439 @@
+[
+    {
+        "code": "ITKA2004",
+        "title": "Tietokannat ja tiedonhallinta",
+        "prerequisites": [],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Aineopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "ITKA201",
+        "title": "Algoritmit 1",
+        "prerequisites": [
+            "ITKP102",
+            "ITKA2004"
+        ],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Aineopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "ITKA2030",
+        "title": "K\u00e4ytt\u00f6j\u00e4rjestelmien ja pilvipalveluiden perusteet",
+        "prerequisites": [
+            "ITKP102"
+        ],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Aineopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "ITKP0008",
+        "title": "Kvanttilaskennan aakkoset - osa A",
+        "prerequisites": [],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Perusopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "ITKP1010",
+        "title": "Digitaalisen osaamisen perusteet",
+        "prerequisites": [],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Perusopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "ITKP1011",
+        "title": "Web-julkaiseminen",
+        "prerequisites": [
+            "ITKP1010"
+        ],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Perusopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "ITKP102",
+        "title": "Ohjelmointi 1",
+        "prerequisites": [],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Perusopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": [1]
+    },
+    {
+        "code": "ITKP104",
+        "title": "Tietoverkot",
+        "prerequisites": [
+            "ITKP101",
+            "ITKP102",
+            "ITKP1010"
+        ],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Perusopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "MATA2520",
+        "title": "Joukko-oppi ja graafiteoria",
+        "prerequisites": [
+            "MATA2700"
+        ],
+        "department": "Matematiikan ja tilastotieteen laitos",
+        "level": "Aineopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "MATA2600",
+        "title": "Todenn\u00e4k\u00f6isyysmatematiikka",
+        "prerequisites": [],
+        "department": "Matematiikan ja tilastotieteen laitos",
+        "level": "Aineopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "MATA2700",
+        "title": "Todistamisen ja p\u00e4\u00e4ttelyn perusteet tekniikan alalle",
+        "prerequisites": [
+            "MATP1700"
+        ],
+        "department": "Matematiikan ja tilastotieteen laitos",
+        "level": "Aineopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "MATA2710",
+        "title": "Lineaarialgebra ja derivointi tekniikan alalla",
+        "prerequisites": [
+            "MATP1700"
+        ],
+        "department": "Matematiikan ja tilastotieteen laitos",
+        "level": "Aineopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "MATA280",
+        "title": "Stokastiikan perusteet",
+        "prerequisites": [
+            "MATP213",
+            "MATA172"
+        ],
+        "department": "Matematiikan ja tilastotieteen laitos",
+        "level": "Aineopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "MATP121",
+        "title": "Lineaarinen algebra ja geometria 1",
+        "prerequisites": [
+            "MATP100"
+        ],
+        "department": "Matematiikan ja tilastotieteen laitos",
+        "level": "Perusopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "MATP1700",
+        "title": "Tekniikan alan matematiikan valmistava kurssi",
+        "prerequisites": [],
+        "department": "Matematiikan ja tilastotieteen laitos",
+        "level": "Perusopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "MATP211",
+        "title": "Calculus 1",
+        "prerequisites": [],
+        "department": "Matematiikan ja tilastotieteen laitos",
+        "level": "Perusopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "MATP212",
+        "title": "Calculus 2",
+        "prerequisites": [
+            "MATP211"
+        ],
+        "department": "Matematiikan ja tilastotieteen laitos",
+        "level": "Perusopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "MATP213",
+        "title": "Calculus 3",
+        "prerequisites": [
+            "MATP212"
+        ],
+        "department": "Matematiikan ja tilastotieteen laitos",
+        "level": "Perusopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "TEKA3003",
+        "title": "Ohjelmistotuotanto",
+        "prerequisites": [],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Aineopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "TEKP1110",
+        "title": "Yritys ja toimintaymp\u00e4rist\u00f6",
+        "prerequisites": [],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Perusopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "TIEA1130",
+        "title": "Oliosuuntautunut suunnittelu ja ohjelmointi",
+        "prerequisites": [
+            "ITKP102"
+        ],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Aineopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "TIEA2048",
+        "title": "Tietokoneen rakenne ja arkkitehtuuri 2",
+        "prerequisites": [
+            "TIEP114",
+            "ITKP102",
+            "TIEP111",
+            "ITKA203"
+        ],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Aineopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "TIEA2120",
+        "title": "Web-k\u00e4ytt\u00f6liittymien ohjelmointi",
+        "prerequisites": [],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Aineopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "TIEA301",
+        "title": "Kandidaattiseminaari",
+        "prerequisites": [],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Aineopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": [9, 10, 11, 12]
+    },
+    {
+        "code": "TIEA302",
+        "title": "Kandidaatintutkielma",
+        "prerequisites": [
+            "TIEA301"
+        ],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Aineopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": [9, 10, 11, 12]
+    },
+    {
+        "code": "TIEA303",
+        "title": "Kypsyysn\u00e4yte",
+        "prerequisites": [
+            "TIEA301"
+        ],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Aineopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": [9, 10, 11, 12]
+    },
+    {
+        "code": "TIEA304",
+        "title": "Harjoittelu",
+        "prerequisites": [],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Aineopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "TIEA341",
+        "title": "Funktio-ohjelmointi",
+        "prerequisites": [],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Aineopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "TIEA3810",
+        "title": "Sovellettu predikaattilogiikka",
+        "prerequisites": [],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Aineopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "TIEP111",
+        "title": "Ohjelmointi 2",
+        "prerequisites": [
+            "ITKP102"
+        ],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Perusopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": [3]
+    },
+    {
+        "code": "TIEP112",
+        "title": "Ohjelmointi 2, C++",
+        "prerequisites": [
+            "TIEP111"
+        ],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Perusopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "TIEP114",
+        "title": "Tietokoneen rakenne ja arkkitehtuuri",
+        "prerequisites": [],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Perusopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "TIEP115",
+        "title": "Johdatus tietotekniikkaan",
+        "prerequisites": [],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Perusopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": [1]
+    },
+    {
+        "code": "TIEP1200",
+        "title": "Teko\u00e4lyn alkeet",
+        "prerequisites": [],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Perusopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "TIEP1300",
+        "title": "Python ohjelmointi",
+        "prerequisites": [],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Perusopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": [2]
+    },
+    {
+        "code": "TILP2400",
+        "title": "Datan esitt\u00e4minen ja analysointi",
+        "prerequisites": [],
+        "department": "Matematiikan ja tilastotieteen laitos",
+        "level": "Perusopinnot",
+        "credits": 5,
+        "outcomes": [],
+        "years": [],
+        "period": []
+    }
+]
