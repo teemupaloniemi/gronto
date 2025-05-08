@@ -17,17 +17,33 @@
   (display "(<= sem_") (display course-code) (display " ") (display max-sem) (display ")))")
   (newline))
 
+(define (assert-sem-exact course-code period)
+  (display "(= sem_") (display course-code) (display " ") (display period) (display ")")
+  (newline))
+
 ;; Declare one course.
-(define (decl-sem-var course-code min-sem max-sem)
+(define (decl-sem-var-all course-code min-sem max-sem)
     (declare-int course-code)
     (assert-sem-range course-code min-sem max-sem))
+
+;; Make exact requirement for one of given periods.
+(define (decl-sem-var-specific course-code period)
+    (declare-int course-code)
+    (display "(assert (or ")
+    (map (lambda (p)
+                 (assert-sem-exact course-code p))
+         period)
+    (display "))")
+    (newline))
 
 ;; Declare multiple courses.
 (define (decl-sem-vars courses semester-range)
   (let ((min-sem (car semester-range))
         (max-sem (car (reverse semester-range))))
     (map (lambda (c)
-                 (decl-sem-var (value 'code c) min-sem max-sem))
+                 (if (not (eq? (value 'period c) '()))
+                   (decl-sem-var-specific (value 'code c) (value 'period c) )
+                   (decl-sem-var-all (value 'code c) min-sem max-sem)))
          courses)))
 
 ;; Create one prerequisite constraint.
@@ -145,4 +161,18 @@
                  180   ;; min-tot-cred
                  10000 ;; max-tot-cred
                  2     ;; min-sem-cred
-                 20)   ;; max-sem-cred
+                 15)   ;; max-sem-cred
+
+
+
+
+
+
+
+
+
+
+
+
+
+
