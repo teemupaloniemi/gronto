@@ -49,23 +49,37 @@
 
 (define (preq course preq)
   (display "    ") (display preq) (display " -> ") (display course) (newline))
-
 (define (preqs-one course)
   (map (lambda (p)
                (preq (value 'code course) p))
        (value 'prerequisites course)))
-
 (define (preqs-all courses)
   (map preqs-one courses))
 
+(define (year-subgraph year sem-pairs courses)
+  (let ((sem-start (+ 1 (* year 4)))
+        (sem-end (min (+ 4 (* year 4)) (max-pairs sem-pairs))))
+    (display "    subgraph cluster_year") (display (+ year 1)) (display " {") (newline)
+    (display "        label=\"Year ") (display (+ year 1)) (display "\";") (newline)
+    (display "        style=filled; color=lightgreen;") (newline)
+    (for-each
+     (lambda (sem)
+             (subgraph sem sem-pairs courses))
+     (build-list (- (+ 1 sem-end) sem-start)
+                 (lambda (i) (+ sem-start i))))
+    (display "    }") (newline)))
+
 (define (gen-dot courses sem-pairs)
   (let ((max-sem (max-pairs sem-pairs)))
+    (define (num-years max-sem)
+      (ceiling (/ max-sem 4)))
     (display "digraph Curriculum {") (newline)
     (display "    rankdir=TB") (newline)
     (display "    node [shape=box style=filled fillcolor=lightblue]") (newline)
-    (map (lambda (s)
-                 (subgraph s sem-pairs courses))
-         (range max-sem))
+    (map (lambda (y)
+                 (year-subgraph y sem-pairs courses))
+         (map (lambda (x) (- x 1))
+              (range (num-years max-sem))))
     (map (lambda (s)
                  (anchor-subgraph s))
          (range (- max-sem 1)))
@@ -79,5 +93,5 @@
       (error-message)
       (gen-dot courses sem-pairs)))
 
-(safe-gen-dot (json-read "data/tekka.json") (parse-smt-model "tmp-files/z3.txt"))
+(safe-gen-dot (json-read "data/tekka.json") (parse-smt-model "tmp/z3.txt"))
 

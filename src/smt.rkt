@@ -162,17 +162,3 @@
                  10000 ;; max-tot-cred
                  2     ;; min-sem-cred
                  15)   ;; max-sem-cred
-
-
-
-
-
-
-
-
-
-
-
-
-
-
