@@ -18,41 +18,41 @@
   (newline))
 
 ;; Declare one course.
-(define (decl-sem-var course-code
-                      min-sem
-                      max-sem)
+(define (decl-sem-var course-code min-sem max-sem)
     (declare-int course-code)
     (assert-sem-range course-code min-sem max-sem))
 
 ;; Declare multiple courses.
-(define (decl-sem-vars courses
-                       semester-range)
+(define (decl-sem-vars courses semester-range)
   (let ((min-sem (car semester-range))
         (max-sem (car (reverse semester-range))))
     (map (lambda (c)
                  (decl-sem-var (value 'code c) min-sem max-sem))
          courses)))
 
-;; Force prerequisite codes
+;; Create one prerequisite constraint.
+(define (preq-constr-one course-code preq-code)
+  (display "(assert (> sem_") (display course-code)
+            (display " sem_") (display preq-code)
+  (display "))") (newline))
+
+;; Create all prerequisite constraints.
 (define (preq-constr courses)
-  (display "; Prerequisite constrainsts")                     (newline)
-  (display (value 'code (search-by-code courses "ITKA2004"))) (newline))
+  (map (lambda (c)
+               (map (lambda (p)
+                            (preq-constr-one (value 'code c) p))
+                    (value 'prerequisites c)))
+       courses))
 
 ;; Give semester credit constrains
-(define (cred-constr courses
-                     semester-range
-                     max-cred-sem
-                     min-cred-sem)
+(define (cred-constr courses semester-range max-cred-sem min-cred-sem)
   (display "; Credit constraints (semester)") (newline)
   (display semester-range)                    (newline)
   (display max-cred-sem)                      (newline)
   (display min-cred-sem)                      (newline))
 
 ;; Give total credit constrains
-(define (tot-cred-constr courses
-                         semester-range
-                         max-tot-cred
-                         min-tot-cred)
+(define (tot-cred-constr courses semester-range max-tot-cred min-tot-cred)
   (display "; Credit constraints (total)") (newline)
   (display semester-range)                 (newline)
   (display max-tot-cred)                   (newline)
@@ -67,7 +67,6 @@
                          max-tot-cred
                          min-cred-sem
                          max-cred-sem)
-
   (let* ((total-semesters (* years sem-per-year))
          (semester-range  (range total-semesters))
          (courses         (json-read courses-path)))
