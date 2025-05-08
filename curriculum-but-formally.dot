@@ -1,0 +1,572 @@
+/// These are Sampsa Kiiskinen's notes
+/// from the curriculum development days
+/// that were organized from 2024-06-05 to 2024-06-06.
+
+digraph dependencies {
+  /// We shall build our model around
+  /// the finite network (or finite directed graph) data structure.
+  /// If you do not care about finer details,
+  /// you may skip any subsequent paragraph that begins with "formally",
+  /// and simply feed this file into GraphViz.
+  /// This file is a small example
+  /// of a result it itself describes how to produce.
+  ///
+  /// Formally, given the types for source nodes, target nodes,
+  /// source node labels, target node labels and edge labels
+  ///
+  ///     Source : 𝒰,
+  ///     Target : 𝒰,
+  ///     SourceLabel : 𝒰,
+  ///     TargetLabel : 𝒰 and
+  ///     EdgeLabel : 𝒰,
+  ///
+  /// a finite network is an inhabitant of the type
+  ///
+  ///     FinNet (Source, Target,
+  ///             SourceLabel, TargetLabel, EdgeLabel) : 𝒰
+  ///
+  /// with the projections
+  ///
+  ///     sources : FinNet (Source, Target,
+  ///                       SourceLabel, TargetLabel, EdgeLabel) →
+  ///               FinMap (Source, SourceLabel),
+  ///
+  ///     targets : FinNet (Source, Target,
+  ///                       SourceLabel, TargetLabel, EdgeLabel) →
+  ///               FinMap (Target, TargetLabel) and
+  ///
+  ///     arrows : FinNet (Source, Target,
+  ///                      SourceLabel, TargetLabel, EdgeLabel) →
+  ///              FinMap (Source × Target, EdgeLabel).
+  ///
+  /// Note that this definition implies
+  /// that edges are uniquely determined by their endpoints,
+  /// but you can still represent parallel edges
+  /// by using nonempty finite sets as edge labels.
+  /// We also stratify sources and targets,
+  /// so that we can represent morphisms
+  /// between different networks as networks themselves.
+  /// If sources and targets happen to coincide,
+  /// so that we only have the types for nodes and node labels
+  ///
+  ///     Node : 𝒰 and
+  ///     NodeLabel : 𝒰
+  ///
+  /// and a way to combine node labels in the sense of some
+  ///
+  ///     semigroup : Semigrp (NodeLabel),
+  ///
+  /// it is easier to work with just
+  ///
+  ///     FinNet' (Node, NodeLabel, EdgeLabel) : 𝒰
+  ///     FinNet' (Node, NodeLabel, EdgeLabel) ≡
+  ///       FinNet (Node, Node, NodeLabel, NodeLabel, EdgeLabel).
+  ///
+  /// In this case, we can derive the simpler projections
+  ///
+  ///     nodes : FinNet' (Node, NodeLabel, EdgeLabel) →
+  ///             FinMap (Node, NodeLabel)
+  ///     nodes (a) ≡ union (operation (semigroup),
+  ///                        sources (a), targets (a)) and
+  ///
+  ///     edges : FinNet' (Node, NodeLabel, EdgeLabel) →
+  ///             FinMap (Node × Node, EdgeLabel)
+  ///     edges (a) ≡ arrows (a).
+  ///
+  /// It is also customary to define
+  ///
+  ///     sources' : FinNet (Source, Target,
+  ///                        SourceLabel, TargetLabel, EdgeLabel) →
+  ///                FinSet (Source)
+  ///     sources' (a) ≡ keys (sources (a)),
+  ///
+  ///     targets' : FinNet (Source, Target,
+  ///                        SourceLabel, TargetLabel, EdgeLabel) →
+  ///                FinSet (Target)
+  ///     targets' (a) ≡ keys (targets (a)),
+  ///
+  ///     arrows' : FinNet (Source, Target,
+  ///                       SourceLabel, TargetLabel, EdgeLabel) →
+  ///               FinSet (Source × Target)
+  ///     arrows' (a) ≡ keys (arrows (a)),
+  ///
+  ///     nodes' : FinNet' (Node, NodeLabel, EdgeLabel) → FinSet (Node)
+  ///     nodes' (a) ≡ keys (sources (a)) ∪ keys (targets (a)) and
+  ///
+  ///     edges' : FinNet' (Node, NodeLabel, EdgeLabel) → FinSet (Node × Node)
+  ///     edges' (a) ≡ keys (edges (a)).
+  ///
+  /// This treatise of finite networks should suffice for now.
+  ///
+  /// Let there be a finite network of courses (or units or classes).
+  /// The nodes of this network are course codes and
+  /// its node labels are pairs of course names and credits.
+  /// This network must be edgeless,
+  /// giving it the structure of a finite set.
+  ///
+  /// Formally, we have
+  ///
+  ///     courses : FinNet' (Code, Name × Credits, 𝟘)
+  ///
+  /// with the (free) property
+  ///
+  ///     discrete : empty (arrows' (courses)).
+  ///
+  /// The motivation for having a silly network like this
+  /// is to later give it more structure through an embedding.
+
+  edge [style = solid]
+
+  subgraph cluster_courses {
+    graph [label = "Kurssit"]
+
+    ITKA203 [label = "\N\nKäyttöjärjestelmät (5 op)"]
+    ITKP101 [label = "\N\nTietokone ja tietoverkot työvälineenä (2 op)"]
+    ITKP102 [label = "\N\nOhjelmointi 1 (6 op)"]
+    TIEP114 [label = "\N\nTietokoneen rakenne ja arkkitehtuuri (1–5 op)"]
+  }
+
+  /// Let there be a finite network of domains (or subjects or concepts).
+  /// The nodes of this network are arbitrary keywords,
+  /// its node labels are things that can be learned and
+  /// its edges are hierarchical relations
+  /// from less specific to more specific.
+  /// This network must be rooted and acyclic,
+  /// giving it the structure of a strictly partially ordered set.
+  ///
+  /// Formally, we have
+  ///
+  ///     domains : FinNet' (Keyword, Description, 𝟙)
+  ///
+  /// with the properties
+  ///
+  ///     initial : exists (i ↦ forall (j ↦ i ≠ j →
+  ///                                       ¬ empty (trails (domains, i, j),
+  ///                                   nodes' (domains))),
+  ///                       nodes' (domains)) and
+  ///
+  ///     loopfree : forall (i ↦ empty (trails (domains, i, i)),
+  ///                        nodes' (domains)).
+  ///
+  /// These properties are written in terms of trails,
+  /// because we want to keep them decidable,
+  /// but they also apply to paths and walks.
+  /// As a reminder, the conventional terminology is the following.
+  ///
+  /// | Term     | Vertex Repetitions | Edge Repetitions
+  /// |----------|--------------------|------------------
+  /// | Trail    | Allowed            | Disallowed
+  /// | Walk     | Allowed            | Allowed
+  /// | Path     | Disallowed         | Disallowed
+  /// | Nonsense | Disallowed         | Allowed
+  ///
+
+  subgraph cluster_domains {
+    graph [label = "Aiheet"]
+
+    algorithms [label = "Algoritmit"]
+    assembly [label = "Assembly"]
+    boolean_logic [label = "Boolen logiikka"]
+    c [label = "C"]
+    c_plus_plus [label = "C++"]
+    c_sharp [label = "C#"]
+    combinatory_logic [label = "Kombinatorinen logiikka"]
+    concurrency [label = "Rinnakkaisuus"]
+    content_creation [label = "Sisällön tuottaminen"]
+    data_structures [label = "Tietorakenteet"]
+    digital_circuits [label = "Digitaaliset piirit"]
+    domain [label = "Asia"]
+    file_management [label = "Tiedostojen hallinta"]
+    file_systems [label = "Tiedostojärjestelmät"]
+    hardware [label = "Laitteisto"]
+    image_editing [label = "Kuvankäsittely"]
+    information_security [label = "Tietoturva"]
+    java [label = "Java"]
+    knowledge [label = "Tieto"]
+    linux [label = "Linux"]
+    logic [label = "Logiikka"]
+    machine_language [label = "Konekieli"]
+    memory [label = "Muisti"]
+    object_oriented_programming [label = "Olio-ohjelmointi"]
+    office_software [label = "Toimisto-ohjelmistot"]
+    operating_systems [label = "Käyttöjärjestelmät"]
+    parallelism [label = "Yhtäaikaisuus"]
+    peripherals [label = "Oheislaitteet"]
+    posix [label = "POSIX"]
+    processors [label = "Prosessorit"]
+    programming [label = "Ohjelmointi"]
+    shell [label = "Shell"]
+    skill [label = "Taito"]
+    standards [label = "Standardit"]
+    structured_programming [label = "Rakenteinen ohjelmointi"]
+    text_editing [label = "Tekstinkäsittely"]
+    type_theory [label = "Tyyppiteoria"]
+    web_publishing [label = "Web-julkaiseminen"]
+    windows [label = "Windows"]
+  }
+
+  subgraph domains {
+    edge [style = solid]
+
+    content_creation -> image_editing
+    content_creation -> programming
+    content_creation -> text_editing
+    content_creation -> web_publishing
+    domain -> knowledge
+    domain -> skill
+    file_systems -> file_management
+    hardware -> digital_circuits
+    hardware -> memory
+    hardware -> peripherals
+    hardware -> processors
+    knowledge -> algorithms
+    knowledge -> concurrency
+    knowledge -> data_structures
+    knowledge -> file_systems
+    knowledge -> hardware
+    knowledge -> information_security
+    knowledge -> logic
+    knowledge -> operating_systems
+    knowledge -> parallelism
+    knowledge -> standards
+    logic -> boolean_logic
+    logic -> combinatory_logic
+    logic -> type_theory
+    machine_language -> assembly
+    object_oriented_programming -> c_plus_plus
+    object_oriented_programming -> c_sharp
+    operating_systems -> linux
+    operating_systems -> windows
+    programming -> c
+    programming -> c_plus_plus
+    programming -> c_sharp
+    programming -> java
+    programming -> machine_language
+    programming -> shell
+    programming -> structured_programming
+    skill -> content_creation
+    skill -> file_management
+    skill -> office_software
+    skill -> programming
+    standards -> posix
+    structured_programming -> object_oriented_programming
+  }
+
+  /// Let there be a finite network of goals (or targets or objectives) and
+  /// a finite network of prerequisites (or preliminaries).
+  /// The source nodes of these networks are courses,
+  /// their target nodes are keywords and
+  /// their edge labels are weights.
+  /// The weights must be positive rational numbers on the unit interval and
+  /// the sums of weights of all the edges
+  /// with the same source node must be one.
+  /// These networks represent mappings from courses to domains,
+  /// which is why their nodes are set to match.
+  ///
+  /// Formally, we have
+  ///
+  ///     goals, prerequisites : FinNet (Code, Keyword, 𝟙, 𝟙, ℚ)
+  ///
+  /// with the properties
+  ///
+  ///     bounded : forall (w ↦ 0 < w ≤ 1, values (arrows (goals))),
+  ///
+  ///     sourced : forall (i ↦ i ∈ nodes' (courses), sources' (goals)),
+  ///
+  ///     targeted : forall (j ↦ j ∈ nodes' (domains), targets' (goals)) and
+  ///
+  ///     normalized : forall (k ↦ sum (map (((i, j), (w, _)) ↦ w,
+  ///                                        filter (((i, j), (w, _)) ↦ i = k,
+  ///                                                arrows (goals)))) = 1,
+  ///                          map (pr₀, arrows' (goals)))
+  ///
+  /// for goals and again for prerequisites.
+  /// Note that, in the normalized property,
+  /// the expression we quantify over is the preimage of the edges and
+  /// the expression we filter through is the full set of labeled edges.
+  /// The seasoned functional programmer will also notice
+  /// that the whole thing is subject to short cut fusion.
+  ///
+  /// If we are given a malformed network without weights,
+  /// we can still recover a well-formed network
+  /// by assigning all the edges equal weights using the mapping
+  ///
+  ///     equalize : ∀ (A : 𝒰), FinSet A → FinSet (A × ℚ)
+  ///     equalize (a) ≡ map (x ↦ (x, 1 / size (a)), a).
+  ///
+  /// If we are given a malformed network
+  /// with weights that are not normalized,
+  /// we can still recover a well-formed network
+  /// by normalizing the weights using the mapping
+  ///
+  ///     normalize : ∀ (A : 𝒰), FinSet (A × ℚ) → FinSet (A × ℚ)
+  ///     normalize (a) ≡ let s ≡ sum (map (pr₁, a)) in
+  ///                     if s = 0 then
+  ///                     equalize (map (pr₀, a)) else
+  ///                     map ((x, w) ↦ (x, w / s), a).
+  ///
+  /// If we are given a malformed network
+  /// with more edges than there are unique endpoints,
+  /// we can still recover a well-formed network
+  /// by combining parallel edges using the arithmetic mean
+  ///
+  ///     mean : ∀ (a : FinSet (ℚ)), ¬ empty (a) → ℚ,
+  ///
+  /// because it has the property
+  ///
+  ///     contractive : ∀ (a : FinSet (ℚ)), ¬ empty (a) →
+  ///                   forall (w ↦ 0 < w ≤ 1, a) → 0 < mean (a) ≤ 1.
+  ///
+  /// The motivation for using the mean is that,
+  /// if there are two mappings from the same course to the same domain,
+  /// either it is a mistake or there are two opinions,
+  /// so we should choose whatever weight is closest to the intended truth.
+  ///
+  /// If we are only given one network instead of two,
+  /// we can use two copies of it to stand for both
+  /// by using the diagonal mapping
+  ///
+  ///     diag : ∀ (A : 𝒰), A → A × A.
+  ///
+  /// The motivation for doing so is that,
+  /// if there is no other information provided
+  /// about a course besides its subjects,
+  /// the point of the course is most likely
+  /// diving deeper into said subjects.
+
+  edge [style = dashed]
+
+  subgraph goals {
+    edge [color = "#b30000"]
+
+    ITKP101 -> office_software [label = "2 / 8"]
+    ITKP101 -> file_management [label = "1 / 8"]
+    ITKP101 -> image_editing [label = "1 / 8"]
+    ITKP101 -> information_security [label = "1 / 8"]
+    ITKP101 -> text_editing [label = "1 / 8"]
+    ITKP101 -> web_publishing [label = "1 / 8"]
+    ITKP101 -> windows [label = "1 / 8"]
+
+    ITKP102 -> object_oriented_programming [label = "4 / 10"]
+    ITKP102 -> c_sharp [label = "2 / 10"]
+    ITKP102 -> structured_programming [label = "2 / 10"]
+    ITKP102 -> algorithms [label = "1 / 10"]
+    ITKP102 -> data_structures [label = "1 / 10"]
+
+    ITKA203 -> linux [label = "4 / 16"]
+    ITKA203 -> shell [label = "2 / 16"]
+    ITKA203 -> assembly [label = "1 / 16"]
+    ITKA203 -> c [label = "1 / 16"]
+    ITKA203 -> concurrency [label = "1 / 16"]
+    ITKA203 -> file_systems [label = "1 / 16"]
+    ITKA203 -> memory [label = "1 / 16"]
+    ITKA203 -> parallelism [label = "1 / 16"]
+    ITKA203 -> peripherals [label = "1 / 16"]
+    ITKA203 -> posix [label = "1 / 16"]
+    ITKA203 -> processors [label = "1 / 16"]
+
+    TIEP114 -> operating_systems [label = "3 / 10"]
+    TIEP114 -> digital_circuits [label = "2 / 10"]
+    TIEP114 -> machine_language [label = "2 / 10"]
+    TIEP114 -> boolean_logic [label = "1 / 10"]
+    TIEP114 -> combinatory_logic [label = "1 / 10"]
+    TIEP114 -> processors [label = "1 / 10"]
+  }
+
+  subgraph prerequisites {
+    edge [color = "#0000e2"]
+
+    ITKP102 -> text_editing [label = "4 / 6"]
+    ITKP102 -> file_systems [label = "1 / 6"]
+    ITKP102 -> shell [label = "1 / 6"]
+
+    ITKA203 -> programming [label = "3 / 7"]
+    ITKA203 -> algorithms [label = "2 / 7"]
+    ITKA203 -> c [label = "1 / 7"]
+    ITKA203 -> c_plus_plus [label = "1 / 7"]
+
+    TIEP114 -> file_management [label = "1 / 3"]
+    TIEP114 -> operating_systems [label = "1 / 3"]
+    TIEP114 -> text_editing [label = "1 / 3"]
+  }
+
+  /// Our goal is to construct another network of courses,
+  /// except this time with weighted edges,
+  /// so as to model a fuzzy order between them.
+  /// The nodes of this network are course codes,
+  /// its node labels are pairs of course names and credits and
+  /// its edge labels are weights.
+  /// The weights must be positive rational numbers on the unit interval.
+  ///
+  /// Formally, we want
+  ///
+  ///     results : FinNet' (Code, Name × Credits, ℚ)
+  ///
+  /// currently without the familiar property
+  ///
+  ///     rebounded : forall (w ↦ 0 < w ≤ 1, values (edges (results))).
+  ///
+  /// We pose the following way to do this as a first demonstration.
+  ///
+  /// For each pair of courses,
+  /// insert an edge between them
+  /// if their induced weight is positive.
+  /// For each edge starting from the goals of the first course and
+  /// for each edge starting from the prerequisites of the second course,
+  /// their induced weight is the combination
+  /// of the individual weights of the edges,
+  /// scaled up by credits and
+  /// scaled down by the length of the shortest trail
+  /// between their images in the domains.
+  /// This should give us an estimate of how much the goals of one course
+  /// align with the prerequisites of another, and
+  /// visualize the whole thing on the fly.
+  ///
+  /// Formally, we posit that
+  ///
+  ///     results ≡
+  ///       fold ((a, (k₀, k₁)) ↦
+  ///             let s : ℚ
+  ///                 s ≡ let b₀, b₁ : FinMap (Code × Keyword, ℚ)
+  ///                         b₀ ≡ filter (((i, j), (w, _)) ↦ i = k₀,
+  ///                                     arrows (goals))
+  ///                         b₁ ≡ filter (((i, j), (w, _)) ↦ i = k₁,
+  ///                                     arrows (prerequisites)) in
+  ///                     let c₀, c₁ : Credits
+  ///                         c₀ ≡ credits (pr₁ (lookup (k₀, courses)))
+  ///                         c₁ ≡ credits (pr₁ (lookup (k₁, courses))) in
+  ///                     sum (map (((i₀, j₀), (i₁, j₁)) ↦
+  ///                               let w₀, w₁ : ℚ
+  ///                                   w₀ ≡ lookup ((i₀, j₀), b₀)
+  ///                                   w₁ ≡ lookup ((i₁, j₁), b₁) in
+  ///                               let t : FinSet (Keyword⁺)
+  ///                                   t ≡ trails (domains, j₀, j₁) in
+  ///                               if empty (t) then 0 else
+  ///                               let n : ℕ
+  ///                                   n ≡ length (minimize (length, t)) in
+  ///                               ((c₀ × c₁) × (w₀ × w₁)) / (1 + n),
+  ///                               keys (b₀) × keys (b₁))) in
+  ///             if s = 0 then a else
+  ///             insert ((k₀, k₁), s, a),
+  ///             courses, nodes' (courses) × nodes' (courses)).
+  ///
+  /// Alas, this definition is completely arbitrary.
+  /// Its fitness can only be verified through experiment,
+  /// which is why we need to collect some data.
+  ///
+  /// We propose the following kind of user interface
+  /// for collecting the data from our teachers and staff.
+  /// It is intended to be both collaborative and uncoordinated.
+  ///
+  ///     Edit Networks
+  ///
+  ///     ┌── Courses ────────────────────────────┐ Frameset for a collaboratively modifiable list.
+  ///     │                                       │
+  ///     │  [Edit] ITKA203 Käyttöjärjestelmät    │ This list is initially sorted by code and then by name.
+  ///     │  [Edit] ITKP102 Ohjelmointi 1         │ Each item also shows a timestamped list of the people editing (serving as a soft lock).
+  ///     │  [Edit] ITKA201 Algoritmit 1          │ Editing opens up a frameset.
+  ///     │                                       │
+  ///     │  ┌── Edit Course ──────────────────┐  │ Frameset for preparing a transaction.
+  ///     │  │                                 │  │
+  ///     │  │     Code: ITKA201_____________  │  │ Textfield with strict validation.
+  ///     │  │     Name: Algoritmit 1________  │  │ Textfield with loose validation.
+  ///     │  │  Credits: (x) Exactly 4_        │  │ Radiobutton for one or two spinners for natural numbers
+  ///     │  │           ( ) Between __ -- __  │  │ with strict validation for strictly increasing ranges.
+  ///     │  │                                 │  │
+  ///     │  │  ┌── Goals ──────────────────┐  │  │ Frameset for editing a weighted list.
+  ///     │  │  │                           │  │  │
+  ///     │  │  │  [-] Algoritmit (2 / 3)   │  │  │ This list is initially sorted by weight and then by name.
+  ///     │  │  │  [-] Ohjelmointi (1 / 3)  │  │  │ The given weight is displayed alongside the normalized weight.
+  ///     │  │  │  [+] Title (Weight)       │  │  │ FZF finder component sourced on the domains and
+  ///     │  │  │                           │  │  │ a spinner for natural numbers.
+  ///     │  │  └───────────────────────────┘  │  │
+  ///     │  │                                 │  │
+  ///     │  │  [↑ Copy] [↓ Copy]              │  │ Buttons to wrangle data (asking for confirmation).
+  ///     │  │                                 │  │
+  ///     │  │  ┌── Prerequisites ──────────┐  │  │ Frameset that is similar to the one above.
+  ///     │  │  │                           │  │  │
+  ///     │  │  │  ...                      │  │  │
+  ///     │  │  │                           │  │  │
+  ///     │  │  └───────────────────────────┘  │  │
+  ///     │  │                                 │  │
+  ///     │  │  Talk about Your Feelings:      │  │ Textarea for notes (for yourself and other editors).
+  ///     │  │  _____________________________  │  │
+  ///     │  │  _____________________________  │  │
+  ///     │  │  _____________________________  │  │
+  ///     │  │                                 │  │
+  ///     │  │  [Publish]    [Forget Changes]  │  │ Commit or discard the transaction (asking for confirmation).
+  ///     │  │                                 │  │
+  ///     │  └─────────────────────────────────┘  │
+  ///     │                                       │
+  ///     │  [Add New]                            │
+  ///     │                                       │
+  ///     └───────────────────────────────────────┘
+  ///
+  ///     ┌── Domains ────────────────────────────┐ Frameset for a collaboratively modifiable list (only for maintainers).
+  ///     │                                       │
+  ///     │  [Edit]                               │ This button also shows a timestamped list of the people editing (serving as a soft lock).
+  ///     │                                       │
+  ///     │  ┌── Edit Domains ─────────────────┐  │ Frameset for preparing a transaction.
+  ///     │  │                                 │  │
+  ///     │  │  [-] Aihe → Taito               │  │ This list of edges is initially sorted by rank and then by name.
+  ///     │  │  [-] Aihe → Tieto               │  │ Since the network is rooted, nodes are determined by edges:
+  ///     │  │  [-] Taito → Ohjelmointi        │  │ nodes can be added by adding edges that have them as endpoints and
+  ///     │  │  [-] Ohjelmointi → Java         │  │ nodes can be removed by removing all the edges that have them as endpoints.
+  ///     │  │  [+] Source → Target            │  │ Two FZF finder components sourced on the nodes of the domains.
+  ///     │  │                                 │  │
+  ///     │  │  [Y] Rooted                     │  │ Two blinkers indicating validation status.
+  ///     │  │  [Y] Acyclic                    │  │ Invalid data cannot be committed, because it would break the user interface.
+  ///     │  │                                 │  │
+  ///     │  │  Talk about Your Feelings:      │  │ Textarea for free notes (for yourself and other editors).
+  ///     │  │  _____________________________  │  │
+  ///     │  │  _____________________________  │  │
+  ///     │  │  _____________________________  │  │
+  ///     │  │                                 │  │
+  ///     │  │  [Publish]    [Forget Changes]  │  │ Commit or discard the transaction (asking for confirmation).
+  ///     │  │                                 │  │
+  ///     │  └─────────────────────────────────┘  │
+  ///     │                                       │
+  ///     └───────────────────────────────────────┘
+  ///
+  ///     Inspect Networks
+  ///
+  ///     ┌── Visualizations ─────────────────────┐
+  ///     │                                       │
+  ///     │  [Show Courses with Computed Weights] │ Buttons to open GraphViz (or other) visualizations.
+  ///     │  [Show Domains]                       │
+  ///     │  [Show It All]                        │
+  ///     │                                       │
+  ///     └───────────────────────────────────────┘
+  ///
+  ///     ┌── Data Files ─────────────────────────┐
+  ///     │                                       │
+  ///     │  [Export It All as JSON or Whatever]  │ Buttons to export raw data.
+  ///     │  [Export Courses as ...]              │
+  ///     │  [Export Domains as ...]              │
+  ///     │                                       │
+  ///     └───────────────────────────────────────┘
+  ///
+  /// Hopefully, this will help us develop a better curriculum!
+
+  subgraph results {
+    edge [style = dotted]
+
+    // ITKP101 -> ITKA203 [label = "0 / 1"]
+    ITKP101 -> ITKP102 [label = "9 / 8"]
+    ITKP101 -> TIEP114 [label = "5 / 8"]
+    ITKP102 -> ITKA203 [label = "27 / 7"]
+    // ITKP102 -> TIEP114 [label = "0 / 1"]
+    TIEP114 -> ITKA203 [label = "9 / 12"]
+    // TIEP114 -> ITKP102 [label = "0 / 1"]
+  }
+
+  edge [style = invis]
+
+  /// We quietly place invisible edges
+  /// to connect the terminal nodes in the initial graph
+  /// with the initial nodes in the terminal graph,
+  /// so that the visualization gets arranged better.
+  /// These connections have no semantic meaning.
+
+  ITKA203 -> domain
+}
