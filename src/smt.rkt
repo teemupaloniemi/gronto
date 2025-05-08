@@ -31,16 +31,25 @@
          courses)))
 
 ;; Create one prerequisite constraint.
-(define (preq-constr-one course-code preq-code)
-  (display "(assert (> sem_") (display course-code)
-            (display " sem_") (display preq-code)
-  (display "))") (newline))
+(define (preq-constr-one courses course-code preq-code)
+  (define (preq-exists)
+    (not (eq? (search-by-code courses preq-code) '())))
+  (define (show)
+    (display "(assert (> sem_") (display course-code)
+              (display " sem_") (display preq-code)
+    (display "))") (newline))
+  (define (err)
+    (display "; prerequisite ") (display preq-code)
+    (display " did not exist for course") (display course-code) (newline))
+  (if (preq-exists)
+      (show)
+      (err)))
 
 ;; Create all prerequisite constraints.
 (define (preq-constr courses)
   (map (lambda (c)
                (map (lambda (p)
-                            (preq-constr-one (value 'code c) p))
+                            (preq-constr-one courses (value 'code c) p))
                     (value 'prerequisites c)))
        courses))
 
@@ -78,8 +87,8 @@
                (sum-ites-lte courses s max-cred-sem))
        semester-range))
 
-;; Give total credit constrains. This is almost the same as 
-;; semester cred. But we sum and compare over all the sems, 
+;; Give total credit constrains. This is almost the same as
+;; semester cred. But we sum and compare over all the sems,
 ;; not individually.
 (define (ites courses sem)
   (map (lambda (c)
@@ -130,7 +139,7 @@
   (display "(get-model)") (newline)))
 
 ;; Call the builder.
-(build-smt-model "../data/tekka.json"
+(build-smt-model "data/tekka.json"
                  3    ;; Years
                  4    ;; sem-per-year
                  180  ;; min-tot-cred

@@ -19,3 +19,20 @@ distance graph ũ.
 
 And to create a software implementation that is relatively easy to use at any
 platform.
+
+## Usage
+
+```
+# Install z3 theorem solver.
+
+apt install z3
+
+# Install racket.
+
+add-apt-repository ppa:plt/racket
+apt-get install racket
+
+# Run scripts.
+
+make
+```

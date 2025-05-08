@@ -72,5 +72,5 @@
     (preqs-all courses)
     (display "}")))
 
-(gen-dot (json-read "../data/tekka.json") (parse-smt-model "z3.txt"))
+(gen-dot (json-read "data/tekka.json") (parse-smt-model "tmp-files/z3.txt"))
 

@@ -19,11 +19,15 @@
 ;; Given a list of json data search return those that match
 ;; the given code in a field "code".
 (provide search-by-code)
+(define (safe-car l)
+  (if (eq? l '())
+      l
+      (car l)))
+
 (define (search-by-code data code)
-  (car
-    (filter
-      (lambda (x) (string=? (value 'code x) code))
-      data)))
+  (safe-car (filter
+              (lambda (x) (string=? (value 'code x) code))
+                data)))
 
 ;; Get a maximum of a list.
 (define (max-element x y) (if (> x y) x y))
