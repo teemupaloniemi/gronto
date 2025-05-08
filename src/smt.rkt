@@ -78,12 +78,29 @@
                (sum-ites-lte courses s max-cred-sem))
        semester-range))
 
-;; Give total credit constrains.
-(define (tot-cred-constr courses semester-range max-tot-cred min-tot-cred)
-  (display "; Credit constraints (total)") (newline)
-  (display semester-range)                 (newline)
-  (display max-tot-cred)                   (newline)
-  (display min-tot-cred)                   (newline))
+;; Give total credit constrains. This is almost the same as 
+;; semester cred. But we sum and compare over all the sems, 
+;; not individually.
+(define (ites courses sem)
+  (map (lambda (c)
+               (cred-ite (value 'code c) (value 'credits c) sem))
+       courses)
+  (newline))
+
+(define (tot-cred-constr courses semester-range min-tot-cred max-tot-cred)
+  (display "(assert (>= ")
+  (display "(+ ")
+  (map (lambda (s)
+               (ites courses s))
+       semester-range)
+  (display ") ") (display min-tot-cred) (display "))") (newline)
+
+  (display "(assert (<= ")
+  (display "(+ ")
+  (map (lambda (s)
+               (ites courses s))
+       semester-range)
+  (display ") ") (display max-tot-cred) (display "))") (newline))
 
 ;;;; Building the actual model ;;;;
 
@@ -109,7 +126,6 @@
                    semester-range
                    min-tot-cred
                    max-tot-cred)
-  ;; 6. Close the model.
   (display "(check-sat)") (newline)
   (display "(get-model)") (newline)))
 
