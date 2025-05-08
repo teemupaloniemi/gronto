@@ -72,5 +72,12 @@
     (preqs-all courses)
     (display "}")))
 
-(gen-dot (json-read "data/tekka.json") (parse-smt-model "tmp-files/z3.txt"))
+(define (safe-gen-dot courses sem-pairs)
+  (define (error-message)
+    (raise "Error: could not parse z3 model"))
+  (if (eq? sem-pairs '())
+      (error-message)
+      (gen-dot courses sem-pairs)))
+
+(safe-gen-dot (json-read "data/tekka.json") (parse-smt-model "tmp-files/z3.txt"))
 

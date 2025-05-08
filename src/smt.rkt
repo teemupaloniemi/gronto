@@ -140,9 +140,9 @@
 
 ;; Call the builder.
 (build-smt-model "data/tekka.json"
-                 3    ;; Years
-                 4    ;; sem-per-year
-                 180  ;; min-tot-cred
-                 1000 ;; max-tot-cred
-                 2    ;; min-sem-cred
-                 23)  ;; max-sem-cred
+                 3     ;; Years
+                 4     ;; sem-per-year
+                 180   ;; min-tot-cred
+                 10000 ;; max-tot-cred
+                 2     ;; min-sem-cred
+                 20)   ;; max-sem-cred
