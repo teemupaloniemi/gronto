@@ -44,14 +44,41 @@
                     (value 'prerequisites c)))
        courses))
 
-;; Give semester credit constrains
-(define (cred-constr courses semester-range max-cred-sem min-cred-sem)
-  (display "; Credit constraints (semester)") (newline)
-  (display semester-range)                    (newline)
-  (display max-cred-sem)                      (newline)
-  (display min-cred-sem)                      (newline))
+;; Give semester credit constrains to one course.
+(define (cred-ite course-code course-creds sem)
+  (display "        (ite (= sem_")
+  (display course-code)
+  (display " ")
+  (display sem)
+  (display ") ")
+  (display course-creds)
+  (display " 0)") (newline))
 
-;; Give total credit constrains
+(define (sum-ites-gt courses sem min-cred-sem)
+  (display "(assert (> (+") (newline)
+  (map (lambda (c)
+               (cred-ite (value 'code c) (value 'credits c) sem))
+       courses)
+  (display ") ") (display min-cred-sem) (display "))")
+  (newline))
+
+(define (sum-ites-lte courses sem max-cred-sem)
+  (display "(assert (<= (+ ") (newline)
+  (map (lambda (c)
+               (cred-ite (value 'code c) (value 'credits c) sem))
+       courses)
+  (display ") ") (display max-cred-sem) (display "))")
+  (newline))
+
+(define (cred-constr courses semester-range min-cred-sem max-cred-sem)
+  (map (lambda (s)
+               (sum-ites-gt courses s min-cred-sem))
+       semester-range)
+  (map (lambda (s)
+               (sum-ites-lte courses s max-cred-sem))
+       semester-range))
+
+;; Give total credit constrains.
 (define (tot-cred-constr courses semester-range max-tot-cred min-tot-cred)
   (display "; Credit constraints (total)") (newline)
   (display semester-range)                 (newline)
@@ -71,68 +98,17 @@
          (semester-range  (range total-semesters))
          (courses         (json-read courses-path)))
 
-  ;; SMTLIB example
-  ;; 1. Header, set logic type.
   (display "(set-logic QF_LIA)") (newline)
-  ;; 2. Create vars.
-  ;;   (declare-const sem_ITKA2004 Int)
-  ;;   (assert (and (>= sem_ITKA2004 1) (<= sem_ITKA2004 12)))
-  (decl-sem-vars courses
-                 semester-range)
-  ;; 3. Constrain prerequisites.
-  ;;   (assert (> sem_ITKA201 sem_ITKP102))
+  (decl-sem-vars courses semester-range)
   (preq-constr courses)
-  ;; 4. Constrain semester min and max limits.
-  ;;
-  ;;     (assert (<= (+ (ite (= sem_ITKA2004 1) 5 0)
-  ;;                    ...
-  ;;                    (ite (= sem_TILP2400 1) 5 0))
-  ;;                 23))
-  ;;     (assert (<= (+ (ite (= sem_ITKA2004 1) 5 0)
-  ;;                    ...
-  ;;                    (ite (= sem_TILP2400 1) 5 0))
-  ;;                 5))
-  ;;                     .
-  ;;                     .
-  ;;                     .
-  ;;     (assert (<= (+ (ite (= sem_ITKA2004 12) 5 0)
-  ;;                    ...
-  ;;                    (ite (= sem_TILP2400 12) 5 0))
-  ;;                 23))
-  ;;     (assert (<= (+ (ite (= sem_ITKA2004 12) 5 0)
-  ;;                    ...
-  ;;                    (ite (= sem_TILP2400 12) 5 0))
-  ;;                 5))
   (cred-constr courses
                semester-range
-               max-cred-sem
-               min-cred-sem)
-  ;; 5. Constrain total min and max.
-  ;;
-  ;; (assert (>= (+ (ite (= sem_ITKA2004 1) 5 0)
-  ;;                (ite (= sem_ITKA2004 2) 5 0)
-  ;;                (ite (= sem_ITKA2004 3) 5 0)
-  ;;                (ite (= sem_ITKA2004 4) 5 0)
-  ;;                ...
-  ;;                (ite (= sem_TILP2400 9) 5 0)
-  ;;                (ite (= sem_TILP2400 10) 5 0)
-  ;;                (ite (= sem_TILP2400 11) 5 0)
-  ;;                (ite (= sem_TILP2400 12) 5 0))
-  ;;             180))
-  ;; (assert (>= (+ (ite (= sem_ITKA2004 1) 5 0)
-  ;;                (ite (= sem_ITKA2004 2) 5 0)
-  ;;                (ite (= sem_ITKA2004 3) 5 0)
-  ;;                (ite (= sem_ITKA2004 4) 5 0)
-  ;;                ...
-  ;;                (ite (= sem_TILP2400 9) 5 0)
-  ;;                (ite (= sem_TILP2400 10) 5 0)
-  ;;                (ite (= sem_TILP2400 11) 5 0)
-  ;;                (ite (= sem_TILP2400 12) 5 0))
-  ;;             180))
+               min-cred-sem
+               max-cred-sem)
   (tot-cred-constr courses
                    semester-range
-                   max-tot-cred
-                   min-tot-cred)
+                   min-tot-cred
+                   max-tot-cred)
   ;; 6. Close the model.
   (display "(check-sat)") (newline)
   (display "(get-model)") (newline)))
