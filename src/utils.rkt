@@ -24,3 +24,12 @@
     (filter
       (lambda (x) (string=? (value 'code x) code))
       data)))
+
+;; Get a maximum of a list.
+(define (max-element x y) (if (> x y) x y))
+(provide max-list)
+(define (max-list ls)
+    (if (null? (cdr ls))
+        (car ls)
+        (max-element (car ls) (max-list (cdr ls)))))
+

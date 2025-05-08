@@ -12,3 +12,9 @@
   (call-with-output-file filename
     (λ (x) (write-json json x))
     #:exists 'replace))
+
+;; Reading a string from SMT output.
+;; Parsing this is done at dot.rkt -file.
+(provide smt-read)
+(define (smt-read filename)
+  (port->string (open-input-file filename) #:close? #t))
