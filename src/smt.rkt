@@ -154,11 +154,22 @@
   (display "(check-sat)") (newline)
   (display "(get-model)") (newline)))
 
-;; Call the builder.
-(build-smt-model "data/tekka.json"
-                 3     ;; Years
-                 4     ;; sem-per-year
-                 180   ;; min-tot-cred
-                 10000 ;; max-tot-cred
-                 2     ;; min-sem-cred
-                 15)   ;; max-sem-cred
+(define (main)
+  (if (getenv "LARGE")
+      (build-smt-model "data/large.json"
+                      5     ;; Years
+                      4     ;; sem-per-year
+                      250   ;; min-tot-cred
+                      10000 ;; max-tot-cred
+                      2     ;; min-sem-cred
+                      25)   ;; max-sem-cred
+      (build-smt-model "data/small.json"
+                      3     ;; Years
+                      4     ;; sem-per-year
+                      180   ;; min-tot-cred
+                      10000 ;; max-tot-cred
+                      2     ;; min-sem-cred
+                      25))) ;; max-sem-cred
+
+(main)
+

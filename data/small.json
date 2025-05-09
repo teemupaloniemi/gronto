@@ -133,7 +133,7 @@
         "credits": 5,
         "outcomes": [],
         "years": [],
-        "period": []
+        "period": [1, 2]
     },
     {
         "code": "MATA2710",
