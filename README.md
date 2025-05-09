@@ -32,7 +32,9 @@ apt install z3
 add-apt-repository ppa:plt/racket
 apt-get install racket
 
-# Run scripts.
-
+# Run scripts (ba).
 make
+
+# Run scripts (ba+ms).
+LARGE=1 make
 ```
