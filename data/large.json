@@ -573,7 +573,7 @@
       "code": "MATA173",
       "title": "Johdatus matemaattiseen analyysiin 3",
       "prerequisites": [
-        "MATA171"
+        "MATA172"
       ],
       "department": "Matematiikan ja tilastotieteen laitos",
       "credits": 5,
@@ -584,7 +584,7 @@
       "code": "MATA174",
       "title": "Johdatus matemaattiseen analyysiin 4",
       "prerequisites": [
-        "MATA171"
+        "MATA173"
       ],
       "department": "Matematiikan ja tilastotieteen laitos",
       "credits": 5,

@@ -159,17 +159,17 @@
       (build-smt-model "data/large.json"
                       5     ;; Years
                       4     ;; sem-per-year
-                      250   ;; min-tot-cred
+                      270   ;; min-tot-cred
                       10000 ;; max-tot-cred
-                      2     ;; min-sem-cred
-                      25)   ;; max-sem-cred
+                      6     ;; min-sem-cred
+                      19)   ;; max-sem-cred
       (build-smt-model "data/small.json"
                       3     ;; Years
                       4     ;; sem-per-year
                       180   ;; min-tot-cred
                       10000 ;; max-tot-cred
-                      2     ;; min-sem-cred
-                      25))) ;; max-sem-cred
+                      6     ;; min-sem-cred
+                      19))) ;; max-sem-cred
 
 (main)
 
