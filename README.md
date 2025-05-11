@@ -7,6 +7,50 @@ The current idea is to find G, f, H, and M such that:
 `f(t, c1, c2) -> d` tells the distance between two courses (c1 and c2) in a given
 ontology (t).
 
+For example for two courses:
+
+```
+C1:
+    outcome1
+    outcome2
+
+C2
+    outcome1
+    outcome3
+    outcome4
+```
+
+So far we have an f such that is measures the average of the minimum distance from
+each c1 outcome to c2 outcome. The steps for this are:
+ 1. Create a cartesian-product of c1 and c2 outcomes (we will add prerequisites later).
+ ```
+ ("outcome1" "outcome1")
+ ("outcome1" "outcome3")
+ ("outcome1" "outcome4")
+ ("outcome2" "outcome1")
+ ("outcome2" "outcome3")
+ ("outcome2" "outcome4")
+ ```
+ 2. Count distance for each pair.
+ ```
+ ("outcome1" "outcome1" 0)
+ ("outcome1" "outcome3" 7)
+ ("outcome1" "outcome4" 16)
+ ("outcome2" "outcome1" 3)
+ ("outcome2" "outcome3" 8)
+ ("outcome2" "outcome4" 1)
+ ```
+ 3. Select the minimum for each where source is c1 outcome.
+ ```
+ ("outcome1" "outcome1" 0)
+ ("outcome2" "outcome4" 1)
+ ```
+
+ 4. Count the average of these.
+ ```
+ (0 + 1) / 2 = 1/2
+ ```
+
 `G(t, f, C) -> u` composes a course distance graph (u) such that each edge
 between any two courses in the set of all courses (C) is produced by the distance
 function (f).
@@ -37,4 +81,7 @@ make
 
 # Run scripts (ba+ms).
 LARGE=1 make
+
+# Distance
+make dist
 ```

@@ -27,7 +27,7 @@
 (define (search-by-code data code)
   (safe-car (filter
               (lambda (x) (string=? (value 'code x) code))
-                data)))
+                      data)))
 
 ;; Get a maximum of a list.
 (define (max-element x y) (if (> x y) x y))

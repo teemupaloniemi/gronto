@@ -1,12 +1,106 @@
 [
     {
+        "code": "MATA2520",
+        "title": "Joukko-oppi ja graafiteoria",
+        "prerequisites": [
+            "MATA2700"
+        ],
+        "department": "Matematiikan ja tilastotieteen laitos",
+        "level": "Aineopinnot",
+        "credits": 5,
+        "outcomes": [
+            "Graph theory"
+        ],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "TIEA341",
+        "title": "Funktio-ohjelmointi",
+        "prerequisites": [],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Aineopinnot",
+        "credits": 5,
+        "outcomes": [
+          "Recursion",
+          "Polymorphism",
+          "Abstract data types",
+          "Inheritance",
+          "Functional languages"
+        ],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "TIEA1130",
+        "title": "Oliosuuntautunut suunnittelu ja ohjelmointi",
+        "prerequisites": [
+            "ITKP102"
+        ],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Aineopinnot",
+        "credits": 5,
+        "outcomes": [
+          "Object oriented languages",
+          "Object oriented architectures",
+          "Unified Modeling Language (UML)"
+        ],
+        "years": [],
+        "period": []
+    },
+    {
+        "code": "ITKP102",
+        "title": "Ohjelmointi 1",
+        "prerequisites": [],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Perusopinnot",
+        "credits": 5,
+        "outcomes": [
+          "Object oriented development",
+          "Object oriented languages",
+          "Computer games",
+          "Software configuration management and version control systems",
+          "Software development techniques",
+          "Data types and structures",
+          "Classes and objects",
+          "Modules / packages",
+          "Software testing and debugging",
+          "Procedures, functions and subroutines"
+        ],
+        "years": [],
+        "period": [1]
+    },
+    {
+        "code": "ITKP104",
+        "title": "Tietoverkot",
+        "prerequisites": [
+            "ITKP101",
+            "ITKP102",
+            "ITKP1010"
+        ],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Perusopinnot",
+        "credits": 5,
+        "outcomes": [
+          "Network components",
+          "Network protocols",
+          "Network architectures"
+        ],
+        "years": [],
+        "period": []
+    },
+    {
         "code": "ITKA2004",
         "title": "Tietokannat ja tiedonhallinta",
         "prerequisites": [],
         "department": "Informaatioteknologian tiedekunta",
         "level": "Aineopinnot",
         "credits": 5,
-        "outcomes": [],
+        "outcomes": [
+          "Database design and models",
+          "Database transaction processing",
+          "Structured Query Language"
+        ],
         "years": [],
         "period": []
     },
@@ -20,7 +114,10 @@
         "department": "Informaatioteknologian tiedekunta",
         "level": "Aineopinnot",
         "credits": 5,
-        "outcomes": [],
+        "outcomes": [
+          "Complexity classes",
+          "Data structures design and analysis"
+        ],
         "years": [],
         "period": []
     },
@@ -33,7 +130,13 @@
         "department": "Informaatioteknologian tiedekunta",
         "level": "Aineopinnot",
         "credits": 5,
-        "outcomes": [],
+        "outcomes": [
+          "Memory management",
+          "Process management",
+          "Virtual worlds software",
+          "Assembly languages",
+          "Cloud computing"
+        ],
         "years": [],
         "period": []
     },
@@ -67,45 +170,6 @@
         ],
         "department": "Informaatioteknologian tiedekunta",
         "level": "Perusopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "years": [],
-        "period": []
-    },
-    {
-        "code": "ITKP102",
-        "title": "Ohjelmointi 1",
-        "prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Perusopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "years": [],
-        "period": [1]
-    },
-    {
-        "code": "ITKP104",
-        "title": "Tietoverkot",
-        "prerequisites": [
-            "ITKP101",
-            "ITKP102",
-            "ITKP1010"
-        ],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Perusopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "years": [],
-        "period": []
-    },
-    {
-        "code": "MATA2520",
-        "title": "Joukko-oppi ja graafiteoria",
-        "prerequisites": [
-            "MATA2700"
-        ],
-        "department": "Matematiikan ja tilastotieteen laitos",
-        "level": "Aineopinnot",
         "credits": 5,
         "outcomes": [],
         "years": [],
@@ -246,19 +310,6 @@
         "period": []
     },
     {
-        "code": "TIEA1130",
-        "title": "Oliosuuntautunut suunnittelu ja ohjelmointi",
-        "prerequisites": [
-            "ITKP102"
-        ],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Aineopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "years": [],
-        "period": []
-    },
-    {
         "code": "TIEA2048",
         "title": "Tietokoneen rakenne ja arkkitehtuuri 2",
         "prerequisites": [
@@ -334,17 +385,6 @@
         "period": []
     },
     {
-        "code": "TIEA341",
-        "title": "Funktio-ohjelmointi",
-        "prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Aineopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "years": [],
-        "period": []
-    },
-    {
         "code": "TIEA3810",
         "title": "Sovellettu predikaattilogiikka",
         "prerequisites": [],
@@ -390,7 +430,7 @@
         "credits": 5,
         "outcomes": [],
         "years": [],
-        "period": []
+        "period": [1, 2, 3, 4]
     },
     {
         "code": "TIEP115",
@@ -442,6 +482,7 @@
       "prerequisites": [],
       "department": "Informaatioteknologian tiedekunta",
       "credits": 2,
+      "outcomes": [],
       "level": "Muut opinnot",
       "period": []
     },
@@ -451,6 +492,7 @@
       "prerequisites": [],
       "department": "Informaatioteknologian tiedekunta",
       "credits": 1,
+      "outcomes": [],
       "level": "Muut opinnot",
       "period": []
     },
@@ -460,6 +502,7 @@
       "prerequisites": [],
       "department": "Informaatioteknologian tiedekunta",
       "credits": 3,
+      "outcomes": [],
       "level": "Syventävät opinnot",
       "period": []
     },
@@ -469,6 +512,7 @@
       "prerequisites": [],
       "department": "Informaatioteknologian tiedekunta",
       "credits": 10,
+      "outcomes": [],
       "level": "Syventävät opinnot",
       "period": []
     },
@@ -478,6 +522,7 @@
       "prerequisites": [],
       "department": "Informaatioteknologian tiedekunta",
       "credits": 0,
+      "outcomes": [],
       "level": "Syventävät opinnot",
       "period": []
     },
@@ -487,6 +532,7 @@
       "prerequisites": [],
       "department": "Informaatioteknologian tiedekunta",
       "credits": 10,
+      "outcomes": [],
       "level": "Syventävät opinnot",
       "period": []
     },
@@ -496,6 +542,7 @@
       "prerequisites": [],
       "department": "Informaatioteknologian tiedekunta",
       "credits": 5,
+      "outcomes": [],
       "level": "Syventävät opinnot",
       "period": []
     },
@@ -505,6 +552,7 @@
       "prerequisites": [],
       "department": "Informaatioteknologian tiedekunta",
       "credits": 5,
+      "outcomes": [],
       "level": "Syventävät opinnot",
       "period": []
     },
@@ -514,6 +562,7 @@
       "prerequisites": [],
       "department": "Informaatioteknologian tiedekunta",
       "credits": 5,
+      "outcomes": [],
       "level": "Syventävät opinnot",
       "period": []
     },
@@ -523,6 +572,7 @@
       "prerequisites": [],
       "department": "Informaatioteknologian tiedekunta",
       "credits": 5,
+      "outcomes": [],
       "level": "Syventävät opinnot",
       "period": []
     },
@@ -534,6 +584,7 @@
       ],
       "department": "Informaatioteknologian tiedekunta",
       "credits": 5,
+      "outcomes": [],
       "level": "Syventävät opinnot",
       "period": []
     },
@@ -543,6 +594,7 @@
       "prerequisites": [],
       "department": "Informaatioteknologian tiedekunta",
       "credits": 5,
+      "outcomes": [],
       "level": "Syventävät opinnot",
       "period": []
     },
@@ -555,6 +607,7 @@
       ],
       "department": "Matematiikan ja tilastotieteen laitos",
       "credits": 5,
+      "outcomes": [],
       "level": "Aineopinnot",
       "period": []
     },
@@ -566,6 +619,7 @@
       ],
       "department": "Matematiikan ja tilastotieteen laitos",
       "credits": 5,
+      "outcomes": [],
       "level": "Aineopinnot",
       "period": []
     },
@@ -577,6 +631,7 @@
       ],
       "department": "Matematiikan ja tilastotieteen laitos",
       "credits": 5,
+      "outcomes": [],
       "level": "Aineopinnot",
       "period": []
     },
@@ -588,6 +643,7 @@
       ],
       "department": "Matematiikan ja tilastotieteen laitos",
       "credits": 5,
+      "outcomes": [],
       "level": "Aineopinnot",
       "period": []
     },
@@ -600,6 +656,7 @@
       ],
       "department": "Matematiikan ja tilastotieteen laitos",
       "credits": 4,
+      "outcomes": [],
       "level": "Aineopinnot",
       "period": []
     },
@@ -612,6 +669,7 @@
       ],
       "department": "Matematiikan ja tilastotieteen laitos",
       "credits": 5,
+      "outcomes": [],
       "level": "Aineopinnot",
       "period": []
     },
@@ -621,6 +679,7 @@
       "prerequisites": [],
       "department": "Matematiikan ja tilastotieteen laitos",
       "credits": 2,
+      "outcomes": [],
       "level": "Aineopinnot",
       "period": []
     },
@@ -633,6 +692,7 @@
       ],
       "department": "Matematiikan ja tilastotieteen laitos",
       "credits": 5,
+      "outcomes": [],
       "level": "Aineopinnot",
       "period": []
     },
@@ -644,6 +704,7 @@
       ],
       "department": "Informaatioteknologian tiedekunta",
       "credits": 5,
+      "outcomes": [],
       "level": "Syventävät opinnot",
       "period": []
     }

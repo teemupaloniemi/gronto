@@ -12,3 +12,7 @@ visualize:
 
 clean:
 	rm -rf tmp
+
+dist:
+	racket src/distance.rkt > tmp/distance.dot
+	xdot tmp/distance.dot
