@@ -12,11 +12,9 @@
   (sum-r l 0))
 
 ;; Distance between each outcome.
-;; Returns a list of size (length o1) * (length o2).
-;; Each element contains:
-;;     (source destination distance)
-(define (distance-outcomes t o1 o2)
-  (let ((cp (cartesian-product o1 o2)))
+;; Returns a list of size (length l1) * (length l2).
+(define (cp-path-lengths t l1 l2)
+  (let ((cp (cartesian-product l1 l2)))
 
     ;; Return a path from root of a tree (t) to node (n) if exists.
     ;; Otherwise returns an empty list.
@@ -47,6 +45,8 @@
         (- (+ (length p1) (length p2))
            (* 2 (length (common p1 p2))))))
 
+    ;; Create a list of distances related to each node pair in
+    ;; cartesian-product.
     (map (lambda (x)
                  (list (car x)
                        (cadr x)
@@ -55,43 +55,54 @@
                                        (string->symbol (cadr x)))))
          cp)))
 
-(define (min-distance-outcomes t o1 o2)
-  (let ((d (distance-outcomes t o1 o2)))
-    (define (min-of-source source distances)
-      (let* ((filtered (filter (lambda (x)
-                                  (eq? (car x) source))
-                          distances))
-             (sorted (sort filtered
-                           (lambda (x y)
-                                   (< (caddr x) (caddr y))))))
-        (if (> (length filtered) 0)
-               (caddar sorted)
-               999)))
+;; Distance between c1 outcomes and c2 prerequisites in ontology t.
+(define (distance t c1 c2)
+  (let* ((outs (value 'outcomes c1)) (louts (length outs))
+         (pres (value 'outcomes c2)) (lpres (length pres)))
 
-    (define mins-of-sources
-      (for*/list ((x o1))
-        (min-of-source x d)))
-    (/ (sum mins-of-sources) (length mins-of-sources))))
+    ;; Distance between two partitions in ontology.
+    (define (average-closest-neighbour-distance t outs pres)
+        ;; Find closest neighbour of one outcome.
+        (define (find-closest-neighbour o g)
+          ;; f: Filter ones that have `o` as source.
+          ;; s: Sort according to distance in acending order.
+          (let* ((f (filter (lambda (x) (eq? (car x) o)) g))
+                 (s (sort f (lambda (x y) (< (caddr x) (caddr y))))))
+            (if (> (length f) 0)
+                (caddar s)
+                999)))
+        ;; Call closest-neighbour for all outcomes.
+        (define closest-neighbours
+          (let ((p (cp-path-lengths t outs pres)))
+            (for*/list ((oi outs))
+              (find-closest-neighbour oi p))))
+        ;; Average distance betwee partitions usign the closests neighbours.
+        (if (> (length closest-neighbours) 0)
+            (/ (sum closest-neighbours) (length closest-neighbours))
+            999))
 
-;; Returns a pair of the average length of
-;; course outcomes to another outcomes.
-;; '(c1 --> c2 c2 --> c1)
-(define (distance-courses o c1 c2)
-  (let* ((o1 (value 'outcomes c1)) (l1 (length o1))
-         (o2 (value 'outcomes c2)) (l2 (length o2)))
-    (if (or (eq? l1 0) (eq? l2 0))
+    ;; If ether is empty return large value.
+    ;; We cant compute distance to nothing!
+    (if (or (eq? outs 0) (eq? pres 0))
         999
-        (min-distance-outcomes o o1 o2))))
+        (average-closest-neighbour-distance t outs pres))))
 
-(define (distance-courses-all courses ontology)
-    (map (lambda (p) (list (value 'title (car p))
-                           (value 'title (cadr p))
-                           (distance-courses ontology (car p) (cadr p))))
-         (cartesian-product courses courses)))
+;; Find the distance grpah among the courses according to the distance function f.
+;; Save results in triples:
+;;     (src dst dist)
+(define (G f cs o)
+    (map (lambda (p)
+                 (list (value 'title (car p))
+                       (value 'title (cadr p))
+                       (f o (car p) (cadr p))))
+         (cartesian-product cs cs)))
 
+(define courses (json-read "data/small.json"))
+(define ontology (json-read "data/acm.json"))
+(define u (G distance courses ontology))
 
-(define (prnt fds)
-  (define ds (filter (lambda (x) (not (eq? (caddr x) 999))) fds))
+(define (prnt g)
+  (define ds (filter (lambda (x) (not (eq? (caddr x) 999))) g))
   (define weights (map caddr ds))
   (define min-weight (apply min weights))
   (define max-weight (apply max weights))
@@ -103,15 +114,10 @@
   ;; Color based on original (non-inverted) scaled value
   (define (color w)
     (let ((s (scaled w)))
-      (cond ((< s 0.5) "green")
-            ((< s 0.66) "blue")
+      (cond ((< s 0.45) "green")
+            ((< s 0.55) "yellow")
+            ((< s 0.65) "orange")
             (else "brown"))))
-
-  ;; Inverted exponential scaling for penwidth
-  (define (normalize w)
-    (let* ((inv (- 1 (scaled w))) ;; invert so small weights => big penwidth
-           (exp-scale (+ 1 (* 4 (exp (* 2 (- inv 1))))))) ; penwidth ~1–5
-      exp-scale))
 
   ;; Print each edge with label, width, and color
   (define (prnt-pair p)
@@ -120,17 +126,14 @@
       (display (car p)) (display "\" -> \"") (display (cadr p))
       (display "\" [label=\"")
       (display w)
-      (display "\" penwidth=")
-      (display (normalize w))
+      (display "\" penwidth=2")
       (display ", color=")
       (display (color w))
+      (display ", style=dashed")
       (display "];") (newline)))
 
   (display "digraph Distances {") (newline)
   (map prnt-pair ds)
   (display "}") (newline))
 
-(define dists
-  (distance-courses-all (json-read "data/small.json") (json-read "data/acm.json")))
-
-(prnt dists)
+(prnt u)

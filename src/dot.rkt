@@ -52,7 +52,7 @@
 (define (preqs-one course)
   (map (lambda (p)
                (preq (value 'code course) p))
-       (value 'prerequisites course)))
+       (value 'course-prerequisites course)))
 (define (preqs-all courses)
   (map preqs-one courses))
 

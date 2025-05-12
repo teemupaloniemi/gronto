@@ -66,7 +66,7 @@
   (map (lambda (c)
                (map (lambda (p)
                             (preq-constr-one courses (value 'code c) p))
-                    (value 'prerequisites c)))
+                    (value 'course-prerequisites c)))
        courses))
 
 ;; Give semester credit constrains to one course.
