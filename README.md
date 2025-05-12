@@ -96,15 +96,38 @@ function (f).
 ### Filter
 
 `H(u, th) -> ũ` is a filter removing any edges from source graph (u) below the
-threshold value (th).
+threshold value (th) and remove any cycles (out of two "bidirectional" edges
+between two nodes remove the larger distance).
 
 ```scheme
 (define (H u th)
-  (filter (lambda (x) (< (caddr x) th))
-          u))
+  (define f (filter (lambda (x) (< (caddr x) th)) u))
+  ;; Find the smaller of bidirectional edges between same nodes.
+  ;; TODO: Does not work when weights are equal.
+  (define (find-smaller-if-exists p l)
+    (define r (filter (lambda (x) (and (eq? (car x) (cadr p))
+                                        (eq? (cadr x) (car p))))
+                      f))
+    (if (> (length r) 0) ;; counterpart exists
+        (if (< (caddr p) (caddr (car r)))
+            p
+            (car r))
+        p))
+  (remove-duplicates (for*/list ((p f))
+                       (find-smaller-if-exists p f))))
 ```
 
-(This all can be visualized with `make dist`.)
+Before the filter the graph looks like this ("inf"-edges removed).
+[images/graph-no-filter.svg](images/graph-no-filter.svg)
+
+Then we apply the threshold filter (th = 5, experimental).
+[images/graph-th-filter.svg](images/graph-th-filter.svg)
+
+And finally we remove bidirectionals.
+[images/graph-th-filter-and-acyclic.svg](images/graph-th-filter-and-acyclic.svg)
+
+From this we can make clear inference on what courses are prerequsite to other
+and we can proceed to schedule the courses.
 
 ## Schedule ([smt.rkt](src/smt.rkt) and [dot.rkt](src/dot.rkt))
 

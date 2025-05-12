@@ -94,10 +94,24 @@
                        (f t (car p) (cadr p))))
          (cartesian-product C C)))
 
-;; Filter any edges below threshold value.
+;; Filter any edges below threshold value
+;; and remove smaller of bidirectional edges.
 (define (H u th)
-  (filter (lambda (x) (< (caddr x) th))
-          u))
+  ;;(filter (lambda (x) (< (caddr x) 999)) u))
+  (define f (filter (lambda (x) (< (caddr x) th)) u))
+  ;; Find the smaller of bidirectional edges between same nodes.
+  ;; TODO: Does not work when weights are equal.
+  (define (find-smaller-if-exists p l)
+    (define r (filter (lambda (x) (and (eq? (car x) (cadr p))
+                                        (eq? (cadr x) (car p))))
+                      f))
+    (if (> (length r) 0) ;; counterpart exists
+        (if (< (caddr p) (caddr (car r)))
+            p
+            (car r))
+        p))
+  (remove-duplicates (for*/list ((p f))
+                       (find-smaller-if-exists p f))))
 
 ;; Read data and call the number-cruncher!
 (define courses (json-read "data/small.json"))
