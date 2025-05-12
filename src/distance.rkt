@@ -11,8 +11,10 @@
         (sum-r (cdr l) (+ s (car l)))))
   (sum-r l 0))
 
-;; Distance between each outcome.
-;; Returns a list of size (length l1) * (length l2).
+;; Compute distance for each pair in cartesian product between
+;; two lists using LCA path length style.
+;;
+;; Return a list of size (length l1) * (length l2).
 (define (cp-path-lengths t l1 l2)
   (let ((cp (cartesian-product l1 l2)))
 
@@ -55,7 +57,7 @@
                                        (string->symbol (cadr x)))))
          cp)))
 
-;; Distance between c1 outcomes and c2 prerequisites in ontology t.
+;; Distance between one course (c1) outcomes and another (c2) prerequisites in ontology (t).
 (define (distance t c1 c2)
   (let* ((outs (value 'outcomes c1)) (louts (length outs))
          (pres (value 'outcomes c2)) (lpres (length pres)))
@@ -71,7 +73,10 @@
             (if (> (length f) 0)
                 (caddar s)
                 999)))
-        ;; Call closest-neighbour for all outcomes.
+        ;; Compute the cartesian prodict of outs and preds and
+        ;; find closest-neighbour for all outcomes. By using
+        ;; closest-neighbour tactic we gain the advantage of two
+        ;; identical pratitions having no distance between them.
         (define closest-neighbours
           (let ((p (cp-path-lengths t outs pres)))
             (for*/list ((oi outs))
