@@ -3,14 +3,6 @@
 (require "io.rkt")
 (require "utils.rkt")
 
-;; Sum of the elements in a list.
-(define (sum l)
-  (define (sum-r l s)
-    (if (eq? '() l)
-        s
-        (sum-r (cdr l) (+ s (car l)))))
-  (sum-r l 0))
-
 ;; Compute distance for each pair in cartesian product between
 ;; two lists using LCA path length style.
 ;;

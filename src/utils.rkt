@@ -29,6 +29,16 @@
               (lambda (x) (string=? (value 'code x) code))
                       data)))
 
+;; Sum of the elements in a list.
+(provide sum)
+(define (sum l)
+  (define (sum-r l s)
+    (if (eq? '() l)
+        s
+        (sum-r (cdr l) (+ s (car l)))))
+  (sum-r l 0))
+
+
 ;; Get a maximum of a list.
 (define (max-element x y) (if (> x y) x y))
 (provide max-list)
