@@ -15,15 +15,14 @@ For example for two courses:
 C1:
     outcome1
     outcome2
-
 C2:
     outcome1
     outcome3
     outcome4
 ```
 
-So far we have an f such that is measures the average of the minimum distance from
-each c1 outcome to c2 outcome. The steps for this are:
+We have `f` such that is computes the average distance between the nodes of
+c1 outcomes from c2 outcomes in the ontology-tree. The steps for this are:
 
  1. Create a cartesian-product of c1 and c2 outcomes (we will add prerequisites later).
  ```
@@ -34,9 +33,26 @@ each c1 outcome to c2 outcome. The steps for this are:
  ("outcome2" "outcome3")
  ("outcome2" "outcome4")
  ```
+
  2. Count distance for each pair. This is done by counting taking the paths from
  root to outcome-a and root to outcome-b. Then common part is discarded from least
- ancestor (LCA) and tail lengths are added.
+ ancestor (LCA) and tail lengths are added (see code below).
+
+ ```lisp
+    (define (distance-nodes o n1 n2)
+      (let ((p1 (path-from-root o n1))
+            (p2 (path-from-root o n2)))
+
+        ;; Return a list containing elements present in both l1 AND l2.
+        (define (common l1 l2)
+          (filter (lambda (x) (member x l1))
+                  l2))
+
+        (- (+ (length p1) (length p2))
+           (* 2 (length (common p1 p2))))))
+ ```
+
+ Resulting in this:
  ```
  ("outcome1" "outcome1" 0)
  ("outcome1" "outcome3" 7)
@@ -45,6 +61,7 @@ each c1 outcome to c2 outcome. The steps for this are:
  ("outcome2" "outcome3" 8)
  ("outcome2" "outcome4" 1)
  ```
+
  3. Select the minimum for each where source is c1 outcome.
  ```
  ("outcome1" "outcome1" 0)

@@ -12,7 +12,7 @@
 
     ;; Return a path from root of a tree (t) to node (n) if exists.
     ;; Otherwise returns an empty list.
-    (define (path t n)
+    (define (path-from-root t n)
       (define (create-path t n p)
         (cond
           ((not (hash? t)) '())
@@ -30,8 +30,8 @@
     ;; + path from root to n2
     ;; - (2 * common in the paths).
     (define (distance-nodes o n1 n2)
-      (let ((p1 (path o n1))
-            (p2 (path o n2)))
+      (let ((p1 (path-from-root o n1))
+            (p2 (path-from-root o n2)))
         ;; Return a list containing elements present in both l1 AND l2.
         (define (common l1 l2)
           (filter (lambda (x) (member x l1))
