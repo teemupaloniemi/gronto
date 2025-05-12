@@ -406,7 +406,12 @@
         "department": "Informaatioteknologian tiedekunta",
         "level": "Perusopinnot",
         "credits": 5,
-        "outcomes": [],
+        "outcomes": [
+          "Object oriented architectures",
+          "Language features",
+          "Relational database model",
+          "User interface programming"
+        ],
         "skill-prerequisites": [],
         "period": [3]
     },

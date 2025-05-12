@@ -118,9 +118,9 @@
   ;; Color based on original (non-inverted) scaled value
   (define (color w)
     (let ((s (scaled w)))
-      (cond ((< s 0.45) "green")
-            ((< s 0.55) "yellow")
-            ((< s 0.65) "orange")
+      (cond ((< s 0.55) "green")
+            ((< s 0.66) "yellow")
+            ((< s 0.70) "orange")
             (else "brown"))))
 
   ;; Print each edge with label, width, and color

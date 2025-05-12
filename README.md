@@ -6,7 +6,7 @@ The current idea is to find G, f, H, and M such that:
 
 ## Constructing a distance graph ([distance.rkt](src/distance.rkt))
 
-### Distance function 
+### Distance function
 
 `f(t, c1, c2) -> d` tells the distance between two courses (c1 and c2) in a given
 ontology (t).
