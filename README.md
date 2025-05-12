@@ -93,7 +93,7 @@ function (f).
          (cartesian-product C C)))
 ```
 
-### Map to all courses
+### Filter
 
 `H(u, th) -> ũ` is a filter removing any edges from source graph (u) below the
 threshold value (th).
