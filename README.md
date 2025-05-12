@@ -38,18 +38,18 @@ c1 outcomes from c2 outcomes in the ontology-tree. The steps for this are:
  root to outcome-a and root to outcome-b. Then common part is discarded from least
  ancestor (LCA) and tail lengths are added (see code below).
 
- ```lisp
-    (define (distance-nodes o n1 n2)
-      (let ((p1 (path-from-root o n1))
-            (p2 (path-from-root o n2)))
+ ```scheme
+ (define (distance-nodes o n1 n2)
+   (let ((p1 (path-from-root o n1))
+         (p2 (path-from-root o n2)))
 
-        ;; Return a list containing elements present in both l1 AND l2.
-        (define (common l1 l2)
-          (filter (lambda (x) (member x l1))
-                  l2))
+     ;; Return a list containing elements present in both l1 AND l2.
+     (define (common l1 l2)
+       (filter (lambda (x) (member x l1))
+               l2))
 
-        (- (+ (length p1) (length p2))
-           (* 2 (length (common p1 p2))))))
+     (- (+ (length p1) (length p2))
+        (* 2 (length (common p1 p2))))))
  ```
 
  Resulting in this:
@@ -78,7 +78,20 @@ from its counterpart which is 0 for all.
 
 `G(t, f, C) -> u` composes a course distance graph (u) such that each edge
 between any two courses in the set of all courses (C) is produced by the distance
-function (f). (This can be visualized with `make dist`.)
+function (f). 
+
+```scheme
+(define (G f cs o)
+    (map (lambda (p)
+                 (list (value 'title (car p))
+                       (value 'title (cadr p))
+                       (f o (car p) (cadr p))))
+         (cartesian-product cs cs)))
+```
+
+(This can be visualized with `make dist`.)
+
+
 
 ## Filter
 

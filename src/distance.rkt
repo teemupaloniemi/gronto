@@ -84,7 +84,7 @@
         999
         (average-closest-neighbour-distance t outs pres))))
 
-;; Find the distance grpah among the courses according to the distance function f.
+;; Find the distance graph among the courses according to the distance function f.
 ;; Save results in triples:
 ;;     (src dst dist)
 (define (G f cs o)
