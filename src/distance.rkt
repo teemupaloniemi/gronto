@@ -87,17 +87,19 @@
 ;; Find the distance graph among the courses according to the distance function f.
 ;; Save results in triples:
 ;;     (src dst dist)
-(define (G f cs o)
+(define (G t f C)
     (map (lambda (p)
                  (list (value 'title (car p))
                        (value 'title (cadr p))
-                       (f o (car p) (cadr p))))
-         (cartesian-product cs cs)))
+                       (f t (car p) (cadr p))))
+         (cartesian-product C C)))
 
+;; Read data and call the number-cruncher!
 (define courses (json-read "data/small.json"))
 (define ontology (json-read "data/acm.json"))
-(define u (G distance courses ontology))
+(define u (G ontology distance courses))
 
+;; Visualize :)
 (define (prnt g)
   (define ds (filter (lambda (x) (not (eq? (caddr x) 999))) g))
   (define weights (map caddr ds))

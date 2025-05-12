@@ -78,15 +78,15 @@ from its counterpart which is 0 for all.
 
 `G(t, f, C) -> u` composes a course distance graph (u) such that each edge
 between any two courses in the set of all courses (C) is produced by the distance
-function (f). 
+function (f).
 
 ```scheme
-(define (G f cs o)
+(define (G t f C)
     (map (lambda (p)
                  (list (value 'title (car p))
                        (value 'title (cadr p))
-                       (f o (car p) (cadr p))))
-         (cartesian-product cs cs)))
+                       (f t (car p) (cadr p))))
+         (cartesian-product C C)))
 ```
 
 (This can be visualized with `make dist`.)
