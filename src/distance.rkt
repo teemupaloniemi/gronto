@@ -94,14 +94,19 @@
                        (f t (car p) (cadr p))))
          (cartesian-product C C)))
 
+;; Filter any edges below threshold value.
+(define (H u th)
+  (filter (lambda (x) (< (caddr x) th))
+          u))
+
 ;; Read data and call the number-cruncher!
 (define courses (json-read "data/small.json"))
 (define ontology (json-read "data/acm.json"))
 (define u (G ontology distance courses))
+(define ũ (H u 5/1))
 
 ;; Visualize :)
-(define (prnt g)
-  (define ds (filter (lambda (x) (not (eq? (caddr x) 999))) g))
+(define (prnt ds)
   (define weights (map caddr ds))
   (define min-weight (apply min weights))
   (define max-weight (apply max weights))
@@ -135,4 +140,4 @@
   (map prnt-pair ds)
   (display "}") (newline))
 
-(prnt u)
+(prnt ũ)

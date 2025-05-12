@@ -4,7 +4,9 @@ Gronto is short for `GRaphs and ONTology to Opetussuunnitelma's`. Gronto aims to
 use graph theoretic optimization methods for ontology based curriculum planning.
 The current idea is to find G, f, H, and M such that:
 
-## Distance ([distance.rkt](src/distance.rkt))
+## Constructing a distance graph ([distance.rkt](src/distance.rkt))
+
+### Distance function 
 
 `f(t, c1, c2) -> d` tells the distance between two courses (c1 and c2) in a given
 ontology (t).
@@ -76,6 +78,8 @@ c1 outcomes from c2 outcomes in the ontology-tree. The steps for this are:
 With this the distance to course itself is `0` because each outcome finds minimum
 from its counterpart which is 0 for all.
 
+### Map to all courses
+
 `G(t, f, C) -> u` composes a course distance graph (u) such that each edge
 between any two courses in the set of all courses (C) is produced by the distance
 function (f).
@@ -89,12 +93,18 @@ function (f).
          (cartesian-product C C)))
 ```
 
-(This can be visualized with `make dist`.)
+### Map to all courses
 
-## Filter (TODO: filter.rkt)
+`H(u, th) -> ũ` is a filter removing any edges from source graph (u) below the
+threshold value (th).
 
-`H(u, l) -> ũ` is a filter removing any edges from source graph (u) below the
-threshold value (l).
+```scheme
+(define (H u th)
+  (filter (lambda (x) (< (caddr x) th))
+          u))
+```
+
+(This all can be visualized with `make dist`.)
 
 ## Schedule ([smt.rkt](src/smt.rkt) and [dot.rkt](src/dot.rkt))
 
