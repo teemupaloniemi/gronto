@@ -118,13 +118,13 @@ between two nodes remove the larger distance).
 ```
 
 Before the filter the graph looks like this ("inf"-edges removed).
-[images/graph-no-filter.svg](images/graph-no-filter.svg)
+![images/graph-no-filter.svg](images/graph-no-filter.svg)
 
 Then we apply the threshold filter (th = 5, experimental).
-[images/graph-th-filter.svg](images/graph-th-filter.svg)
+![images/graph-th-filter.svg](images/graph-th-filter.svg)
 
 And finally we remove bidirectionals.
-[images/graph-th-filter-and-acyclic.svg](images/graph-th-filter-and-acyclic.svg)
+![images/graph-th-filter-and-acyclic.svg](images/graph-th-filter-and-acyclic.svg)
 
 From this we can make clear inference on what courses are prerequsite to other
 and we can proceed to schedule the courses.
