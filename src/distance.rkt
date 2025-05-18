@@ -3,28 +3,27 @@
 (require "io.rkt")
 (require "utils.rkt")
 
+;; Return a path from root of a tree (t) to node (n) if exists.
+;; Otherwise returns an empty list.
+(define (path-from-root t n)
+  (define (create-path t n p)
+    (cond
+      ((not (hash? t)) '())
+      ((member n (hash-keys t)) (reverse (cons n p)))
+      (else
+       (foldr (lambda (k acc)
+                (define sub (create-path (value k t) n (cons k p)))
+                (if (null? sub) acc sub))
+              '()
+              (hash-keys t)))))
+  (create-path t n '()))
+
 ;; Compute distance for each pair in cartesian product between
 ;; two lists using LCA path length style.
 ;;
 ;; Return a list of size (length l1) * (length l2).
 (define (cp-path-lengths t l1 l2)
   (let ((cp (cartesian-product l1 l2)))
-
-    ;; Return a path from root of a tree (t) to node (n) if exists.
-    ;; Otherwise returns an empty list.
-    (define (path-from-root t n)
-      (define (create-path t n p)
-        (cond
-          ((not (hash? t)) '())
-          ((member n (hash-keys t)) (reverse (cons n p)))
-          (else
-           (foldr (lambda (k acc)
-                    (define sub (create-path (value k t) n (cons k p)))
-                    (if (null? sub) acc sub))
-                  '()
-                  (hash-keys t)))))
-      (create-path t n '()))
-
     ;; Distance from n1 to n2 in o is the length of
     ;;   path from root to n1
     ;; + path from root to n2
@@ -36,8 +35,13 @@
         (define (common l1 l2)
           (filter (lambda (x) (member x l1))
                   l2))
-        (- (+ (length p1) (length p2))
-           (* 2 (length (common p1 p2))))))
+        (* (- (+ (length p1) (length p2))
+              (* 2 (length (common p1 p2))))
+           ;; Weight the distance by the depth of the preq item.
+           ;; More specific items are better at describing the actual
+           ;; content of the course. But we have to scale down this
+           ;; effect a but so half seems like appropriate, who knows.
+           (/ (length p2) 2))))
 
     ;; Create a list of distances related to each node pair in
     ;; cartesian-product.
@@ -49,10 +53,13 @@
                                        (string->symbol (cadr x)))))
          cp)))
 
-;; Distance between one course (c1) outcomes and another (c2) prerequisites in ontology (t).
+;; Distance between one course (c1) outcomes and another (c2) prerequisites
+;; in ontology (t).
+(provide distance)
 (define (distance t c1 c2)
   (let* ((outs (value 'outcomes c1)) (louts (length outs))
-         (pres (value 'outcomes c2)) (lpres (length pres)))
+         (pres (value 'outcomes c2)) (lpres (length pres))
+         (weight (value 'credits c2)))
 
     ;; Distance between two partitions in ontology.
     (define (average-closest-neighbour-distance t outs pres)
@@ -82,11 +89,13 @@
     ;; We cant compute distance to nothing!
     (if (or (eq? outs 0) (eq? pres 0))
         999
-        (average-closest-neighbour-distance t outs pres))))
+        (* weight (average-closest-neighbour-distance t outs pres)))))
+        ;;(average-closest-neighbour-distance t outs pres))))
 
 ;; Find the distance graph among the courses according to the distance function f.
 ;; Save results in triples:
 ;;     (src dst dist)
+(provide G)
 (define (G t f C)
     (map (lambda (p)
                  (list (value 'title (car p))
@@ -96,8 +105,8 @@
 
 ;; Filter any edges below threshold value
 ;; and remove smaller of bidirectional edges.
+(provide H)
 (define (H u th)
-  ;;(filter (lambda (x) (< (caddr x) 999)) u))
   (define f (filter (lambda (x) (< (caddr x) th)) u))
   ;; Find the smaller of bidirectional edges between same nodes.
   ;; TODO: Does not work when weights are equal.
@@ -117,7 +126,7 @@
 (define courses (json-read "data/small.json"))
 (define ontology (json-read "data/acm.json"))
 (define u (G ontology distance courses))
-(define ũ (H u 5/1))
+(define ũ (H u 30/1))
 
 ;; Visualize :)
 (define (prnt ds)

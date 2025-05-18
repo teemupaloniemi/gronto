@@ -63,10 +63,10 @@
           "Computer games",
           "Software configuration management and version control systems",
           "Software development techniques",
+          "Software testing and debugging",
           "Data types and structures",
           "Classes and objects",
           "Modules / packages",
-          "Software testing and debugging",
           "Procedures, functions and subroutines"
         ],
         "skill-prerequisites": [],
@@ -120,7 +120,10 @@
           "Complexity classes",
           "Data structures design and analysis"
         ],
-        "skill-prerequisites": [],
+        "skill-prerequisites": [
+          "Software development techniques",
+          "Software testing and debugging"
+        ],
         "period": []
     },
     {
@@ -197,8 +200,13 @@
         "department": "Matematiikan ja tilastotieteen laitos",
         "level": "Aineopinnot",
         "credits": 5,
-        "outcomes": [],
-        "skill-prerequisites": [],
+        "outcomes": [
+          "Complexity classes",
+          "Formal software verification"
+        ],
+        "skill-prerequisites": [
+          "Software testing and debugging"
+        ],
         "period": [1, 2]
     },
     {
