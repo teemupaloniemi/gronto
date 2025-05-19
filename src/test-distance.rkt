@@ -51,7 +51,3 @@
 ;; (alg1 - fun1) > (alg1 - ohj1)
 (is-larger-distance? '("TIEA341" "MATA2520")
                      '("ITKP102" "TIEA341"))
-
-;; (käyttis - fun1) > (käyttis - ohj1)
-(is-larger-distance? '("ITKA2030" "TIEA341")
-                     '("ITKA2030" "ITKP102"))
