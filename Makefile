@@ -14,5 +14,8 @@ clean:
 	rm -rf tmp
 
 dist:
-	racket src/distance.rkt > tmp/distance.dot
+	DOT=1 racket src/distance.rkt > tmp/distance.dot
 	xdot tmp/distance.dot
+
+test:
+	racket src/test-distance.rkt

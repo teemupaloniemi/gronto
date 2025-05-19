@@ -120,10 +120,7 @@
           "Complexity classes",
           "Data structures design and analysis"
         ],
-        "skill-prerequisites": [
-          "Software development techniques",
-          "Software testing and debugging"
-        ],
+        "skill-prerequisites": [],
         "period": []
     },
     {
@@ -204,9 +201,7 @@
           "Complexity classes",
           "Formal software verification"
         ],
-        "skill-prerequisites": [
-          "Software testing and debugging"
-        ],
+        "skill-prerequisites": [],
         "period": [1, 2]
     },
     {
