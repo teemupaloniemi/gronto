@@ -31,6 +31,7 @@ c1 outcomes from c2 outcomes in the ontology-tree. The steps for this are:
  ("outcome1" "outcome1")
  ("outcome1" "outcome3")
  ("outcome1" "outcome4")
+
  ("outcome2" "outcome1")
  ("outcome2" "outcome3")
  ("outcome2" "outcome4")
@@ -58,6 +59,7 @@ c1 outcomes from c2 outcomes in the ontology-tree. The steps for this are:
  ("outcome1" "outcome1" 0)
  ("outcome1" "outcome3" 7)
  ("outcome1" "outcome4" 16)
+
  ("outcome2" "outcome1" 3)
  ("outcome2" "outcome3" 8)
  ("outcome2" "outcome4" 1)
@@ -66,6 +68,7 @@ c1 outcomes from c2 outcomes in the ontology-tree. The steps for this are:
  3. Select the minimum for each where source is c1 outcome.
  ```
  ("outcome1" "outcome1" 0)
+
  ("outcome2" "outcome4" 1)
  ```
 
@@ -84,7 +87,6 @@ multiplied together.
 This distance function has some nice properties:
 
 - Distance from course to itself is `0`. Minimum length from each node to self is 0.
--
 
 ### Map to all courses
 
