@@ -3,6 +3,8 @@
 (require "io.rkt")
 (require "utils.rkt")
 
+(define INF 9999)
+
 ;; Compute distance for each pair in cartesian product between
 ;; two lists using LCA path length style.
 ;;
@@ -36,11 +38,10 @@
                   l2))
         (* (- (+ (length p1) (length p2))
               (* 2 (length (common p1 p2))))
-           ;; Weight the distance by the depth of the preq item.
-           ;; More specific items are better at describing the actual
-           ;; content of the course. But we have to scale down this
-           ;; effect a but so half seems like appropriate, who knows.
-           (/ (length p2) 2))))
+           ;; Average depth of ontology nodes.
+           ;; Deeper nodes convey more detailed
+           ;; information.
+           (/ (* (length p1) (length p2)) 2))))
 
     ;; Create a list of distances related to each node pair in
     ;; cartesian-product.
@@ -71,7 +72,7 @@
                  (s (sort f (lambda (x y) (< (caddr x) (caddr y))))))
             (if (> (length f) 0)
                 (caddar s)
-                999)))
+                INF)))
         ;; Compute the cartesian prodict of outs and preds and
         ;; find closest-neighbour for all outcomes. By using
         ;; closest-neighbour tactic we gain the advantage of two
@@ -83,12 +84,12 @@
         ;; Average distance betwee partitions usign the closests neighbours.
         (if (> (length closest-neighbours) 0)
             (/ (sum closest-neighbours) (length closest-neighbours))
-            999))
+            INF))
 
     ;; If ether is empty return large value.
     ;; We cant compute distance to nothing!
     (if (or (eq? outs 0) (eq? pres 0))
-        999
+        INF
         (* weight1 weight2 (average-closest-neighbour-distance t outs pres)))))
 
 ;; Find the distance graph among the courses according to the distance function f.
@@ -130,7 +131,7 @@
   ;; Filter threshold is experimental,
   ;; it changes relative to the the moon
   ;; position in the sky.
-  (define ũ (H u 150/1))
+  (define ũ (H u 600/1))
 
   ;; Visualize :)
   (define (prnt ds)
