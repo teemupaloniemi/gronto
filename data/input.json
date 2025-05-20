@@ -2,9 +2,7 @@
     {
         "code": "MATA2520",
         "title": "Joukko-oppi ja graafiteoria",
-        "course-prerequisites": [
-            "MATA2700"
-        ],
+        "course-prerequisites": [],
         "department": "Matematiikan ja tilastotieteen laitos",
         "level": "Aineopinnot",
         "credits": 5,
@@ -36,9 +34,7 @@
     {
         "code": "TIEA1130",
         "title": "Oliosuuntautunut suunnittelu ja ohjelmointi",
-        "course-prerequisites": [
-            "ITKP102"
-        ],
+        "course-prerequisites": [],
         "department": "Informaatioteknologian tiedekunta",
         "level": "Aineopinnot",
         "credits": 5,
@@ -70,16 +66,12 @@
           "Procedures, functions and subroutines"
         ],
         "skill-prerequisites": [],
-        "period": [1]
+        "period": []
     },
     {
         "code": "ITKP104",
         "title": "Tietoverkot",
-        "course-prerequisites": [
-            "ITKP101",
-            "ITKP102",
-            "ITKP1010"
-        ],
+        "course-prerequisites": [],
         "department": "Informaatioteknologian tiedekunta",
         "level": "Perusopinnot",
         "credits": 5,
@@ -109,10 +101,7 @@
     {
         "code": "ITKA201",
         "title": "Algoritmit 1",
-        "course-prerequisites": [
-            "ITKP102",
-            "ITKA2004"
-        ],
+        "course-prerequisites": [],
         "department": "Informaatioteknologian tiedekunta",
         "level": "Aineopinnot",
         "credits": 5,
@@ -126,9 +115,7 @@
     {
         "code": "ITKA2030",
         "title": "K\u00e4ytt\u00f6j\u00e4rjestelmien ja pilvipalveluiden perusteet",
-        "course-prerequisites": [
-            "ITKP102"
-        ],
+        "course-prerequisites": [],
         "department": "Informaatioteknologian tiedekunta",
         "level": "Aineopinnot",
         "credits": 5,
@@ -167,9 +154,7 @@
     {
         "code": "ITKP1011",
         "title": "Web-julkaiseminen",
-        "course-prerequisites": [
-            "ITKP1010"
-        ],
+        "course-prerequisites": [],
         "department": "Informaatioteknologian tiedekunta",
         "level": "Perusopinnot",
         "credits": 5,
@@ -191,9 +176,7 @@
     {
         "code": "MATA2700",
         "title": "Todistamisen ja p\u00e4\u00e4ttelyn perusteet tekniikan alalle",
-        "course-prerequisites": [
-            "MATP1700"
-        ],
+        "course-prerequisites": [],
         "department": "Matematiikan ja tilastotieteen laitos",
         "level": "Aineopinnot",
         "credits": 5,
@@ -202,14 +185,12 @@
           "Formal software verification"
         ],
         "skill-prerequisites": [],
-        "period": [1, 2]
+        "period": []
     },
     {
         "code": "MATA2710",
         "title": "Lineaarialgebra ja derivointi tekniikan alalla",
-        "course-prerequisites": [
-            "MATP1700"
-        ],
+        "course-prerequisites": [],
         "department": "Matematiikan ja tilastotieteen laitos",
         "level": "Aineopinnot",
         "credits": 5,
@@ -220,10 +201,7 @@
     {
         "code": "MATA280",
         "title": "Stokastiikan perusteet",
-        "course-prerequisites": [
-            "MATP213",
-            "MATA172"
-        ],
+        "course-prerequisites": [],
         "department": "Matematiikan ja tilastotieteen laitos",
         "level": "Aineopinnot",
         "credits": 5,
@@ -234,9 +212,7 @@
     {
         "code": "MATP121",
         "title": "Lineaarinen algebra ja geometria 1",
-        "course-prerequisites": [
-            "MATP100"
-        ],
+        "course-prerequisites": [],
         "department": "Matematiikan ja tilastotieteen laitos",
         "level": "Perusopinnot",
         "credits": 5,
@@ -269,9 +245,7 @@
     {
         "code": "MATP212",
         "title": "Calculus 2",
-        "course-prerequisites": [
-            "MATP211"
-        ],
+        "course-prerequisites": [],
         "department": "Matematiikan ja tilastotieteen laitos",
         "level": "Perusopinnot",
         "credits": 5,
@@ -282,9 +256,7 @@
     {
         "code": "MATP213",
         "title": "Calculus 3",
-        "course-prerequisites": [
-            "MATP212"
-        ],
+        "course-prerequisites": [],
         "department": "Matematiikan ja tilastotieteen laitos",
         "level": "Perusopinnot",
         "credits": 5,
@@ -317,12 +289,7 @@
     {
         "code": "TIEA2048",
         "title": "Tietokoneen rakenne ja arkkitehtuuri 2",
-        "course-prerequisites": [
-            "TIEP114",
-            "ITKP102",
-            "TIEP111",
-            "ITKA203"
-        ],
+        "course-prerequisites": [],
         "department": "Informaatioteknologian tiedekunta",
         "level": "Aineopinnot",
         "credits": 5,
@@ -350,33 +317,29 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": [9, 10, 11, 12]
+        "period": []
     },
     {
         "code": "TIEA302",
         "title": "Kandidaatintutkielma",
-        "course-prerequisites": [
-            "TIEA301"
-        ],
+        "course-prerequisites": [],
         "department": "Informaatioteknologian tiedekunta",
         "level": "Aineopinnot",
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": [9, 10, 11, 12]
+        "period": []
     },
     {
         "code": "TIEA303",
         "title": "Kypsyysn\u00e4yte",
-        "course-prerequisites": [
-            "TIEA301"
-        ],
+        "course-prerequisites": [],
         "department": "Informaatioteknologian tiedekunta",
         "level": "Aineopinnot",
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": [9, 10, 11, 12]
+        "period": []
     },
     {
         "code": "TIEA304",
@@ -403,9 +366,7 @@
     {
         "code": "TIEP111",
         "title": "Ohjelmointi 2",
-        "course-prerequisites": [
-            "ITKP102"
-        ],
+        "course-prerequisites": [],
         "department": "Informaatioteknologian tiedekunta",
         "level": "Perusopinnot",
         "credits": 5,
@@ -416,14 +377,12 @@
           "User interface programming"
         ],
         "skill-prerequisites": [],
-        "period": [3]
+        "period": []
     },
     {
         "code": "TIEP112",
         "title": "Ohjelmointi 2, C++",
-        "course-prerequisites": [
-            "TIEP111"
-        ],
+        "course-prerequisites": [],
         "department": "Informaatioteknologian tiedekunta",
         "level": "Perusopinnot",
         "credits": 5,
@@ -438,10 +397,7 @@
         "department": "Informaatioteknologian tiedekunta",
         "level": "Perusopinnot",
         "credits": 5,
-        "outcomes": [
-            "Assembly languages",
-            "Arithmetic and datapath circuits"
-        ],
+        "outcomes": [],
         "skill-prerequisites": [],
         "period": []
     },
@@ -454,7 +410,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": [1]
+        "period": []
     },
     {
         "code": "TIEP1200",
@@ -476,7 +432,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": [2]
+        "period": []
     },
     {
         "code": "TILP2400",

@@ -89,13 +89,12 @@
 (define (safe-gen-dot courses sem-pairs)
   (define (error-message)
     (raise "Error: could not parse z3 model"))
-  (if (eq? sem-pairs '())
+  (if (equal? sem-pairs '())
       (error-message)
       (gen-dot courses sem-pairs)))
 
 (define (main)
-  (if (getenv "LARGE")
-      (safe-gen-dot (json-read "data/large.json") (parse-smt-model "tmp/z3.txt"))
-      (safe-gen-dot (json-read "data/small.json") (parse-smt-model "tmp/z3.txt"))))
+  (safe-gen-dot (json-read "tmp/output.json")
+                (parse-smt-model "tmp/z3.txt")))
 
 (main)

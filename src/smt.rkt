@@ -41,7 +41,7 @@
   (let ((min-sem (car semester-range))
         (max-sem (car (reverse semester-range))))
     (map (lambda (c)
-                 (if (not (eq? (value 'period c) '()))
+                 (if (not (equal? (value 'period c) '()))
                    (decl-sem-var-specific (value 'code c) (value 'period c) )
                    (decl-sem-var-all (value 'code c) min-sem max-sem)))
          courses)))
@@ -49,7 +49,7 @@
 ;; Create one prerequisite constraint.
 (define (preq-constr-one courses course-code preq-code)
   (define (preq-exists)
-    (not (eq? (search-by-code courses preq-code) '())))
+    (not (equal? (search-by-code courses preq-code) '())))
   (define (show)
     (display "(assert (> sem_") (display course-code)
               (display " sem_") (display preq-code)
@@ -155,21 +155,13 @@
   (display "(get-model)") (newline)))
 
 (define (main)
-  (if (getenv "LARGE")
-      (build-smt-model "data/large.json"
-                      5     ;; Years
-                      4     ;; sem-per-year
-                      270   ;; min-tot-cred
-                      10000 ;; max-tot-cred
-                      6     ;; min-sem-cred
-                      19)   ;; max-sem-cred
-      (build-smt-model "data/small.json"
-                      3     ;; Years
-                      4     ;; sem-per-year
-                      180   ;; min-tot-cred
-                      10000 ;; max-tot-cred
-                      6     ;; min-sem-cred
-                      19))) ;; max-sem-cred
+  (build-smt-model "tmp/output.json"
+                   3     ;; Years
+                   4     ;; sem-per-year
+                   180   ;; min-tot-cred
+                   10000 ;; max-tot-cred
+                   5     ;; min-sem-cred
+                   20)) ;; max-sem-cred
 
 (main)
 

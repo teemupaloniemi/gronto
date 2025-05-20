@@ -1,4 +1,4 @@
-all: tmp-folder gen-smt solve-smt visualize
+all: tmp-folder dist gen-smt solve-smt visualize
 
 tmp-folder:
 	mkdir -p tmp
@@ -9,13 +9,10 @@ solve-smt:
 visualize:
 	racket src/dot.rkt > tmp/courses.dot
 	xdot tmp/courses.dot
-
-clean:
-	rm -rf tmp
-
 dist:
-	DOT=1 racket src/distance.rkt > tmp/distance.dot
+	racket src/distance.rkt > tmp/distance.dot
 	xdot tmp/distance.dot
-
 test:
 	racket src/test-distance.rkt
+clean:
+	rm -rf tmp

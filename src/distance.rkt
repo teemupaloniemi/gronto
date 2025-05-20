@@ -68,7 +68,7 @@
         (define (find-closest-neighbour o g)
           ;; f: Filter ones that have `o` as source.
           ;; s: Sort according to distance in acending order.
-          (let* ((f (filter (lambda (x) (eq? (car x) o)) g))
+          (let* ((f (filter (lambda (x) (equal? (car x) o)) g))
                  (s (sort f (lambda (x y) (< (caddr x) (caddr y))))))
             (if (> (length f) 0)
                 (caddar s)
@@ -88,7 +88,7 @@
 
     ;; If ether is empty return large value.
     ;; We cant compute distance to nothing!
-    (if (or (eq? outs 0) (eq? pres 0))
+    (if (or (equal? outs 0) (equal? pres 0))
         INF
         (* weight1 weight2 (average-closest-neighbour-distance t outs pres)))))
 
@@ -98,8 +98,8 @@
 (provide G)
 (define (G t f C)
     (map (lambda (p)
-                 (list (value 'title (car p))
-                       (value 'title (cadr p))
+                 (list (value 'code (car p))
+                       (value 'code (cadr p))
                        (f t (car p) (cadr p))))
          (cartesian-product C C)))
 
@@ -108,32 +108,49 @@
 (provide H)
 (define (H u th)
   (define f (filter (lambda (x) (< (caddr x) th)) u))
-  ;; Find the smaller of bidirectional edges between same nodes.
-  ;; TODO: Does not work when weights are equal.
-  (define (find-smaller-if-exists p l)
-    (define r (filter (lambda (x) (and (eq? (car x) (cadr p))
-                                        (eq? (cadr x) (car p))))
+
+  ;; Find the smallest of the two bidirectional edges between same nodes.
+  (define (find-min-order current)
+
+    ;; Find all that have the same codes but in different order.
+    (define r (filter (lambda (new) (and (equal? (car  new) (cadr current))
+                                         (equal? (cadr new) (car  current))))
                       f))
-    (if (> (length r) 0) ;; counterpart exists
-        (if (< (caddr p) (caddr (car r)))
-            p
-            (car r))
-        p))
+
+    ;; If some are found select the first.
+    (define other
+      (if (> (length r) 0)
+         (car r)
+         '()))
+
+    ;; Find shorter.
+    (if (not (equal? '() other))
+        ;; Counterpart exists.
+        (if (< (caddr current) (caddr other))
+            ;; Current is the shortest direction.
+            current
+            ;; Oterwise they are equal or the other is shorter.
+            (if (equal? (caddr current) (caddr other))
+               ;; Equally short directions.
+               ;;
+               ;; If the codes are in lexical order use
+               ;; current order so when we see the flipped
+               ;; version it is _not_ in order and ordered
+               ;; is again selected and thus can be removed
+               ;; as duplicate later.
+               (if (string>? (car current) (cadr current))
+                   current
+                   other)
+               ;; The other is shorter direction.
+               ;; Select that one.
+               other))
+        current))
+
   (remove-duplicates (for*/list ((p f))
-                       (find-smaller-if-exists p f))))
+                       (find-min-order p))))
 
-(define (graph-all)
-  ;; Read data and call the number-cruncher!
-  (define courses (json-read "data/small.json"))
-  (define ontology (json-read "data/acm.json"))
-  (define u (G ontology distance courses))
-
-  ;; Filter threshold is experimental,
-  ;; it changes relative to the the moon
-  ;; position in the sky.
-  (define ũ (H u 600/1))
-
-  ;; Visualize :)
+;; Visualize :)
+(define (graph-all u)
   (define (prnt ds)
     (define weights (map caddr ds))
     (define min-weight (apply min weights))
@@ -167,10 +184,38 @@
     (display "digraph Distances {") (newline)
     (map prnt-pair ds)
     (display "}") (newline))
-  (prnt ũ))
+
+  (prnt u))
+
+;; Assign prerequsite courses to courses and save them for scheduling.
+(define (save-results filename graph courses)
+  (define (course-codes)
+    (map (lambda (x) (value 'code x))
+         courses))
+  (define (get-prerequisites code)
+    (map car
+         (filter (lambda (x) (and (not (eqv? (car x) code)) (eqv? (cadr x) code)))
+                 graph)))
+  (define (assign-prerequisites code)
+    (define mutable (hash-copy (search-by-code courses code)))
+    (hash-set! mutable
+               'course-prerequisites
+               (get-prerequisites code))
+    mutable)
+  (json-write filename
+              (map assign-prerequisites
+                   (course-codes))))
 
 (define (main)
-  (when (getenv "DOT")
-    (graph-all)))
+  ;; Read data and call the number-cruncher!
+  (define courses (json-read "data/input.json"))
+  (define ontology (json-read "data/acm.json"))
+  (define u (G ontology distance courses))
+  ;; Filter threshold is experimental,
+  ;; it changes relative to the the moon
+  ;; position in the sky.
+  (define ũ (H u 666/1))
+  (graph-all ũ)
+  (save-results "tmp/output.json" ũ courses))
 
 (main)
