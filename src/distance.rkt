@@ -58,7 +58,8 @@
 (define (distance t c1 c2)
   (let* ((outs (value 'outcomes c1)) (louts (length outs))
          (pres (value 'outcomes c2)) (lpres (length pres))
-         (weight (value 'credits c2)))
+         (weight1 (value 'credits c1))
+         (weight2 (value 'credits c2)))
 
     ;; Distance between two partitions in ontology.
     (define (average-closest-neighbour-distance t outs pres)
@@ -88,7 +89,7 @@
     ;; We cant compute distance to nothing!
     (if (or (eq? outs 0) (eq? pres 0))
         999
-        (* weight (average-closest-neighbour-distance t outs pres)))))
+        (* weight1 weight2 (average-closest-neighbour-distance t outs pres)))))
 
 ;; Find the distance graph among the courses according to the distance function f.
 ;; Save results in triples:
@@ -129,7 +130,7 @@
   ;; Filter threshold is experimental,
   ;; it changes relative to the the moon
   ;; position in the sky.
-  (define ũ (H u 30/1))
+  (define ũ (H u 150/1))
 
   ;; Visualize :)
   (define (prnt ds)
