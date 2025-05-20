@@ -38,21 +38,20 @@ c1 outcomes from c2 outcomes in the ontology-tree. The steps for this are:
 
  2. Count distance for each pair. This is done by counting taking the paths from
  root to outcome-a and root to outcome-b. Then common part is discarded from least
- ancestor (LCA) and tail lengths are added (see code below).
+ ancestor (LCA) and tail lengths are added (see code below). Weight each distance
+ by the average of depths of both nodes.
 
  ```scheme
- (define (distance-nodes o n1 n2)
-   (let ((p1 (path-from-root o n1))
-         (p2 (path-from-root o n2)))
-
-     ;; Return a list containing elements present in both l1 AND l2.
-     (define (common l1 l2)
-       (filter (lambda (x) (member x l1))
-               l2))
-
-     (- (+ (length p1) (length p2))
-        (* 2 (length (common p1 p2))))))
- ```
+(define (distance-nodes o n1 n2)
+  (let ((p1 (path-from-root o n1))
+        (p2 (path-from-root o n2)))
+    (define (common l1 l2)
+      (filter (lambda (x) (member x l1))
+              l2))
+    (* (- (+ (length p1) (length p2))
+          (* 2 (length (common p1 p2))))
+       (/ (* (length p1) (length p2)) 2))))
+```
 
  Resulting in this:
  ```
@@ -75,8 +74,17 @@ c1 outcomes from c2 outcomes in the ontology-tree. The steps for this are:
  (0 + 1) / 2 = 1/2
  ```
 
-With this the distance to course itself is `0` because each outcome finds minimum
-from its counterpart which is 0 for all.
+ 5. And finally multiply the result with the product of both courses credits
+multiplied together.
+
+```
+(* weight1 weight2 (average-closest-neighbour-distance t outs pres)))))
+```
+
+This distance function has some nice properties:
+
+- Distance from course to itself is `0`. Minimum length from each node to self is 0.
+-
 
 ### Map to all courses
 
