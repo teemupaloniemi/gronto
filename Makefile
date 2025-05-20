@@ -1,3 +1,5 @@
+.PHONY: tmp-folder gen-smt solve-smt visualize dist test clean
+
 all: tmp-folder dist gen-smt solve-smt visualize
 
 tmp-folder:
