@@ -15,9 +15,11 @@
 ;; Return a list of size (length l1) * (length l2).
 (define (cp-path-lengths t l1 l2)
   (let ((cp (cartesian-product l1 l2)))
+
     ;; Return a path from root of a tree (t) to node (n) if exists.
     ;; Otherwise returns an empty list.
     (define (path-from-root t n)
+
       (define (create-path t n p)
         (cond
           ((not (hash? t)) '())
@@ -28,7 +30,9 @@
                     (if (null? sub) acc sub))
                   '()
                   (hash-keys t)))))
+
       (create-path t n '()))
+
     ;; Distance from n1 to n2 in o is the length of
     ;;   path from root to n1
     ;; + path from root to n2
@@ -36,6 +40,7 @@
     (define (distance-nodes o n1 n2)
       (let ((p1 (path-from-root o n1))
             (p2 (path-from-root o n2)))
+
         ;; Return a list containing elements present in both l1 AND l2.
         (define (common l1 l2)
           (filter (lambda (x) (member x l1))
@@ -69,6 +74,7 @@
 
     ;; Distance between two partitions in ontology.
     (define (average-closest-neighbour-distance t outs pres)
+
         ;; Find closest neighbour of one outcome.
         (define (find-closest-neighbour o g)
           ;; f: Filter ones that have `o` as source.
@@ -78,6 +84,7 @@
             (if (> (length f) 0)
                 (caddar s)
                 INF)))
+
         ;; Compute the cartesian prodict of outs and preds and
         ;; find closest-neighbour for all outcomes. By using
         ;; closest-neighbour tactic we gain the advantage of two
@@ -86,6 +93,7 @@
           (let ((p (cp-path-lengths t outs pres)))
             (for*/list ((oi outs))
               (find-closest-neighbour oi p))))
+
         ;; Average distance betwee partitions usign the closests neighbours.
         (if (> (length closest-neighbours) 0)
             (/ (sum closest-neighbours) (length closest-neighbours))
@@ -158,13 +166,15 @@
 
 
 ;; Visualize :)
-(define (print-dot-graph edges)
+(define (print-dot-graph edges courses)
   (let* ((weights (map caddr edges))
          (min-weight (apply min weights))
          (max-weight (apply max weights)))
+
     ;; Normalized weight [0 (min) to 1 (max)]
     (define (scaled w)
       (/ (- w min-weight) (max 1 (- max-weight min-weight))))
+
     ;; Color based on original (non-inverted) scaled value
     (define (color w)
       (let ((s (scaled w)))
@@ -172,11 +182,14 @@
               ((< s 0.75) "yellow")
               ((< s 0.85) "orange")
               (else "brown"))))
+
     ;; Print each edge with label, width, and color
     (define (print-edge p)
-      (let ((w (caddr p)))
+      (let ((src (value 'title (search-by-code courses (car p))))
+            (dst (value 'title (search-by-code courses (cadr p))))
+            (w (caddr p)))
         (display "    \"")
-        (display (car p)) (display "\" -> \"") (display (cadr p))
+        (display src) (display "\" -> \"") (display dst)
         (display "\" [label=\"")
         (display (scaled w))
         (display "\" penwidth=2")
@@ -184,6 +197,7 @@
         (display (color w))
         (display ", style=dashed")
         (display "];") (newline)))
+
     (display "digraph Distances {") (newline)
     (map print-edge edges)
     (display "}") (newline)))
@@ -191,19 +205,29 @@
 
 ;; Assign prerequsite courses to courses and save them for scheduling.
 (define (save-results filename graph courses)
+
+  ;; Get a list of all known course codes.
   (define course-codes
     (map (lambda (x) (value 'code x))
          courses))
+
+  ;; Find all edges that point to node with given code.
   (define (get-prerequisites code)
     (map car
-         (filter (lambda (x) (and (not (eqv? (car x) code)) (eqv? (cadr x) code)))
+         (filter (lambda (x) (and (not (eqv? (car x)
+                                             code))
+                                  (eqv? (cadr x)
+                                        code)))
                  graph)))
+
+  ;; Mutate the original course by adding a list of prerequisite-courses.
   (define (assign-prerequisites code)
     (define mutable (hash-copy (search-by-code courses code)))
     (hash-set! mutable
                'course-prerequisites
                (get-prerequisites code))
     mutable)
+
   (json-write filename
               (map assign-prerequisites course-codes)))
 
@@ -214,7 +238,9 @@
   (define u (G ontology distance courses))
   (define ũ (H u 666/1))
 
-  (print-dot-graph ũ)
+  (print-dot-graph ũ
+                   courses)
+
   (save-results "tmp/output.json"
                 ũ
                 courses))
