@@ -10,10 +10,10 @@ solve-smt:
 	z3 -smt2 -st tmp/courses.smt > tmp/z3.txt
 visualize:
 	racket src/dot.rkt > tmp/courses.dot
-	xdot tmp/courses.dot
+	xdot tmp/courses.dot &
 dist:
 	racket src/distance.rkt > tmp/distance.dot
-	xdot tmp/distance.dot
+	xdot tmp/distance.dot &
 test:
 	racket src/test-distance.rkt
 clean:
