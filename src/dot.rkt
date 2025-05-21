@@ -1,5 +1,9 @@
 #lang racket
+
+;; Reading from file.
 (require "io.rkt")
+
+;; Data queries.
 (require "utils.rkt")
 
 ;; Parse the list of course code and semester pairs.
@@ -11,8 +15,10 @@
                         model
                         #:match-select values))))
 
+
 (define (max-pairs sem-pairs)
   (max-list (map string->number (map cadr sem-pairs))))
+
 
 (define (node pair courses)
   (let* ((code (car pair))
@@ -23,6 +29,7 @@
     (display (car pair)) (display "\\n") (display name)
     (display "\"];")
     (newline)))
+
 
 (define (subgraph sem sem-pairs courses)
   (display "    subgraph cluster_sem") (display sem) (display " {") (newline)
@@ -41,20 +48,27 @@
   (display "        }") (newline)
   (display "    }") (newline))
 
+
 (define (anchor-subgraph sem)
   (display "    sem_anchor_")(display sem)
   (display " -> sem_anchor_")(display (+ 1 sem))
   (display " [style=invisible, arrowhead=none];")
   (newline))
 
+
 (define (preq course preq)
   (display "    ") (display preq) (display " -> ") (display course) (newline))
+
+
 (define (preqs-one course)
   (map (lambda (p)
                (preq (value 'code course) p))
        (value 'course-prerequisites course)))
+
+
 (define (preqs-all courses)
   (map preqs-one courses))
+
 
 (define (year-subgraph year sem-pairs courses)
   (let ((sem-start (+ 1 (* year 4)))
@@ -68,6 +82,7 @@
      (build-list (- (+ 1 sem-end) sem-start)
                  (lambda (i) (+ sem-start i))))
     (display "    }") (newline)))
+
 
 (define (gen-dot courses sem-pairs)
   (let ((max-sem (max-pairs sem-pairs)))
@@ -86,12 +101,14 @@
     (preqs-all courses)
     (display "}")))
 
+
 (define (safe-gen-dot courses sem-pairs)
   (define (error-message)
     (raise "Error: could not parse z3 model"))
   (if (equal? sem-pairs '())
       (error-message)
       (gen-dot courses sem-pairs)))
+
 
 (define (main)
   (safe-gen-dot (json-read "tmp/output.json")

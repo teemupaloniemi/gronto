@@ -1,8 +1,12 @@
 #lang racket
 
+;; Reading from file.
 (require "io.rkt")
+
+;; Data queries.
 (require "utils.rkt")
 
+;; Constant for edges that are infinite.
 (define INF 9999)
 
 ;; Compute distance for each pair in cartesian product between
@@ -53,6 +57,7 @@
                                        (string->symbol (cadr x)))))
          cp)))
 
+
 ;; Distance between one course (c1) outcomes and another (c2) prerequisites
 ;; in ontology (t).
 (provide distance)
@@ -92,6 +97,7 @@
         INF
         (* weight1 weight2 (average-closest-neighbour-distance t outs pres)))))
 
+
 ;; Find the distance graph among the courses according to the distance function f.
 ;; Save results in triples:
 ;;     (src dst dist)
@@ -102,6 +108,7 @@
                        (value 'code (cadr p))
                        (f t (car p) (cadr p))))
          (cartesian-product C C)))
+
 
 ;; Filter any edges below threshold value
 ;; and remove smaller of bidirectional edges.
@@ -149,17 +156,15 @@
   (remove-duplicates (for*/list ((p f))
                        (find-min-order p))))
 
-;; Visualize :)
-(define (graph-all u)
-  (define (prnt ds)
-    (define weights (map caddr ds))
-    (define min-weight (apply min weights))
-    (define max-weight (apply max weights))
 
+;; Visualize :)
+(define (print-dot-graph edges)
+  (let* ((weights (map caddr edges))
+         (min-weight (apply min weights))
+         (max-weight (apply max weights)))
     ;; Normalized weight [0 (min) to 1 (max)]
     (define (scaled w)
       (/ (- w min-weight) (max 1 (- max-weight min-weight))))
-
     ;; Color based on original (non-inverted) scaled value
     (define (color w)
       (let ((s (scaled w)))
@@ -167,25 +172,22 @@
               ((< s 0.75) "yellow")
               ((< s 0.85) "orange")
               (else "brown"))))
-
     ;; Print each edge with label, width, and color
-    (define (prnt-pair p)
+    (define (print-edge p)
       (let ((w (caddr p)))
         (display "    \"")
         (display (car p)) (display "\" -> \"") (display (cadr p))
         (display "\" [label=\"")
-        (display w)
+        (display (scaled w))
         (display "\" penwidth=2")
         (display ", color=")
         (display (color w))
         (display ", style=dashed")
         (display "];") (newline)))
-
     (display "digraph Distances {") (newline)
-    (map prnt-pair ds)
-    (display "}") (newline))
+    (map print-edge edges)
+    (display "}") (newline)))
 
-  (prnt u))
 
 ;; Assign prerequsite courses to courses and save them for scheduling.
 (define (save-results filename graph courses)
@@ -205,16 +207,16 @@
   (json-write filename
               (map assign-prerequisites course-codes)))
 
+
 (define (main)
-  ;; Read data and call the number-cruncher!
   (define courses (json-read "data/input.json"))
   (define ontology (json-read "data/acm.json"))
   (define u (G ontology distance courses))
-  ;; Filter threshold is experimental,
-  ;; it changes relative to the the moon
-  ;; position in the sky.
   (define ũ (H u 666/1))
-  (graph-all ũ)
-  (save-results "tmp/output.json" ũ courses))
+
+  (print-dot-graph ũ)
+  (save-results "tmp/output.json"
+                ũ
+                courses))
 
 (main)

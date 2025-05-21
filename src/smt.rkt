@@ -1,5 +1,9 @@
 #lang racket
+
+;; Reading from file.
 (require "io.rkt")
+
+;; Data queries.
 (require "utils.rkt")
 
 ;; Declare INT type variable.
@@ -7,6 +11,7 @@
 ;;     (declare-const sem_ITKA2004 Int)
 (define (declare-int course-code)
   (display "(declare-const sem_") (display course-code) (display " Int)") (newline))
+
 
 ;; Assert we are in semester limits.
 ;; Example:
@@ -17,14 +22,17 @@
   (display "(<= sem_") (display course-code) (display " ") (display max-sem) (display ")))")
   (newline))
 
+
 (define (assert-sem-exact course-code period)
   (display "(= sem_") (display course-code) (display " ") (display period) (display ")")
   (newline))
+
 
 ;; Declare one course.
 (define (decl-sem-var-all course-code min-sem max-sem)
     (declare-int course-code)
     (assert-sem-range course-code min-sem max-sem))
+
 
 ;; Make exact requirement for one of given periods.
 (define (decl-sem-var-specific course-code period)
@@ -36,6 +44,7 @@
     (display "))")
     (newline))
 
+
 ;; Declare multiple courses.
 (define (decl-sem-vars courses semester-range)
   (let ((min-sem (car semester-range))
@@ -45,6 +54,7 @@
                    (decl-sem-var-specific (value 'code c) (value 'period c) )
                    (decl-sem-var-all (value 'code c) min-sem max-sem)))
          courses)))
+
 
 ;; Create one prerequisite constraint.
 (define (preq-constr-one courses course-code preq-code)
@@ -61,6 +71,7 @@
       (show)
       (err)))
 
+
 ;; Create all prerequisite constraints.
 (define (preq-constr courses)
   (map (lambda (c)
@@ -68,6 +79,7 @@
                             (preq-constr-one courses (value 'code c) p))
                     (value 'course-prerequisites c)))
        courses))
+
 
 ;; Give semester credit constrains to one course.
 (define (cred-ite course-code course-creds sem)
@@ -79,6 +91,7 @@
   (display course-creds)
   (display " 0)") (newline))
 
+
 (define (sum-ites-gt courses sem min-cred-sem)
   (display "(assert (> (+") (newline)
   (map (lambda (c)
@@ -86,6 +99,7 @@
        courses)
   (display ") ") (display min-cred-sem) (display "))")
   (newline))
+
 
 (define (sum-ites-lte courses sem max-cred-sem)
   (display "(assert (<= (+ ") (newline)
@@ -95,6 +109,7 @@
   (display ") ") (display max-cred-sem) (display "))")
   (newline))
 
+
 (define (cred-constr courses semester-range min-cred-sem max-cred-sem)
   (map (lambda (s)
                (sum-ites-gt courses s min-cred-sem))
@@ -102,6 +117,7 @@
   (map (lambda (s)
                (sum-ites-lte courses s max-cred-sem))
        semester-range))
+
 
 ;; Give total credit constrains. This is almost the same as
 ;; semester cred. But we sum and compare over all the sems,
@@ -111,6 +127,7 @@
                (cred-ite (value 'code c) (value 'credits c) sem))
        courses)
   (newline))
+
 
 (define (tot-cred-constr courses semester-range min-tot-cred max-tot-cred)
   (display "(assert (>= ")
@@ -127,7 +144,6 @@
        semester-range)
   (display ") ") (display max-tot-cred) (display "))") (newline))
 
-;;;; Building the actual model ;;;;
 
 (define (build-smt-model courses-path
                          years
@@ -153,6 +169,7 @@
                    max-tot-cred)
   (display "(check-sat)") (newline)
   (display "(get-model)") (newline)))
+
 
 (define (main)
   (build-smt-model "tmp/output.json"
