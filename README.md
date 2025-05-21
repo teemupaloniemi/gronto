@@ -19,7 +19,9 @@ Suprisingly this seems to produce valid curriculums.
 
 <details>
 <summary>Ontology tree</summary>
+
 ![images/acm.svg](images/acm.svg)
+
 </details>
 
 ## Constructing a distance graph ([distance.rkt](src/distance.rkt))
