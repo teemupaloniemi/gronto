@@ -1,13 +1,14 @@
 # Gronto
 
 Gronto is short for `GRaphs and ONTology to Opetussuunnitelma's`. Gronto aims to
-use ontology, graph theory, and satisfiability solvers for more formal and repeatable
-curriculum planning.
+use [ontology](https://en.wikipedia.org/wiki/Ontology_(information_science)), [graph theory](https://en.wikipedia.org/wiki/Graph_theory), and [satisfiability solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories)
+for more formal and repeatable curriculum planning than traditionally.
 
-In detail the goal is to compose a schedule of courses with given number of years
-and semesters such that each semester has appropriate load in terms of credits
-and that each year and semester builds on top of previous knowledge. These are
-very natural constraints on a curriculum even without more formal methods.
+In detail the goal is to compose a schedule or a curriculum of courses with
+given number of years and semesters such that (1) each semester has appropriate 
+load in terms of credits and (2) that each year and semester builds on top of 
+previous knowledge. These are very natural constraints on a curriculum even 
+without more formal methods.
 
 The goal can be achieved when the course prerequisites and outcomes are well
 defined from a common ontology where the distance between two nodes can be computed.
