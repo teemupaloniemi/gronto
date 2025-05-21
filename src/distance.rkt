@@ -189,7 +189,7 @@
 
 ;; Assign prerequsite courses to courses and save them for scheduling.
 (define (save-results filename graph courses)
-  (define (course-codes)
+  (define course-codes
     (map (lambda (x) (value 'code x))
          courses))
   (define (get-prerequisites code)
@@ -203,8 +203,7 @@
                (get-prerequisites code))
     mutable)
   (json-write filename
-              (map assign-prerequisites
-                   (course-codes))))
+              (map assign-prerequisites course-codes)))
 
 (define (main)
   ;; Read data and call the number-cruncher!
