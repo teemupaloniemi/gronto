@@ -199,6 +199,8 @@
         (display "];") (newline)))
 
     (display "digraph Distances {") (newline)
+    (display "rankdir=TB;")
+    (display "node [shape=box style=filled fillcolor=lightblue];") (newline)
     (map print-edge edges)
     (display "}") (newline)))
 
