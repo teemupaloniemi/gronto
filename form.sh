@@ -6,8 +6,8 @@ PREQ=$(cat data/acm.txt | fzf -i -m --prompt="Search by typing. Use TAB to selec
 OUTC=$(cat data/acm.txt | fzf -i -m --prompt="Search by typing. Use TAB to select all that apply. Quit using ENTER. (outcomes) >" | tr '\n' ',')
 
 echo -e "{"
-echo -e "  \"title\": $COURSE_NAME,"
-echo -e "  \"code\": $COURSE_CODE,"
+echo -e "  \"title\": \"$COURSE_NAME\","
+echo -e "  \"code\": \"$COURSE_CODE\","
 echo -e "  \"prerequisites\": [ $PREQ ],"
 echo -e "  \"outcomes\": [ $OUTC ]"
 echo -e "}"
