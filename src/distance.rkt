@@ -185,11 +185,13 @@
 
     ;; Print each edge with label, width, and color
     (define (print-edge p)
-      (let ((src (value 'title (search-by-code courses (car p))))
-            (dst (value 'title (search-by-code courses (cadr p))))
-            (w (caddr p)))
+      (let* ((src-course (search-by-code courses (car p)))
+             (dst-course (search-by-code courses (cadr p)))
+             (src-name (value 'title src-course))
+             (dst-name (value 'title dst-course))
+             (w (caddr p)))
         (display "    \"")
-        (display src) (display "\" -> \"") (display dst)
+        (display src-name) (display "\" -> \"") (display dst-name)
         (display "\" [label=\"")
         (display (scaled w))
         (display "\" penwidth=2")
