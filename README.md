@@ -1,13 +1,22 @@
 # Gronto
 
-Gronto is short for `GRaphs and ONTology to Opetussuunnitelma's`. Gronto aims to
-use [ontology](https://en.wikipedia.org/wiki/Ontology_(information_science)), [graph theory](https://en.wikipedia.org/wiki/Graph_theory), and [satisfiability solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories)
-for more formal and repeatable curriculum planning than traditionally.
+Gronto is short for `GRaphs and ONTology to Opetussuunnitelma's`.
+
+## General
+
+Gronto aims to bring the [ACM Compute Classification System's](https://dl.acm.org/ccs)
+benefits to curriculum design. We also touch some topics from
+[graph theory](https://en.wikipedia.org/wiki/Graph_theory), and
+[satisfiability solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
+
+Overall the goal is to move towards a more formal and repeatable curriculum planning.
+We do not assume to replace the current meeting oriented process but rather make
+it a bit more effective.
 
 In detail the goal is to compose a schedule or a curriculum of courses with
-given number of years and semesters such that (1) each semester has appropriate 
-load in terms of credits and (2) that each year and semester builds on top of 
-previous knowledge. These are very natural constraints on a curriculum even 
+given number of years and semesters such that (1) each semester has appropriate
+load in terms of credits and (2) that each year and semester builds on top of
+previous knowledge. These are very natural constraints on a curriculum even
 without more formal methods.
 
 The goal can be achieved when the course prerequisites and outcomes are well
@@ -17,16 +26,15 @@ prerequisiteness based on that distance.
 
 Suprisingly this seems to produce valid curriculums.
 
-<details>
-<summary>Ontology tree</summary>
+## Past work
 
-![images/acm.svg](images/acm.svg)
+TODO
 
-</details>
+## Method
 
-## Constructing a distance graph ([distance.rkt](src/distance.rkt))
+### Constructing a distance graph ([distance.rkt](src/distance.rkt))
 
-### Distance function
+#### Distance function
 
 `f(t, c1, c2) -> d` tells the distance between two courses (c1 and c2) in a given
 ontology (t).
@@ -108,7 +116,7 @@ This distance function has some nice properties:
 
 - Distance from course to itself is `0`. Minimum length from each node to self is 0.
 
-### Map to all courses
+#### Map to all courses
 
 `G(t, f, C) -> u` composes a course distance graph (u) such that each edge
 between any two courses in the set of all courses (C) is produced by the distance
@@ -123,7 +131,7 @@ function (f).
          (cartesian-product C C)))
 ```
 
-### Filter
+#### Filter
 
 `H(u, th) -> ũ` is a filter removing any edges from source graph (u) below the
 threshold value (th) and remove any cycles (out of two "bidirectional" edges
@@ -159,7 +167,7 @@ And finally we remove bidirectionals.
 From this we can make clear inference on what courses are prerequsite to other
 and we can proceed to schedule the courses.
 
-## Schedule ([smt.rkt](src/smt.rkt) and [dot.rkt](src/dot.rkt))
+### Schedule ([smt.rkt](src/smt.rkt) and [dot.rkt](src/dot.rkt))
 
 `M(ũ, s) -> m` creates a model curriculum (m) based on the filtered course
 distance graph ũ. (A rought idea of this can be visualized with `make all`).
