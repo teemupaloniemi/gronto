@@ -2,25 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>JYU Course questionnaire</title>
+  <title>JYU Course Form</title>
   <style>
 
     body {
-      margin-left: 10%;
-      margin-right: 10%;
+      font-family: Lato,Helvetica Neue,Helvetica,Arial,sans-serif;
+      margin-top: 0;
+      margin-right: 0;
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-areas: "from result";
+      grid-template-columns: 2fr 1fr;
+      grid-template-rows: 1fr 9fr;
+      grid-template-areas: "info acm" "form acm";
     }
 
-    ul { padding: 0; }
-    li { list-style: none; }
+    h1, h2, h3, span {color: #002957; }
+    p { width: 100%; }
     pre { white-space: pre-wrap; }
 
     .row {
       display: grid;
-      grid-template-rows: 1fr 1fr;
-      height: 25vh;
+      grid-template-rows: 1fr 4fr;
+      height: 20vh;
       overflow: hidden;
     }
 
@@ -31,7 +33,12 @@
 
     .lp {
       display: grid;
+      overflow: auto;
       grid-template-columns: 1fr 1fr;
+    }
+
+    .fzf-header {
+      height: 2em;
     }
 
     #fzf {
@@ -44,60 +51,112 @@
       color: green;
     }
 
+    #op, #oo {
+      color: grey;
+    }
+
+
     #so li:hover, #sp li:hover {
       cursor: pointer;
       color: red;
     }
 
-    #ip, #io { width: 30%; }
+    #oo ul, #op ul { padding: 0; }
+    #oo li, #op li { list-style: none; }
+    #so li, #sp li { list-style-type: square; }
 
-    #from     { grid-area: from; }
-    #result   { grid-area: result; border-left: 1px solid grey };
-    #feelings { width: 100%; }
+    #feelings-block,
+    #feelings { width: 90%; }
+    #ip, #io  { width: 30%; }
+    #result   { grid-area: result; }
+    #form     { grid-area: form; margin-left: 10%; margin-right: 10%; }
+    #info     { grid-area: info; margin-left: 10%; margin-right: 10%; }
+    #acm-box  { grid-area: acm; }
+    #acm-box, #acm {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      width: 100%;
+    }
 
   </style>
 </head>
   <body>
 
+    <div id="info">
+      <h2>Basics</h2>
+      <p>
+        This form is used to collect course information for THESIS-X. If
+        you are interested on <strong>why</strong> you can read some ideas from
+        <a href="https://github.com/teemupaloniemi/gronto">github</a>.
+      </p>
+      <h2>How to use this form?</h2>
+      <p>
+        Fill in the form for all courses you are responsible for. If multiple
+        people are responsible for the course we recommend working together.
+      </p>
+      <p>
+        For basic course information &mdash; i.e. name, code and credits &mdash;
+        filling the input fields is enough.
+      </p>
+      <p>
+        For list formatted data &mdash; i.e. prerequisites and outcomes
+        &mdash; you must select each item either by <kbd>clicking</kbd> them or
+        using the <kbd>Ctrl-N</kbd> shortcut (for 1 &le; N &le; 8). For
+        prerequisites and outcomes you are restricted to use only the ACM
+        Computing Classification System ontology on the right.
+      </p>
+      <p>
+        When you feel like you have provided all necessary information for the form
+        send an email to me containing the data. The form provides a
+        <a href="#email">link</a> at the bottom that prefills the email
+        for you.
+      </p>
+    </div>
+
     <div id="form">
+      <h2>Form</h2>
       <div class="block">
-      <span><strong>Name:</strong></span><input id="name" placeholder="Funktio-ohjelmointi">
-      <span><strong>Code:</strong></span><input id="code" placeholder="TIE341">
-      <span><strong>Credits:</strong></span><input id="credits" placeholder="5 or 1-5">
+        <span><strong>Nimi / Name:</strong></span><input id="name" placeholder="Funktio-ohjelmointi">
+        <span><strong>Koodi / Code:</strong></span><input id="code" placeholder="TIE341">
+        <span><strong>Opintopisteet / Credits:</strong></span><input id="credits" placeholder="5 or 1-5">
       </div>
 
       <div id="fzf" class="block">
         <div tabindex="-1" class="row">
-          <div>
-            <h3>Prerequisites:</h3>
-            <input id="ip" placeholder="ordinary differential equations...">
+          <div class="fzf-header">
+            <span><strong>Esitiedot / Prerequisites:</strong></span><input id="ip" placeholder="ordinary differential equations...">
           </div>
-          <div class="lp">
-            <ul id="op"></ul>
+          <div tabindex="-1" class="lp">
             <ul id="sp"></ul>
+            <ul id="op"></ul>
           </div>
         </div>
 
         <div tabindex="-1" class="row">
-          <div>
-            <h3>Outcomes:</h3>
-            <input id="io" placeholder="lambda calculus...">
+          <div class="fzf-header">
+            <span><strong>Oppimistavoitteet / Outcomes:</strong></span><input id="io" placeholder="lambda calculus...">
           </div>
-          <div class="lp">
-            <ul id="oo"></ul>
+          <div tabindex="-1" class="lp">
             <ul id="so"></ul>
+            <ul id="oo"></ul>
           </div>
         </div>
       </div>
-      <div class="block">
-        <h3>Feelings:</h3>
+      <div id="feelings-block" class="block">
+        <h3>Tunteet / Feelings:</h3>
         <textarea rows=10 id="feelings" placeholder="Talk about your feelings..."></textarea>
       </div>
+
+      <a id="email" href="">Send response to me (tealjapa@student.jyu.fi)</a>
     </div>
 
-    <div id="result" class="block">
+    <div hidden id="result" class="block">
       <pre id="json"></pre>
-      <a id="email" href="">Send response to me (tealjapa@student.jyu.fi)</a>
+    </div>
+
+    <div id="acm-box" class="block">
+      <iframe id="acm" src="https://dl.acm.org/ccs"></iframe>
     </div>
 
     <script src="main.js" type="module"></script>

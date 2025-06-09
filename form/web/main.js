@@ -23,9 +23,23 @@ class FZF_UI {
     const answer = this.fzf.find(this.input.value);
 
     for (const result of answer) {
+
+      const chars = result.item.split("");
+
+      const nodes = chars.map((c, i) => {
+        if (result.positions.has(i)) {
+          return `<strong style="color: #f1563f">${c}</strong>`;
+        } else {
+          return c;
+        }
+      });
+
+      const word = nodes.join("");
+
       const li = document.createElement('li');
-      if (i < 9) li.innerHTML += `<kbd>[ctrl + ${i}]</kbd> ${result.item}`;
-      else li.innerHTML += result.item;
+      if (i < 9) li.innerHTML += `<kbd>[ctrl + ${i}]</kbd> ${word}`;
+      else li.innerHTML += word;
+
       li.addEventListener('click', () => {
         if (!this.ss.has(result.item)) {
           this.ss.add(result.item);
@@ -64,7 +78,7 @@ class FZF_UI {
 
   init() {
     this.input.addEventListener('keydown', (e) => { this.keyHandler(e); });
-    this.renderResults();
+    //this.renderResults();
   }
 }
 
