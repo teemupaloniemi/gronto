@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JYU Course questionnaire</title>
+  <style>
+
+    body {
+      margin-left: 10%;
+      margin-right: 10%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas: "from result";
+    }
+
+    ul { padding: 0; }
+    li { list-style: none; }
+    pre { white-space: pre-wrap; }
+
+    .row {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      height: 25vh;
+      overflow: hidden;
+    }
+
+    .block {
+      padding: 1em;
+      margin: 1em;
+    }
+
+    .lp {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    #fzf {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+    }
+
+    #oo li:hover, #op li:hover {
+      cursor: pointer;
+      color: green;
+    }
+
+    #so li:hover, #sp li:hover {
+      cursor: pointer;
+      color: red;
+    }
+
+    #ip, #io { width: 30%; }
+
+    #from     { grid-area: from; }
+    #result   { grid-area: result; border-left: 1px solid grey };
+    #feelings { width: 100%; }
+
+  </style>
+</head>
+  <body>
+
+    <div id="form">
+      <div class="block">
+      <span><strong>Name:</strong></span><input id="name" placeholder="Funktio-ohjelmointi">
+      <span><strong>Code:</strong></span><input id="code" placeholder="TIE341">
+      <span><strong>Credits:</strong></span><input id="credits" placeholder="5 or 1-5">
+      </div>
+
+      <div id="fzf" class="block">
+        <div tabindex="-1" class="row">
+          <div>
+            <h3>Prerequisites:</h3>
+            <input id="ip" placeholder="ordinary differential equations...">
+          </div>
+          <div class="lp">
+            <ul id="op"></ul>
+            <ul id="sp"></ul>
+          </div>
+        </div>
+
+        <div tabindex="-1" class="row">
+          <div>
+            <h3>Outcomes:</h3>
+            <input id="io" placeholder="lambda calculus...">
+          </div>
+          <div class="lp">
+            <ul id="oo"></ul>
+            <ul id="so"></ul>
+          </div>
+        </div>
+      </div>
+      <div class="block">
+        <h3>Feelings:</h3>
+        <textarea rows=10 id="feelings" placeholder="Talk about your feelings..."></textarea>
+      </div>
+    </div>
+
+    <div id="result" class="block">
+      <pre id="json"></pre>
+      <a id="email" href="">Send response to me (tealjapa@student.jyu.fi)</a>
+    </div>
+
+    <script src="main.js" type="module"></script>
+
+  </body>
+</html>

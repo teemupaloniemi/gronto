@@ -2,7 +2,7 @@
 import json
 import sys
 
-# Find path in dictionary tree d from root
+# Search path in dictionary tree d from root to target.
 def s(d, t, w=None):
     if w is None:
         w = []
@@ -16,6 +16,7 @@ def s(d, t, w=None):
                 return r
     return None
 
+# Visualize the path.
 def p(w):
     if w is None:
         w = []
@@ -25,7 +26,7 @@ def p(w):
 
 def main():
     t = sys.argv[1].replace('\"', '')
-    with open("data/acm.json", 'r') as f:
+    with open("../data/acm.json", 'r') as f:
         p(s(json.load(f), t))
 
 if __name__ == "__main__":
