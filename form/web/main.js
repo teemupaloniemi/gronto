@@ -79,12 +79,14 @@ class FZF_UI {
       const idx = c - 49;
       if (this.rl.length > idx) {
         this.rl[idx].click();
+        this.input.value = '';
       }
     }
   }
 
   init() {
     this.input.addEventListener('keydown', (e) => { this.keyHandler(e); });
+    this.renderResults("");
   }
 }
 
@@ -159,9 +161,12 @@ document.addEventListener('click', updateRes);
 
 const data = await get("acm.json")
 
-const fzfp = new FZF_UI(flatten(data), "ip", "op", "sp");
-const fzfo = new FZF_UI(flatten(data), "io", "oo", "so");
+const fzfp = new FZF_UI(flatten(data), "ip", "o", "sp");
+const fzfo = new FZF_UI(flatten(data), "io", "o", "so");
 
 fzfp.init();
 fzfo.init();
+
+document.getElementById("name").focus();
+
 updateRes();

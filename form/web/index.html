@@ -5,71 +5,71 @@
   <title>JYU Course Form</title>
   <style>
 
+    /* DOM elements */
     body {
       font-family: Lato,Helvetica Neue,Helvetica,Arial,sans-serif;
       margin-top: 0;
       margin-right: 0;
       display: grid;
-      grid-template-rows: 1fr 9fr;
-      grid-template-areas: "info" "form";
+      grid-template-areas: "info"
+                           "form";
+      margin-left: 3em;
+      margin-right: 30%;;
     }
-
-    h1, h2, h3, span {color: #002957; }
+    h1, h2, h3, span {
+      color: #002957;
+      margin-bottom: 0.5em;
+      margin-top: 0.5em;
+    }
     p { width: 100%; }
     pre { white-space: pre-wrap; }
 
-    .row {
-      display: grid;
-      grid-template-rows: 1fr 4fr;
-      height: 20vh;
-      overflow: hidden;
-    }
-
-    .block {
-      padding: 1em;
-      margin: 1em;
-    }
-
+    /* Classes */
     .lp {
       display: grid;
       overflow: auto;
       grid-template-columns: 1fr 1fr;
     }
-
-    .fzf-header {
-      height: 2em;
+    .header-basic {
+      display: grid;
+      grid-template-columns: 2fr 3fr 5fr;
+    }
+    .header-fzf {
+      display: grid;
+      grid-template-columns: 4fr 4fr 2fr;
     }
 
+
+
+    /* IDs */
     #fzf {
       display: grid;
       grid-template-rows: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas: "preds output"
+                           "outcs output";
+      height: 50vh;
     }
-
     #oo li:hover, #op li:hover {
       cursor: pointer;
       color: green;
     }
-
     #op, #oo {
+      overflow: auto;
       color: grey;
     }
-
-
     #so li:hover, #sp li:hover {
       cursor: pointer;
       color: red;
     }
-
     #oo ul, #op ul { padding: 0; }
     #oo li, #op li { list-style: none; }
     #so li, #sp li { list-style-type: square; }
-
     #feelings-block,
-    #feelings { width: 90%; }
-    #ip, #io  { width: 30%; }
+    #feelings { width: 70%; }
     #result   { grid-area: result; }
-    #form     { grid-area: form; margin-left: 10%; margin-right: 10%; }
-    #info     { grid-area: info; margin-left: 10%; margin-right: 10%; }
+    #form     { grid-area: form; }
+    #info     { grid-area: info; }
     #acm-box  { grid-area: acm; }
     #acm-box, #acm {
       margin: 0;
@@ -77,6 +77,9 @@
       height: 100vh;
       width: 100%;
     }
+    #preqs-box { grid-area: preds; }
+    #outcs-box { grid-area: outcs; }
+    #output-box { grid-area: output; overflow: auto; }
 
   </style>
 </head>
@@ -118,35 +121,45 @@
 
     <form id="form">
       <h2>Form</h2>
-      <div class="block">
-        <span><strong>Nimi / Name:</strong></span><input required id="name" placeholder="Funktio-ohjelmointi">
-        <span><strong>Koodi / Code:</strong></span><input required id="code" placeholder="TIE341">
-        <span><strong>Opintopisteet / Credits:</strong></span><input required id="credits" placeholder="5 or 1-5">
+      <div class="header-basic">
+        <span><strong>Nimi / Name:</strong></span><input required type="text" id="name" placeholder="Funktio-ohjelmointi">
+      </div>
+      <div class="header-basic">
+        <span><strong>Koodi / Code:</strong></span><input required type="text" id="code" placeholder="TIE341">
+      </div>
+      <div class="header-basic">
+        <span><strong>Opintopisteet / Credits:</strong></span><input required type="text" id="credits" placeholder="5 or 1-5">
       </div>
 
-      <div id="fzf" class="block">
-        <div tabindex="-1" class="row">
-          <div class="fzf-header">
-            <span><strong>Esitiedot / Prerequisites:</strong></span><input required pattern="^[a-zA-Z]+$" type="text" id="ip" placeholder="ordinary differential equations...">
+      <div id="fzf">
+        <!-- Prerequisites search -->
+        <div id="preqs-box" tabindex="-1">
+          <div class="header-fzf">
+            <span><strong>Esitiedot / Prerequisites:</strong></span><input required type="text" id="ip" placeholder="ordinary differential equations...">
           </div>
           <div tabindex="-1" class="lp">
             <ul id="sp"></ul>
-            <ul id="op"></ul>
           </div>
         </div>
 
-        <div tabindex="-1" class="row">
-          <div class="fzf-header">
-            <span><strong>Oppimistavoitteet / Outcomes:</strong></span><input required pattern="^[a-zA-Z]+$" type="text" id="io" placeholder="lambda calculus...">
+        <!-- Outcomes search -->
+        <div id="outcs-box" tabindex="-1">
+          <div class="header-fzf">
+            <span><strong>Oppimistavoitteet / Outcomes:</strong></span><input required type="text" id="io" placeholder="lambda calculus...">
           </div>
           <div tabindex="-1" class="lp">
             <ul id="so"></ul>
-            <ul id="oo"></ul>
           </div>
         </div>
+
+        <!-- Search output list -->
+        <div id="output-box" tabindex="-1">
+          <ul id="o"></ul>
+        </div>
       </div>
+
       <div id="feelings-block" class="block">
-        <h3>Tunteet / Feelings:</h3>
+        <span><strong>Tunteet / Feelings:</strong></span>
         <textarea rows=10 id="feelings" placeholder="Talk about your feelings..."></textarea>
       </div>
 
