@@ -10,9 +10,8 @@
       margin-top: 0;
       margin-right: 0;
       display: grid;
-      grid-template-columns: 2fr 1fr;
       grid-template-rows: 1fr 9fr;
-      grid-template-areas: "info acm" "form acm";
+      grid-template-areas: "info" "form";
     }
 
     h1, h2, h3, span {color: #002957; }
@@ -117,18 +116,18 @@
       </p>
     </div>
 
-    <div id="form">
+    <form id="form">
       <h2>Form</h2>
       <div class="block">
-        <span><strong>Nimi / Name:</strong></span><input id="name" placeholder="Funktio-ohjelmointi">
-        <span><strong>Koodi / Code:</strong></span><input id="code" placeholder="TIE341">
-        <span><strong>Opintopisteet / Credits:</strong></span><input id="credits" placeholder="5 or 1-5">
+        <span><strong>Nimi / Name:</strong></span><input required id="name" placeholder="Funktio-ohjelmointi">
+        <span><strong>Koodi / Code:</strong></span><input required id="code" placeholder="TIE341">
+        <span><strong>Opintopisteet / Credits:</strong></span><input required id="credits" placeholder="5 or 1-5">
       </div>
 
       <div id="fzf" class="block">
         <div tabindex="-1" class="row">
           <div class="fzf-header">
-            <span><strong>Esitiedot / Prerequisites:</strong></span><input id="ip" placeholder="ordinary differential equations...">
+            <span><strong>Esitiedot / Prerequisites:</strong></span><input required pattern="^[a-zA-Z]+$" type="text" id="ip" placeholder="ordinary differential equations...">
           </div>
           <div tabindex="-1" class="lp">
             <ul id="sp"></ul>
@@ -138,7 +137,7 @@
 
         <div tabindex="-1" class="row">
           <div class="fzf-header">
-            <span><strong>Oppimistavoitteet / Outcomes:</strong></span><input id="io" placeholder="lambda calculus...">
+            <span><strong>Oppimistavoitteet / Outcomes:</strong></span><input required pattern="^[a-zA-Z]+$" type="text" id="io" placeholder="lambda calculus...">
           </div>
           <div tabindex="-1" class="lp">
             <ul id="so"></ul>
@@ -152,14 +151,10 @@
       </div>
 
       <a id="email" href="">Send response to me (tealjapa@student.jyu.fi)</a>
-    </div>
+    </form>
 
     <div hidden id="result" class="block">
       <pre id="json"></pre>
-    </div>
-
-    <div id="acm-box" class="block">
-      <iframe id="acm" src="https://dl.acm.org/ccs"></iframe>
     </div>
 
     <script src="main.js" type="module"></script>

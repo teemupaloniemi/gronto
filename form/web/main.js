@@ -13,14 +13,17 @@ class FZF_UI {
     // Class buffers
     this.ss = new Set();
     this.rl = [];
+
+    // Flag for function key pressed.
+    this.ctrlPressed = false;
   }
 
-  renderResults() {
+  renderResults(q) {
     this.rl = [];
     this.output.innerHTML = '';
 
     let i = 1;
-    const answer = this.fzf.find(this.input.value);
+    const answer = this.fzf.find(q);
 
     for (const result of answer) {
 
@@ -66,19 +69,22 @@ class FZF_UI {
   }
 
   keyHandler(e) {
-    if (49 <= e.keyCode && e.keyCode < 57) {
-      const idx = e.keyCode - 49;
+    const c = e.keyCode;
+    if (c == 13 && this.rl.length > 0) {
+      this.rl[0].click();
+      this.input.value = '';
+    } else if ((/[a-z]/i).test(String.fromCharCode(c))) {
+      this.renderResults(`${this.input.value}${e.key}`);
+    } else if (49 <= c && c < 57) {
+      const idx = c - 49;
       if (this.rl.length > idx) {
         this.rl[idx].click();
       }
-    } else if (!e.ctrlKey) {
-      this.renderResults();
     }
   }
 
   init() {
     this.input.addEventListener('keydown', (e) => { this.keyHandler(e); });
-    //this.renderResults();
   }
 }
 
@@ -110,8 +116,9 @@ async function get(url) {
 }
 
 function updateMailto() {
-  const subject = encodeURIComponent("Jyu Course Questionnaire");
-  const email = encodeURIComponent("tealjapa@student.jyu.fi");
+  const email_name = "tealjapa";
+  const subject = encodeURIComponent("JYU Course Form");
+  const email = encodeURIComponent(`${email_name}@student.jyu.fi`);
   const body = encodeURIComponent(document.getElementById("json").textContent);
   const mailto = `mailto:${email}?subject=${subject}&body=${body}`;
   document.getElementById("email").href = mailto;
