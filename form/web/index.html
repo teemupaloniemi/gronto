@@ -14,7 +14,6 @@
       grid-template-areas: "info"
                            "form";
       margin-left: 3em;
-      margin-right: 30%;;
     }
     h1, h2, h3, span {
       color: #002957;
@@ -28,11 +27,12 @@
     .lp {
       display: grid;
       overflow: auto;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 3fr;
     }
     .header-basic {
       display: grid;
-      grid-template-columns: 2fr 3fr 5fr;
+      grid-template-columns: 2fr 3fr;
+      width: 30%;
     }
     .header-fzf {
       display: grid;
@@ -40,19 +40,18 @@
     }
 
 
-
     /* IDs */
     #fzf {
       display: grid;
       grid-template-rows: 1fr 1fr;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 3fr 7fr;
       grid-template-areas: "preds output"
                            "outcs output";
       height: 50vh;
     }
-    #oo li:hover, #op li:hover {
+    #o li:hover {
       cursor: pointer;
-      color: green;
+      text-decoration: underline;
     }
     #op, #oo {
       overflow: auto;
@@ -61,6 +60,7 @@
     #so li:hover, #sp li:hover {
       cursor: pointer;
       color: red;
+      text-decoration: underline;
     }
     #oo ul, #op ul { padding: 0; }
     #oo li, #op li { list-style: none; }
@@ -160,7 +160,7 @@
 
       <div id="feelings-block" class="block">
         <span><strong>Tunteet / Feelings:</strong></span><br>
-        <textarea rows=10 id="feelings" placeholder="Talk about your feelings..."></textarea>
+        <textarea rows=8 id="feelings" placeholder="Talk about your feelings..."></textarea>
       </div>
 
       <a id="email" href="">Send response to me (tealjapa@student.jyu.fi)</a>

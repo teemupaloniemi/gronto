@@ -1,21 +1,70 @@
 import { Fzf } from 'https://esm.sh/fzf';
 
+async function get(url) {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to load data: ${response.status}`);
+    }
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.error(error.message);
+    return [];
+  }
+}
+
+const data = await get("acm.json")
+
+function flatten(d) {
+  let l = [];
+  if (d == null) return l;
+  for (const i of Object.keys(d)) {
+    l.push(i);
+    const nl = flatten(d[i]);
+    if (nl != []) {
+      l = l.concat(nl);
+    }
+  }
+  return l;
+}
+
 class FZF_UI {
-  constructor(data, inputID, outputID, selectedID) {
+  constructor(d, iid, oid, sid) {
     // Data and search
-    this.fzf = new Fzf(data);
+    this.data = d;
+    this.fzf = new Fzf(flatten(d));
 
     // HTML elements
-    this.input  = document.getElementById(inputID);
-    this.output = document.getElementById(outputID);
-    this.selected = document.getElementById(selectedID);
+    this.input  = document.getElementById(iid);
+    this.output = document.getElementById(oid);
+    this.selected = document.getElementById(sid);
 
     // Class buffers
     this.ss = new Set();
     this.rl = [];
+  }
 
-    // Flag for function key pressed.
-    this.ctrlPressed = false;
+  search(obj, target, path = []) {
+    for (const key in obj) {
+      const newPath = [...path, key];
+      if (key === target) return newPath;
+      if (typeof obj[key] === 'object' && obj[key] !== null) {
+        const result = this.search(obj[key], target, newPath);
+        if (result) return result;
+      }
+    }
+    return null;
+  }
+
+  renderTree(path) {
+    let result = '';
+    let depth  = 0;
+    for (const item of path) {
+      result += `${"    ".repeat(depth)}└── ${item}\n`;
+      depth += 1;
+    }
+    return result;
   }
 
   renderResults(q) {
@@ -37,7 +86,15 @@ class FZF_UI {
         }
       });
 
-      const word = nodes.join("");
+
+      const path = this.search(this.data, result.item);
+      let word = "";
+      if (path.length > 1) {
+        path.pop();
+        word = `<span style="color: grey;">${path.join("/")}/</span>${nodes.join("")}`;
+      } else { 
+        word = nodes.join("");
+      }
 
       const li = document.createElement('li');
       if (i < 9) li.innerHTML += `<kbd>[ctrl + ${i}]</kbd> ${word}`;
@@ -73,8 +130,11 @@ class FZF_UI {
     if (c == 13 && this.rl.length > 0) {
       this.rl[0].click();
       this.input.value = '';
-    } else if ((/[a-z]/i).test(String.fromCharCode(c))) {
-      this.renderResults(`${this.input.value}${e.key}`);
+    } else if ((/[a-z]/i).test(String.fromCharCode(c)) || e.keyCode == 32 || e.keyCode == 8) {
+      if ((/[a-z]/i).test(String.fromCharCode(c)))
+        this.renderResults(`${this.input.value}${e.key}`);
+      else
+        this.renderResults(this.input.value);
     } else if (49 <= c && c < 57) {
       const idx = c - 49;
       if (this.rl.length > idx) {
@@ -90,32 +150,6 @@ class FZF_UI {
   }
 }
 
-function flatten(d) {
-  let l = [];
-  if (d == null) return l;
-  for (const i of Object.keys(d)) {
-    l.push(i);
-    const nl = flatten(d[i]);
-    if (nl != []) {
-      l = l.concat(nl);
-    }
-  }
-  return l;
-}
-
-async function get(url) {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Failed to load data: ${response.status}`);
-    }
-    const json = await response.json();
-    return json;
-  } catch (error) {
-    console.error(error.message);
-    return [];
-  }
-}
 
 function updateMailto() {
   const email_name = "tealjapa";
@@ -159,10 +193,8 @@ function updateRes() {
 document.addEventListener('keydown', updateRes);
 document.addEventListener('click', updateRes);
 
-const data = await get("acm.json")
-
-const fzfp = new FZF_UI(flatten(data), "ip", "o", "sp");
-const fzfo = new FZF_UI(flatten(data), "io", "o", "so");
+const fzfo = new FZF_UI(data, "io", "o", "so");
+const fzfp = new FZF_UI(data, "ip", "o", "sp");
 
 fzfp.init();
 fzfo.init();
