@@ -1,34 +1,177 @@
-# Gronto
+# What?
 
-Gronto is short for `GRaphs and ONTology to Opetussuunnitelma's`.
+Gronto is short for `GRaphs and ONTology to Opetussuunnitelma`. Gronto aims to
+bring the [ACM Compute Classification System's](https://dl.acm.org/ccs)
+benefits to curriculum design. We also touch some topics from [graph
+theory](https://en.wikipedia.org/wiki/Graph_theory), and [satisfiability
+solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
 
-## General
+The goal is to move towards a computable curriculum planning process by making
+a software that constructs curriculum automatically just from course syllabi.
+We focus specifically to the field of computer science. We do not assume to
+replace the current meeting oriented process but rather make it a bit more
+effective by fixing some problems. We like to think it as replacing old
+bearings to make a car or bike a bit more efficient. Below we first list some
+definitions and after that the problems we see and give a brief explanation on
+why our solution solves the issue.
 
-Gronto aims to bring the [ACM Compute Classification System's](https://dl.acm.org/ccs)
-benefits to curriculum design. We also touch some topics from
-[graph theory](https://en.wikipedia.org/wiki/Graph_theory), and
-[satisfiability solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
+---
 
-Overall the goal is to move towards a more formal and repeatable curriculum planning.
-We do not assume to replace the current meeting oriented process but rather make
-it a bit more effective.
+# Definitions
 
-In detail the goal is to compose a schedule or a curriculum of courses with
-given number of years and semesters such that (1) each semester has appropriate
-load in terms of credits and (2) that each year and semester builds on top of
-previous knowledge. These are very natural constraints on a curriculum even
-without more formal methods.
+***The group*** A curriculum is traditionally build by a group of teachers and
+other staff. A problems arise as the people are selected for this group with
+the lowest bidder philosophy -- in terms of available time. Surely this group
+does not represent the university and its goals (optimally). Still this group
+is essentially responsible for the quality of almost half of the university's
+operations: teaching. Our proposal does not account for the selection problem
+but similar ideas could be used for skill-to-people mapping and group
+formation.
 
-The goal can be achieved when the course prerequisites and outcomes are well
-defined from a common ontology where the distance between two nodes can be computed.
-Then we can construct a distance for any given pair of courses and assign
-prerequisiteness based on that distance.
+***Course*** For out purposes the below format consists a course. We do
+understand that a course includes much more but things like lecture plans,
+material, descriptions, assesment and others do not interest us (yet).
 
-Suprisingly this seems to produce valid curriculums.
+```
+  code:          TEST123
+  title:         Course name
+  credits:       5
+  prerequisites: P1 ... PN
+  outcomes:      O1 ... OM
+```
+
+Here Ps and Os are selected from the ACM Compute Classification System.
+
+---
+
+\clearpage
+
+
+# Problems
+
+***Aligning to reality*** As the group's first task, several meetings are used
+on discussing the meaning of some esoteric ideas like *What does the term
+"software engineer" mean?*, *Do software engineers only program?* or *What is
+programming actually about?*. This phase is quite important as it gives birth
+to the main topics that the curriculum must cover. Some topics might be
+*Software creation and management, Theory of computation, Security and privacy,
+Networks, ect.* These topics ensure that the curriculum is aligned to reality
+and the future academics and professional are focused on the most pressing
+issues of the time.
+
+The current process produces biased results and does so slowly. We can speed
+up and unbias this phase by relying on previously documented topics that are
+checked to represent the field of computer science. ACM Compute Classification
+System does exactly this.
+
+> *[ACM classification system has been] the de facto standard
+> classification system for the computing field. ... It relies
+> on a semantic vocabulary as the single source of categories
+> and concepts that reflect the state of the art of the computing
+> discipline and is receptive to structural change as it evolves
+> in the future.*
+
+***Tedious and error prone work*** Then the group hand picks all courses from
+the university's course catalog which might cover those topics. This means
+reading hundreds of course syllabi and trying to reason under which topic they
+fall. This is tedious and error prone work as it depends solely on the
+interpretation of the syllabus.
+
+By restricting the language used in the syllabus to an ontology we gain
+certainty on the meaning of the contents. For example consider a course
+syllabus which states
+
+> Students learn *abstraction* in this course.
+
+We don't really know what is meant by that. We might have an idea when we read
+the course title and some background material but that is exactly the kind of
+tedious and error prone work we try to avoid. Now consider using the ACM
+Compute Classification System. The term abstraction would be replaced by one of
+the following.
+
+> *Theory of computation &rarr; Logic &rarr; Abstraction*
+
+> *General programming languages &rarr; Language features &rarr; Abstract data types*
+
+> *Software organization and properties &rarr; Software system structures &rarr; Abstraction, modeling and modularity*
+
+Now its right away clear what is meant and there is no need to dig further
+information from the course syllabus.
+
+***Ordering*** One problem that the "topic-ing" strategy still does not solve is
+the order in which courses must be attended. The topics usually don't have any
+ordered relation to each other. Suppose you have to learn about *Networks* and
+*Security and privacy*. Which one should you learn first? What about *Theory of
+computation* and *Software and its engineering*? There might be opinions about
+the answer but opinion based reasoning is a bit too ambiguous. That is what the
+group currently does. We would like easily computable stuff.
+
+When the ontology is selected such that it is a finite network we can indeed
+start to process the information using computable algorithms. Two terms from
+the ontology network have a distance from each other that we can compute.
+Therefore any prerequisite and outcome pair has a distance that we can compute.
+With a bit more graph theory we can compute a distance between all pairs of
+courses, in both directions. This means we have something akin to
+"prerequisiteness" from course A to B and B to A. Now we see easily that if the
+distance from A to B is shorter than from B to A then course A must be taken
+before course B. Course A is more prerequisite to course B than the other way
+around.
+
+We have an order for the courses!
+
+***Scheduling*** First to remove some unnecessary abstraction lets specify some
+arbitrary limits to our curriculum.
+
+- One year consists of 4 semesters.
+- All courses must be possible to attend in 5 years (or 20 semesters).
+- Each semester must have at maximum 15 credits of workload.
+
+From these we can infer that the most credits that a curriculum can include is
+
+20 semesters/curriculum * 15 credits/semester = 300 credits/curriculum.
+
+If we have more than 300 credits worth of courses we must remove some from the
+curriculum. The answer to "which courses" question is still missing. But one
+option would be to filter out all the "latest" courses that appear in the
+ordered set of courses such that we have less than 300 credits left.
+
+This leads us to the last but not least of our ideas. We have a filtered set of
+ordered courses and we have to schedule them according to our limits. One way
+of solving this is with predicate logic and SMT solvers. For example our limits
+can be reformatted a bit further to following statements.
+
+- Course can have an integer value between 1 and 20 (semesters).
+- Sum of scheduled credits in one semester must be less than 15.
+- Course A must have a value less than course B.
+
+Which can later be translated to solver code. SMT solvers are very useful in
+practice because of two things; They provide a way to check if a solution
+exists that meets our restrictions AND if such a solution exists they provide
+the solution! (In case of many possible solutions we get just the first, but
+that is still pretty useful!) This means that we can check if a schedule is
+possible to construct with our restrictions and if so we get a schedule
+constructed for us. Voilà!
+
+# Summary
+
+The combination of our proposed solutions can help in solving some problems that the current
+meeting oriented process suffers. Our proposal removes the interpretation problem
+with a restricted language, it helps with some of the tedious and error prone
+work that goes into curriculum design, and it does speed up the process by
+automating ordering and scheduling.
+
+And on top of this it provides a formal, repeatable and understandable way of
+constructing a curriculum that meets some common criterion.
+
+1. All courses are ***possible to attend*** in a given number of years and
+   semesters.
+2. Each of the semesters have ***appropriate load*** in terms of credits/hours.
+3. Each course shall ***build on top of previous knowledge***.
+
 
 ## Past work
 
-TODO
+[STOPS](https://dl.acm.org/doi/pdf/10.1145/2674683.2674689)
 
 ## Method
 
@@ -187,3 +330,4 @@ apt-get install racket
 # Run scripts.
 make
 ```
+
