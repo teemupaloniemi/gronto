@@ -1,97 +1,69 @@
 #lang racket
 
+;; For shortest path algorithm.
+(require graph)
 ;; Reading from file.
 (require "io.rkt")
-
 ;; Data queries.
 (require "utils.rkt")
 
 ;; Constant for edges that are infinite.
 (define INF 9999)
 
-;; Compute distance for each pair in cartesian product between
-;; two lists using LCA path length style.
-;;
-;; Return a list of size (length l1) * (length l2).
-(define (cp-path-lengths t l1 l2)
-  (let ((cp (cartesian-product l1 l2)))
-
-    ;; Return a path from root of a tree (t) to node (n) if exists.
-    ;; Otherwise returns an empty list.
-    (define (path-from-root t n)
-
-      (define (create-path t n p)
-        (cond
-          ((not (hash? t)) '())
-          ((member n (hash-keys t)) (reverse (cons n p)))
-          (else
-           (foldr (lambda (k acc)
-                    (define sub (create-path (value k t) n (cons k p)))
-                    (if (null? sub) acc sub))
-                  '()
-                  (hash-keys t)))))
-
-      (create-path t n '()))
-
-    ;; Distance from n1 to n2 in o is the length of
-    ;;   path from root to n1
-    ;; + path from root to n2
-    ;; - (2 * common in the paths).
-    (define (distance-nodes o n1 n2)
-      (let ((p1 (path-from-root o n1))
-            (p2 (path-from-root o n2)))
-
-        ;; Return a list containing elements present in both l1 AND l2.
-        (define (common l1 l2)
-          (filter (lambda (x) (member x l1))
-                  l2))
-        (* (- (+ (length p1) (length p2))
-              (* 2 (length (common p1 p2))))
-           ;; Average depth of ontology nodes.
-           ;; Deeper nodes convey more detailed
-           ;; information.
-           (/ (* (length p1) (length p2)) 2))))
-
-    ;; Create a list of distances related to each node pair in
-    ;; cartesian-product.
+(define (filter-distances apd l1 l2)
+    (define (pair-distance a b)
+      (if (equal? a b)
+        0
+        (value (list (string->symbol a) (string->symbol b)) apd)))
     (map (lambda (x)
                  (list (car x)
                        (cadr x)
-                       (distance-nodes t
-                                       (string->symbol (car x))
-                                       (string->symbol (cadr x)))))
-         cp)))
-
+                       (pair-distance (car x) (cadr x))))
+         (cartesian-product l1 l2)))
 
 ;; Distance between one course (c1) outcomes and another (c2) prerequisites
 ;; in ontology (t).
 (provide distance)
-(define (distance t c1 c2)
-  (let* ((outs (value 'outcomes c1)) (louts (length outs))
-         (pres (value 'outcomes c2)) (lpres (length pres))
+(define (distance all-pair-distances c1 c2)
+  (let* ((outs (value 'outcomes c1))
+         (pres (value 'outcomes c2))
          (weight1 (value 'credits c1))
          (weight2 (value 'credits c2)))
 
     ;; Distance between two partitions in ontology.
-    (define (average-closest-neighbour-distance t outs pres)
+    (define (average-closest-neighbour-distance outs pres)
 
         ;; Find closest neighbour of one outcome.
         (define (find-closest-neighbour o g)
-          ;; f: Filter ones that have `o` as source.
-          ;; s: Sort according to distance in acending order.
           (let* ((f (filter (lambda (x) (equal? (car x) o)) g))
                  (s (sort f (lambda (x y) (< (caddr x) (caddr y))))))
             (if (> (length f) 0)
                 (caddar s)
                 INF)))
 
-        ;; Compute the cartesian prodict of outs and preds and
-        ;; find closest-neighbour for all outcomes. By using
-        ;; closest-neighbour tactic we gain the advantage of two
-        ;; identical pratitions having no distance between them.
         (define closest-neighbours
-          (let ((p (cp-path-lengths t outs pres)))
+          ;; Each element in p has outcome, prerequisite and distance.
+          ;; For example it might look like this:
+          ;; (("Recursion"            "Graph theory" 60)
+          ;;  ("Recursion"            "Logic"        35)
+          ;;  ("Polymorphism"         "Graph theory" 60)
+          ;;  ("Polymorphism"         "Logic"        35)
+          ;;  ("Abstract data types"  "Graph theory" 60)
+          ;;  ("Abstract data types"  "Logic"        35)
+          ;;  ("Inheritance"          "Graph theory" 60)
+          ;;  ("Inheritance"          "Logic"        35)
+          ;;  ("Functional languages" "Graph theory" 60)
+          ;;  ("Functional languages" "Logic"        35)
+          ;;  ("Logic"                "Graph theory" 15)
+          ;;  ("Logic"                "Logic" 0))
+          (let ((p (filter-distances all-pair-distances outs pres)))
             (for*/list ((oi outs))
+              ;; Here we find the minimum for each source.
+              ;; For "Recursion" the closest neighbour is "Logic".
+              ;; For "Functional languages" the closest neighbour is "Logic".
+              ;; For "Logic" the closest neighbour is "Logic".
+              ;; etc.
+              ;; This is a bad example. Some could go also to graph theory.
               (find-closest-neighbour oi p))))
 
         ;; Average distance betwee partitions usign the closests neighbours.
@@ -103,7 +75,7 @@
     ;; We cant compute distance to nothing!
     (if (or (equal? outs 0) (equal? pres 0))
         INF
-        (* weight1 weight2 (average-closest-neighbour-distance t outs pres)))))
+        (* weight1 weight2 (average-closest-neighbour-distance outs pres)))))
 
 
 ;; Find the distance graph among the courses according to the distance function f.
@@ -111,11 +83,12 @@
 ;;     (src dst dist)
 (provide G)
 (define (G t f C)
-    (map (lambda (p)
-                 (list (value 'code (car p))
-                       (value 'code (cadr p))
-                       (f t (car p) (cadr p))))
-         (cartesian-product C C)))
+    (let ((all-pair-distances (johnson (unweighted-graph/adj t))))
+      (map (lambda (p)
+                   (list (value 'code (car p))
+                         (value 'code (cadr p))
+                         (f all-pair-distances (car p) (cadr p))))
+           (cartesian-product C C))))
 
 
 ;; Filter any edges below threshold value
@@ -236,17 +209,32 @@
               (map assign-prerequisites course-codes)))
 
 
+;; Racket Generic Graph Library utilizes adjacency lists.
+(define (hash-to-adjacency-lists h)
+  (let ((al '()))
+    (define (recurse h prev prevprev)
+      (if (hash? h)
+         (if (eq? prevprev 'None)
+           (set! al (cons (cons prev (hash-keys h)) al))
+           (set! al (cons (cons prev (cons prevprev (hash-keys h))) al)))
+         (set! al (cons (cons prev (list prevprev)) al)))
+      (when (hash? h)
+        (map (lambda (next)
+                    (recurse (hash-ref h next)
+                              next
+                              prev))
+            (hash-keys h))))
+    (recurse h 'Root 'None)
+    al))
+
+
 (define (main)
   (define courses (json-read "data/input.json"))
-  (define ontology (json-read "data/acm.json"))
+  (define ontology (hash-to-adjacency-lists (json-read "data/acm.json")))
   (define u (G ontology distance courses))
-  (define ũ (H u 666/1))
+  (define ũ (H u 100/1))
 
-  (print-dot-graph ũ
-                   courses)
-
-  (save-results "tmp/output.json"
-                ũ
-                courses))
+  (print-dot-graph ũ courses)
+  (save-results "tmp/output.json" ũ courses))
 
 (main)
