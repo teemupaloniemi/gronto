@@ -74,51 +74,31 @@
            (cartesian-product C C))))
 
 
-;; Filter any edges below threshold value
-;; and remove smaller of bidirectional edges.
 (provide H)
 (define (H u th)
+  ;; Filter any edges below threshold value.
   (define f (filter (lambda (x) (< (caddr x) th)) u))
 
-  ;; Find the smallest of the two bidirectional edges between same nodes.
-  (define (find-min-order current)
-
-    ;; Find all that have the same codes but in different order.
-    (define r (filter (lambda (new) (and (equal? (car  new) (cadr current))
+  ;; Remove smaller of bidirectional edges.
+  (define (remove-bidirectionals current)
+    (let* ((r (filter (lambda (new) (and (equal? (car  new) (cadr current))
                                          (equal? (cadr new) (car  current))))
                       f))
+           (other (if (> (length r) 0) (car r) '())))
 
-    ;; If some are found select the first.
-    (define other
-      (if (> (length r) 0)
-         (car r)
-         '()))
-
-    ;; Find shorter.
-    (if (not (equal? '() other))
-        ;; Counterpart exists.
-        (if (< (caddr current) (caddr other))
-            ;; Current is the shortest direction.
-            current
-            ;; Oterwise they are equal or the other is shorter.
-            (if (equal? (caddr current) (caddr other))
-               ;; Equally short directions.
-               ;;
-               ;; If the codes are in lexical order use
-               ;; current order so when we see the flipped
-               ;; version it is _not_ in order and ordered
-               ;; is again selected and thus can be removed
-               ;; as duplicate later.
-               (if (string>? (car current) (cadr current))
-                   current
-                   other)
-               ;; The other is shorter direction.
-               ;; Select that one.
-               other))
-        current))
+      ;; Find shorter. TODO: Make beautiful with cond. This is hard to read.
+      (if (not (equal? '() other))
+          (if (< (caddr current) (caddr other))
+              current
+              (if (equal? (caddr current) (caddr other))
+                 (if (string>? (car current) (cadr current))
+                     current
+                     other)
+                 other))
+          current)))
 
   (remove-duplicates (for*/list ((p f))
-                       (find-min-order p))))
+                       (remove-bidirectionals p))))
 
 
 ;; Visualize :)
