@@ -7,18 +7,15 @@
 ;; Data queries.
 (require "utils.rkt")
 
+(struct course (name code credits prerequisite-courses skill-prerequisites skill-outcomes))
+
 ;; Constant for edges that are infinite.
 (define INF 9999)
 
 ;; Distance between one course (c1) outcomes and another (c2) prerequisites
 ;; in ontology (t).
 (provide distance)
-(define (distance all-pair-distances c1 c2)
-  (let* ((outs (value 'outcomes c1))
-         (pres (value 'outcomes c2)) ;; TODO: change to prerequisites when they are defined.
-         (weight1 (value 'credits c1))
-         (weight2 (value 'credits c2)))
-
+(define (distance all-pair-distances outs pres weight1 weight2)
     ;; Self made heuristic on distance between two partitions in the ontology.
     (define (average-closest-neighbour-distance outs pres)
 
@@ -55,7 +52,7 @@
     ;; We cant compute distance to nothing!
     (if (or (equal? outs 0) (equal? pres 0))
         INF
-        (* weight1 weight2 (average-closest-neighbour-distance outs pres)))))
+        (* weight1 weight2 (average-closest-neighbour-distance outs pres))))
 
 
 ;; Find the distance graph among the courses according to the distance function f.
@@ -68,9 +65,13 @@
     ;; algorithm would run for every course pair and we dont want that.
     (let ((all-pair-distances (johnson (unweighted-graph/adj t))))
       (map (lambda (p)
-                   (list (value 'code (car p))
-                         (value 'code (cadr p))
-                         (f all-pair-distances (car p) (cadr p))))
+                   (list (course-code (car  p))
+                         (course-code (cadr p))
+                         (f all-pair-distances
+                            (course-skill-outcomes (car  p))
+                            (course-skill-outcomes (cadr p))
+                            (course-credits (car  p))
+                            (course-credits (cadr p)))))
            (cartesian-product C C))))
 
 
@@ -190,12 +191,23 @@
     (recurse h 'Root 'None)
     al))
 
+(define (hash-to-struct h)
+  (for*/list ((c h))
+    (course (value 'title c)
+            (value 'code c)
+            (value 'credits c)
+            (value 'course-prerequisites c)
+            (value 'skill-prerequisites c)
+            (value 'outcomes c))))
 
 (define (main)
-  (define courses (json-read "data/input.json"))
-  (define ontology (hash-to-adjacency-lists (json-read "data/acm.json")))
-  (define u (G ontology distance courses))
-  (define ũ (H u 100/1))
+  ;; Courses hash is still needed as we will mutate and save them later.
+  ;; Specifically we sill assign prerequisite courses based on our computation.
+  (define courses        (json-read "data/input.json"))
+  (define course-structs (hash-to-struct courses))
+  (define ontology       (hash-to-adjacency-lists (json-read "data/acm.json")))
+  (define u              (G ontology distance course-structs))
+  (define ũ              (H u 100/1))
 
   (print-dot-graph ũ courses)
   (save-results "tmp/output.json" ũ courses))
