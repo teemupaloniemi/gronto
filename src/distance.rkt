@@ -10,63 +10,43 @@
 ;; Constant for edges that are infinite.
 (define INF 9999)
 
-(define (filter-distances apd l1 l2)
-    (define (pair-distance a b)
-      (if (equal? a b)
-        0
-        (value (list (string->symbol a) (string->symbol b)) apd)))
-    (map (lambda (x)
-                 (list (car x)
-                       (cadr x)
-                       (pair-distance (car x) (cadr x))))
-         (cartesian-product l1 l2)))
-
 ;; Distance between one course (c1) outcomes and another (c2) prerequisites
 ;; in ontology (t).
 (provide distance)
 (define (distance all-pair-distances c1 c2)
   (let* ((outs (value 'outcomes c1))
-         (pres (value 'outcomes c2))
+         (pres (value 'outcomes c2)) ;; TODO: change to prerequisites when they are defined.
          (weight1 (value 'credits c1))
          (weight2 (value 'credits c2)))
 
-    ;; Distance between two partitions in ontology.
+    ;; Self made heuristic on distance between two partitions in the ontology.
     (define (average-closest-neighbour-distance outs pres)
 
-        ;; Find closest neighbour of one outcome.
-        (define (find-closest-neighbour o g)
-          (let* ((f (filter (lambda (x) (equal? (car x) o)) g))
-                 (s (sort f (lambda (x y) (< (caddr x) (caddr y))))))
-            (if (> (length f) 0)
-                (caddar s)
-                INF)))
+        ;; Select from all-pair-distances the ones that are relevant to given
+        ;; courses.
+        (define (filter-relevant-distances l1 l2)
+            (define (pair-distance a b)
+              (if (equal? a b)
+                0
+                (value (list (string->symbol a) (string->symbol b)) all-pair-distances)))
+            (map (lambda (x)
+                         (list (car x)
+                               (cadr x)
+                               (pair-distance (car x) (cadr x))))
+                 (cartesian-product l1 l2)))
 
+        ;; Find closest neighbour of all (c1) outcomes.
         (define closest-neighbours
-          ;; Each element in p has outcome, prerequisite and distance.
-          ;; For example it might look like this:
-          ;; (("Recursion"            "Graph theory" 60)
-          ;;  ("Recursion"            "Logic"        35)
-          ;;  ("Polymorphism"         "Graph theory" 60)
-          ;;  ("Polymorphism"         "Logic"        35)
-          ;;  ("Abstract data types"  "Graph theory" 60)
-          ;;  ("Abstract data types"  "Logic"        35)
-          ;;  ("Inheritance"          "Graph theory" 60)
-          ;;  ("Inheritance"          "Logic"        35)
-          ;;  ("Functional languages" "Graph theory" 60)
-          ;;  ("Functional languages" "Logic"        35)
-          ;;  ("Logic"                "Graph theory" 15)
-          ;;  ("Logic"                "Logic" 0))
-          (let ((p (filter-distances all-pair-distances outs pres)))
-            (for*/list ((oi outs))
-              ;; Here we find the minimum for each source.
-              ;; For "Recursion" the closest neighbour is "Logic".
-              ;; For "Functional languages" the closest neighbour is "Logic".
-              ;; For "Logic" the closest neighbour is "Logic".
-              ;; etc.
-              ;; This is a bad example. Some could go also to graph theory.
-              (find-closest-neighbour oi p))))
+          (let ((p (filter-relevant-distances outs pres)))
+            ;; For each outcome (o) find the minimum in relevant pairs (p).
+            (for*/list ((o outs))
+              (let* ((f (filter (lambda (x) (equal? (car x) o)) p))
+                     (s (sort f (lambda (x y) (< (caddr x) (caddr y))))))
+                (if (> (length f) 0)
+                    (caddar s)
+                    INF)))))
 
-        ;; Average distance betwee partitions usign the closests neighbours.
+        ;; Average the results based on number of ourcomes.
         (if (> (length closest-neighbours) 0)
             (/ (sum closest-neighbours) (length closest-neighbours))
             INF))
@@ -83,6 +63,9 @@
 ;;     (src dst dist)
 (provide G)
 (define (G t f C)
+    ;; In theory this (computing the distance between all ontology items from
+    ;; each other) should be in distance-function but because of bad design the
+    ;; algorithm would run for every course pair and we dont want that.
     (let ((all-pair-distances (johnson (unweighted-graph/adj t))))
       (map (lambda (p)
                    (list (value 'code (car p))
