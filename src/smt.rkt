@@ -9,37 +9,37 @@
 ;; Declare INT type variable.
 ;; Example:
 ;;     (declare-const sem_ITKA2004 Int)
-(define (declare-int course-code)
-  (display "(declare-const sem_") (display course-code) (display " Int)") (newline))
+(define (declare-int code)
+  (display "(declare-const sem_") (display code) (display " Int)") (newline))
 
 
 ;; Assert we are in semester limits.
 ;; Example:
 ;;     (assert (and (>= sem_ITKA2004 1) (<= sem_ITKA2004 12)))
-(define (assert-sem-range course-code min-sem max-sem)
+(define (assert-sem-range code min-sem max-sem)
   (display "(assert (and ")
-  (display "(>= sem_") (display course-code) (display " ") (display min-sem) (display ") ")
-  (display "(<= sem_") (display course-code) (display " ") (display max-sem) (display ")))")
+  (display "(>= sem_") (display code) (display " ") (display min-sem) (display ") ")
+  (display "(<= sem_") (display code) (display " ") (display max-sem) (display ")))")
   (newline))
 
 
-(define (assert-sem-exact course-code period)
-  (display "(= sem_") (display course-code) (display " ") (display period) (display ")")
+(define (assert-sem-exact code period)
+  (display "(= sem_") (display code) (display " ") (display period) (display ")")
   (newline))
 
 
 ;; Declare one course.
-(define (decl-sem-var-all course-code min-sem max-sem)
-    (declare-int course-code)
-    (assert-sem-range course-code min-sem max-sem))
+(define (decl-sem-var-all code min-sem max-sem)
+    (declare-int code)
+    (assert-sem-range code min-sem max-sem))
 
 
 ;; Make exact requirement for one of given periods.
-(define (decl-sem-var-specific course-code period)
-    (declare-int course-code)
+(define (decl-sem-var-specific code period)
+    (declare-int code)
     (display "(assert (or ")
     (map (lambda (p)
-                 (assert-sem-exact course-code p))
+                 (assert-sem-exact code p))
          period)
     (display "))")
     (newline))
@@ -50,23 +50,23 @@
   (let ((min-sem (car semester-range))
         (max-sem (car (reverse semester-range))))
     (map (lambda (c)
-                 (if (not (equal? (value 'period c) '()))
-                   (decl-sem-var-specific (value 'code c) (value 'period c) )
-                   (decl-sem-var-all (value 'code c) min-sem max-sem)))
+                 (if (not (equal? (course-period c) '()))
+                   (decl-sem-var-specific (course-code c) (course-period c) )
+                   (decl-sem-var-all (course-code c) min-sem max-sem)))
          courses)))
 
 
 ;; Create one prerequisite constraint.
-(define (preq-constr-one courses course-code preq-code)
+(define (preq-constr-one courses ccode pcode)
   (define (preq-exists)
-    (not (equal? (search-by-code courses preq-code) '())))
+    (not (equal? (search-by-code courses pcode 'struct) '())))
   (define (show)
-    (display "(assert (> sem_") (display course-code)
-              (display " sem_") (display preq-code)
+    (display "(assert (> sem_") (display ccode)
+              (display " sem_") (display pcode)
     (display "))") (newline))
   (define (err)
-    (display "; prerequisite ") (display preq-code)
-    (display " did not exist for course") (display course-code) (newline))
+    (display "; prerequisite ") (display pcode)
+    (display " did not exist for course") (display ccode) (newline))
   (if (preq-exists)
       (show)
       (err)))
@@ -76,26 +76,26 @@
 (define (preq-constr courses)
   (map (lambda (c)
                (map (lambda (p)
-                            (preq-constr-one courses (value 'code c) p))
-                    (value 'course-prerequisites c)))
+                            (preq-constr-one courses (course-code c) p))
+                    (course-prerequisite-courses c)))
        courses))
 
 
 ;; Give semester credit constrains to one course.
-(define (cred-ite course-code course-creds sem)
+(define (cred-ite code creds sem)
   (display "        (ite (= sem_")
-  (display course-code)
+  (display code)
   (display " ")
   (display sem)
   (display ") ")
-  (display course-creds)
+  (display creds)
   (display " 0)") (newline))
 
 
 (define (sum-ites-gt courses sem min-cred-sem)
   (display "(assert (> (+") (newline)
   (map (lambda (c)
-               (cred-ite (value 'code c) (value 'credits c) sem))
+               (cred-ite (course-code c) (course-credits c) sem))
        courses)
   (display ") ") (display min-cred-sem) (display "))")
   (newline))
@@ -104,7 +104,7 @@
 (define (sum-ites-lte courses sem max-cred-sem)
   (display "(assert (<= (+ ") (newline)
   (map (lambda (c)
-               (cred-ite (value 'code c) (value 'credits c) sem))
+               (cred-ite (course-code c) (course-credits c) sem))
        courses)
   (display ") ") (display max-cred-sem) (display "))")
   (newline))
@@ -124,7 +124,7 @@
 ;; not individually.
 (define (ites courses sem)
   (map (lambda (c)
-               (cred-ite (value 'code c) (value 'credits c) sem))
+               (cred-ite (course-code c) (course-credits c) sem))
        courses)
   (newline))
 
@@ -154,7 +154,7 @@
                          max-cred-sem)
   (let* ((total-semesters (* years sem-per-year))
          (semester-range  (range total-semesters))
-         (courses         (json-read courses-path)))
+         (courses         (hash-to-struct (json-read courses-path))))
 
   (display "(set-logic QF_LIA)") (newline)
   (decl-sem-vars courses semester-range)

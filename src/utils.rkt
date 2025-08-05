@@ -1,9 +1,52 @@
-;; Utils, I know you hate these.
-;; Thats why they are here!
 #lang racket
 
 ;; Reading from file.
 (require "io.rkt")
+
+(provide (struct-out course))
+(struct course (name code credits period prerequisite-courses skill-prerequisites skill-outcomes))
+
+;; Map our JSON hash to course struct for readability.
+(provide hash-to-struct)
+(define (hash-to-struct h)
+  (for*/list ((c h))
+    (course (hash-ref c 'title)
+            (hash-ref c 'code)
+            (hash-ref c 'credits)
+            (hash-ref c 'period)
+            (hash-ref c 'course-prerequisites)
+            (hash-ref c 'skill-prerequisites)
+            (hash-ref c 'outcomes))))
+
+
+;; Racket Generic Graph Library utilizes adjacency lists.
+(provide hash-to-adjacency-lists)
+(define (hash-to-adjacency-lists h)
+  (let ((al '()))
+    (define (recurse h prev prevprev)
+      (if (hash? h)
+         (if (eq? prevprev 'None)
+           (set! al (cons (cons prev (hash-keys h)) al))
+           (set! al (cons (cons prev (cons prevprev (hash-keys h))) al)))
+         (set! al (cons (cons prev (list prevprev)) al)))
+      (when (hash? h)
+        (map (lambda (next)
+                    (recurse (hash-ref h next)
+                              next
+                              prev))
+            (hash-keys h))))
+    (recurse h 'Root 'None)
+    al))
+
+;; Given a list of courses search those that match the given code.
+(provide search-by-code)
+(define (search-by-code courses code type)
+  (define (first l)
+    (if (eq? l '()) l (car l)))
+  (if (equal? type 'hash)
+    (first (filter (lambda (c) (equal? code (hash-ref c 'code))) courses))
+    (first (filter (lambda (c) (equal? code (course-code c))) courses))))
+
 
 ;; Create a range from 1 to n.
 (provide range)
@@ -13,38 +56,6 @@
       l
       (fill (cons n l) (- n 1))))
   (fill '() n))
-
-
-;; Get value of a filed corresponding the key in json elm.
-(provide value)
-(define (value key elm)
-  (hash-ref elm key))
-
-
-;; Given a list of json data search return those that match
-;; the given code in a field "code".
-(provide search-by-code)
-(define (safe-car l)
-  (if (eq? l '())
-      l
-      (car l)))
-
-
-;; Return courses that match the given code.
-(define (search-by-code data code)
-  (safe-car (filter
-              (lambda (x) (string=? (value 'code x) code))
-                      data)))
-
-
-;; Sum of the elements in a list.
-(provide sum)
-(define (sum l)
-  (define (sum-r l s)
-    (if (eq? '() l)
-        s
-        (sum-r (cdr l) (+ s (car l)))))
-  (sum-r l 0))
 
 
 ;; Get a maximum of a list.

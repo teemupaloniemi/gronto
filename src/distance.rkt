@@ -7,10 +7,8 @@
 ;; Data queries.
 (require "utils.rkt")
 
-(struct course (name code credits prerequisite-courses skill-prerequisites skill-outcomes))
-
 ;; Constant for edges that are infinite.
-(define INF 9999)
+(define INF +inf.0)
 
 ;; Distance between one course (c1) outcomes and another (c2) prerequisites
 ;; in ontology (t).
@@ -25,7 +23,7 @@
             (define (pair-distance a b)
               (if (equal? a b)
                 0
-                (value (list (string->symbol a) (string->symbol b)) all-pair-distances)))
+                (hash-ref all-pair-distances (list (string->symbol a) (string->symbol b)))))
             (map (lambda (x)
                          (list (car x)
                                (cadr x)
@@ -45,7 +43,7 @@
 
         ;; Average the results based on number of ourcomes.
         (if (> (length closest-neighbours) 0)
-            (/ (sum closest-neighbours) (length closest-neighbours))
+            (/ (foldr + 0 closest-neighbours) (length closest-neighbours))
             INF))
 
     ;; If ether is empty return large value.
@@ -65,8 +63,10 @@
     ;; algorithm would run for every course pair and we dont want that.
     (let ((all-pair-distances (johnson (unweighted-graph/adj t))))
       (map (lambda (p)
+                   ;; For each pair
                    (list (course-code (car  p))
                          (course-code (cadr p))
+                         ;; compute the distance.
                          (f all-pair-distances
                             (course-skill-outcomes (car  p))
                             (course-skill-outcomes (cadr p))
@@ -75,12 +75,15 @@
            (cartesian-product C C))))
 
 
+;; TODO: Could consider making bidirectionals a one component. If two courses
+;; depend on each other make all future courses that depend on either one
+;; depend on both of them and remove the bidirectional. This produces less cycles.
 (provide H)
 (define (H u th)
   ;; Filter any edges below threshold value.
   (define f (filter (lambda (x) (< (caddr x) th)) u))
 
-  ;; Remove smaller of bidirectional edges.
+  ;; Remove larger/worse/less prerequisite of bidirectional edges.
   (define (remove-bidirectionals current)
     (let* ((r (filter (lambda (new) (and (equal? (car  new) (cadr current))
                                          (equal? (cadr new) (car  current))))
@@ -90,12 +93,16 @@
       ;; Find shorter. TODO: Make beautiful with cond. This is hard to read.
       (if (not (equal? '() other))
           (if (< (caddr current) (caddr other))
+              ;; Current order is best.
               current
               (if (equal? (caddr current) (caddr other))
+                 ;; Use name for predictable behaviour Since it does not really
+                 ;; matter which way we choose.
                  (if (string>? (car current) (cadr current))
                      current
                      other)
                  other))
+          ;; Only one order.
           current)))
 
   (remove-duplicates (for*/list ((p f))
@@ -122,10 +129,10 @@
 
     ;; Print each edge with label, width, and color
     (define (print-edge p)
-      (let* ((src-course (search-by-code courses (car p)))
-             (dst-course (search-by-code courses (cadr p)))
-             (src-name (value 'title src-course))
-             (dst-name (value 'title dst-course))
+      (let* ((src-course (search-by-code courses (car p) 'struct))
+             (dst-course (search-by-code courses (cadr p) 'struct))
+             (src-name (course-name src-course))
+             (dst-name (course-name dst-course))
              (w (caddr p)))
         (display "    \"")
         (display src-name) (display "\" -> \"") (display dst-name)
@@ -145,12 +152,13 @@
 
 
 ;; Assign prerequsite courses to courses and save them for scheduling.
-(define (save-results filename graph courses)
+;; TODO: Get rid of course-hashes.
+(define (save-results filename graph course-hashes course-structs)
 
   ;; Get a list of all known course codes.
   (define course-codes
-    (map (lambda (x) (value 'code x))
-         courses))
+    (map (lambda (c) (course-code c))
+         course-structs))
 
   ;; Find all edges that point to node with given code.
   (define (get-prerequisites code)
@@ -163,53 +171,26 @@
 
   ;; Mutate the original course by adding a list of prerequisite-courses.
   (define (assign-prerequisites code)
-    (define mutable (hash-copy (search-by-code courses code)))
+    (define mutable (hash-copy (search-by-code course-hashes code 'hash)))
     (hash-set! mutable
                'course-prerequisites
                (get-prerequisites code))
     mutable)
 
-  (json-write filename
-              (map assign-prerequisites course-codes)))
+  ;; Finally write to a file.
+  (json-write filename (map assign-prerequisites course-codes)))
 
-
-;; Racket Generic Graph Library utilizes adjacency lists.
-(define (hash-to-adjacency-lists h)
-  (let ((al '()))
-    (define (recurse h prev prevprev)
-      (if (hash? h)
-         (if (eq? prevprev 'None)
-           (set! al (cons (cons prev (hash-keys h)) al))
-           (set! al (cons (cons prev (cons prevprev (hash-keys h))) al)))
-         (set! al (cons (cons prev (list prevprev)) al)))
-      (when (hash? h)
-        (map (lambda (next)
-                    (recurse (hash-ref h next)
-                              next
-                              prev))
-            (hash-keys h))))
-    (recurse h 'Root 'None)
-    al))
-
-(define (hash-to-struct h)
-  (for*/list ((c h))
-    (course (value 'title c)
-            (value 'code c)
-            (value 'credits c)
-            (value 'course-prerequisites c)
-            (value 'skill-prerequisites c)
-            (value 'outcomes c))))
 
 (define (main)
   ;; Courses hash is still needed as we will mutate and save them later.
   ;; Specifically we sill assign prerequisite courses based on our computation.
-  (define courses        (json-read "data/input.json"))
-  (define course-structs (hash-to-struct courses))
+  (define course-hashes  (json-read "data/input.json"))
+  (define course-structs (hash-to-struct course-hashes))
   (define ontology       (hash-to-adjacency-lists (json-read "data/acm.json")))
   (define u              (G ontology distance course-structs))
   (define ũ              (H u 100/1))
 
-  (print-dot-graph ũ courses)
-  (save-results "tmp/output.json" ũ courses))
+  (print-dot-graph ũ course-structs)
+  (save-results "tmp/output.json" ũ course-hashes course-structs))
 
 (main)

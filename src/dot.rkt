@@ -22,7 +22,7 @@
 
 (define (node pair courses)
   (let* ((code (car pair))
-         (name (value 'title (search-by-code courses code))))
+         (name (course-name (search-by-code courses code 'struct))))
     (display "            ")
     (display (car pair))
     (display " [label=\"")
@@ -62,8 +62,8 @@
 
 (define (preqs-one course)
   (map (lambda (p)
-               (preq (value 'code course) p))
-       (value 'course-prerequisites course)))
+               (preq (course-code course) p))
+       (course-prerequisite-courses course)))
 
 
 (define (preqs-all courses)
@@ -109,9 +109,8 @@
       (error-message)
       (gen-dot courses sem-pairs)))
 
-
 (define (main)
-  (safe-gen-dot (json-read "tmp/output.json")
+  (safe-gen-dot (hash-to-struct (json-read "tmp/output.json"))
                 (parse-smt-model "tmp/z3.txt")))
 
 (main)
