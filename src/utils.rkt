@@ -47,17 +47,6 @@
     (first (filter (lambda (c) (equal? code (hash-ref c 'code))) courses))
     (first (filter (lambda (c) (equal? code (course-code c))) courses))))
 
-
-;; Create a range from 1 to n.
-(provide range)
-(define (range n)
-  (define (fill l n)
-    (if (= n 0)
-      l
-      (fill (cons n l) (- n 1))))
-  (fill '() n))
-
-
 ;; Get a maximum of a list.
 (define (max-element x y) (if (> x y) x y))
 (provide max-list)
