@@ -80,6 +80,7 @@
       (printf "digraph G {\n")
       (when (not (null? graph-attrs))
         (printf "\t~a" (attrs->string graph-attrs ";\n" ";\n")))
+      (printf "        node [shape=box style=filled fillcolor=lightblue];\n")
       ; Add vertices, color them using evenly spaced HSV colors if given colors
       (define color-count (and colors (add1 (apply max (hash-values colors)))))
       (for ([v (in-vertices g)])
