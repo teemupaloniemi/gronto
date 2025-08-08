@@ -85,7 +85,6 @@
       (for ([v (in-vertices g)])
         (define attrs
           (append (vertex-attrs-get-val vertex-attrs v)
-                  `([label ,(sanitize-name v)])
                   (color-attr colors color-count v)))
         (printf "\t~a [~a];\n"
                 (id v #:default (node-id-table-ref! v))
