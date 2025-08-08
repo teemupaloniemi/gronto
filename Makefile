@@ -9,6 +9,7 @@ solve:
 distance:
 	racket src/distance.rkt > tmp/distance.dot
 visualize:
-	xdot tmp/distance.dot && xdot tmp/courses.dot
+	xdot tmp/distance.dot &
+	xdot tmp/courses.dot &
 clean:
 	rm -rf tmp
