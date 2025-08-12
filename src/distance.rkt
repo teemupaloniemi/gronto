@@ -145,8 +145,11 @@
         (display "];") (newline)))
 
     (display "digraph Distances {") (newline)
-    (display "rankdir=TB;")
-    (display "node [shape=box style=filled fillcolor=lightblue];") (newline)
+    (display "label=\"Prerequisite Graph\";\n")
+    (display "labelloc=\"t\";\n")
+    (display "center=true;\n")
+    (display "rankdir=TB;\n")
+    (display "node [shape=box style=filled fillcolor=lightblue];\n") (newline)
     (map print-edge edges)
     (display "}") (newline)))
 

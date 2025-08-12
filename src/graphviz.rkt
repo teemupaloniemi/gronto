@@ -78,6 +78,10 @@
                      (begin0 (format "node~a" node-count)
                        (set! node-count (add1 node-count))))))
       (printf "digraph G {\n")
+      (printf "label=\"Schedule\";\n")
+      (printf "labelloc=\"t\";\n")
+      (printf "center=true;\n")
+
       (when (not (null? graph-attrs))
         (printf "\t~a" (attrs->string graph-attrs ";\n" ";\n")))
       (printf "        node [shape=box style=filled fillcolor=lightblue];\n")
