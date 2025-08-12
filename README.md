@@ -36,7 +36,7 @@ solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
 
 7. Why did we choose this method/these methods (racket, smt, graphs, ontology, etc) ?
    - Well first we have two problems.
-       1. Assign prerequisite courses to courses.
+       - Assign prerequisite courses to courses.
            - Ontology
                - We need some way to tell how "prerequisite" a course is to
                  other courses. In other terms we need some "similarity"
@@ -53,17 +53,18 @@ solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
                  Graphs because they are nice to visualize. Graphs because the
                  ACM ontology is a tree.
 
-       2. Schedule courses based on prerequisites (and semester limits).
+       - Schedule courses based on prerequisites (and semester limits).
            - SMT
-               - There exists lots of literature on University Course Scheduling
-                 Problem or UCSP and the likes. From the two class of solutions,
-                 exact or heuristic, we prefer exact. USCP is a combinatorial
-                 problem and we just want something neat that performs better
-                 than brute force search. We could push for even better
-                 performace with i.e. optimization methods, but SMT has many
-                 different implementations, is simple, well maintained,
-                 understandable and it generalizes well to this class of
-                 problems.
+               - There exists lots of literature on University Course
+                 Scheduling Problem or UCSP and the likes. From the two class
+                 of solutions, exact or heuristic, we prefer exact. USCP is a
+                 combinatorial problem and we just want something neat that
+                 performs better than brute force search. We could push for
+                 even better performace with methods described in [Xiang
+                 et.al.](https://doi.org/10.1016/j.eswa.2024.123383), but SMT
+                 has many different implementations, is simple, well
+                 maintained, understandable and it generalizes well to this
+                 class of problems.
 
        - Racket, I guess I just wanted to learn racket better?
 
