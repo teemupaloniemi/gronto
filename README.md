@@ -93,8 +93,7 @@ solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
          give a lower bound in how many semesters the student can graduate. "No
          there is no way you can graduate in a year, if you take one course per
          semester!". "If you are willing to work, you can graduate before next
-         christmas if you take these courses in this order. <system output
-         here>".
+         christmas if you take these courses in this order" - add system output here.
 
 9. What end used has to provide?
    - An ontology. As an adjacency matrix/ adjacency lists (ACM included).
