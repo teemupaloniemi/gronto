@@ -78,15 +78,15 @@ solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
        - Racket, I guess I just wanted to learn racket better?
 
 8. What end user gets?
-   - A scheduled curricula. Fast.
-       -  What we mean is that the system can be incorporated in day-to-day
-          operations of the curriculum design process. For example the people
-          designing curriculum can run the system iteratively for each
-          course and see how the curriculum evolves. They can play
-          around with the restrictions in the solver i.e. making the curriculum
-          "lighter" by reducing the number of credits for each semester. This
-          way they can end up answering many interesting questions that were
-          out of reach before because of time and resource constraints.
+   - A scheduled curricula. Fast. What we mean is that the system can be
+     incorporated in day-to-day operations of the curriculum design process.
+       - For example the people designing curriculum can run the system
+         iteratively for each course and see how the curriculum evolves. They
+         can play around with the restrictions in the solver i.e. making the
+         curriculum "lighter" by reducing the number of credits for each
+         semester. This way they can end up answering many interesting
+         questions that were out of reach before because of time and resource
+         constraints.
            - "What is the lightest curriculum that can build? What is the heaviest?"
            - "Can a student graduate in 2-years if they want?"
        - This also gives more tools for student counceling. For example we can
