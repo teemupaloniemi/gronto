@@ -67,9 +67,11 @@ solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
                  of solutions, exact or heuristic, we prefer exact. USCP is a
                  combinatorial problem and we just want something neat that
                  performs better than brute force search. We could push for
-                 even better performace with methods described in [Xiang
-                 et.al.](https://doi.org/10.1016/j.eswa.2024.123383), but SMT
-                 has many different implementations, is simple, well
+                 even better performace with methods described in [Solving
+                 Challenging Real-World Scheduling
+                 Problems](https://www.utupub.fi/bitstream/handle/10024/72127/D140%20doria.pdf?sequence=1&isAllowed=y)
+                 or [Xiang et.al.](https://doi.org/10.1016/j.eswa.2024.123383),
+                 but SMT has many different implementations, is simple, well
                  maintained, understandable and it generalizes well to this
                  class of problems.
 
@@ -83,8 +85,9 @@ solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
    - Individual courses embedded into the ontology.
 
 10. Compare to other solutions?
-   - [STOPS – A Graph-Based Study Planning and Curriculum
-Development Tool](https://dl.acm.org/doi/pdf/10.1145/2674683.2674689)
+   - [STOPS – A Graph-Based Study Planning and Curriculum Development Tool](https://dl.acm.org/doi/pdf/10.1145/2674683.2674689)
+       - [Educational Technologies for Supporting Self-Regulated Learning in Online Learning Environments](https://aaltodoc.aalto.fi/server/api/core/bitstreams/9a88834a-affe-4a5f-92fd-6b2340c6336b/content)
+   -  
 
 11. What remains for even better world?
 12.  End user experiances resulting from the use of this system?
