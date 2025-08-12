@@ -83,7 +83,8 @@ solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
    - Individual courses embedded into the ontology.
 
 10. Compare to other solutions?
-   - STOPS
+   - [STOPS – A Graph-Based Study Planning and Curriculum
+Development Tool](https://dl.acm.org/doi/pdf/10.1145/2674683.2674689)
 
 11. What remains for even better world?
 12.  End user experiances resulting from the use of this system?
