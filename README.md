@@ -9,6 +9,13 @@ solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
 # TODO
 
 1. Yes, but why?
+   - Course prerequisite assignment seems to be the biggest unsolved problem in
+     curriculum design.
+       - Here we could show the space of curriculum desing problems and show
+         how this relates to them.
+   - Scheduling just helps in practice, it has been solved million times before
+     so we don't ellaborate on it now.
+
 2. Is the problem social or technical?
    - Both, but we aim to work on the technical problems.
 
