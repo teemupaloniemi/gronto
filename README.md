@@ -28,10 +28,12 @@ solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
 
 5. Test other possible ontologies?
    - [2020 Mathematics Subject Classification System](https://mathscinet.ams.org/mathscinet/msc/msc2020.html)
-   - What properties should these things have for them to work?
-      - A way to determine distance between any two items.
-      - It must span the space of all courses. Expressiveness of the ontology.
-        We must be able to embed all courses to the ontology.
+   - What properties should thes have for them to work?
+      - General
+          - A way to determine distance between any two items.
+          - It must span the space of all courses. Expressiveness of the ontology.
+            We must be able to embed all courses to the ontology.
+      - [Graph properties](https://en.wikipedia.org/wiki/Graph_property)?
 
 6. How to evaluate and validate the effectiveness of the system?
    1. Short term
@@ -77,6 +79,22 @@ solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
 
 8. What end user gets?
    - A scheduled curricula. Fast.
+       -  What we mean is that the system can be incorporated in day-to-day
+          operations of the curriculum design process. For example the people
+          designing curriculum can run the system iteratively for each
+          course and see how the curriculum evolves. They can play
+          around with the restrictions in the solver i.e. making the curriculum
+          "lighter" by reducing the number of credits for each semester. This
+          way they can end up answering many interesting questions that were
+          out of reach before because of time and resource constraints.
+           - "What is the lightest curriculum that can build? What is the heaviest?"
+           - "Can a student graduate in 2-years if they want?"
+       - This also gives more tools for student counceling. For example we can
+         give a lower bound in how many semesters the student can graduate. "No
+         there is no way you can graduate in a year, if you take one course per
+         semester!". "If you are willing to work, you can graduate before next
+         christmas if you take these courses in this order. <system output
+         here>".
 
 9. What end used has to provide?
    - An ontology. As an adjacency matrix/ adjacency lists (ACM included).
