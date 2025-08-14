@@ -11,7 +11,7 @@
             "Logic"
         ],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "TIEA341",
@@ -29,7 +29,7 @@
           "Logic"
         ],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "TIEA1130",
@@ -44,7 +44,7 @@
           "Unified Modeling Language (UML)"
         ],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "ITKP102",
@@ -66,7 +66,7 @@
           "Procedures, functions and subroutines"
         ],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "ITKP104",
@@ -81,7 +81,7 @@
           "Network architectures"
         ],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "ITKA2004",
@@ -96,7 +96,7 @@
           "Structured Query Language"
         ],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "ITKA201",
@@ -110,7 +110,7 @@
           "Data structures design and analysis"
         ],
         "skill-prerequisites": [],
-        "period": []
+        "periods": [1]
     },
     {
         "code": "ITKA2030",
@@ -127,7 +127,7 @@
           "Cloud computing"
         ],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "ITKP0008",
@@ -138,7 +138,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "ITKP1010",
@@ -149,7 +149,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "ITKP1011",
@@ -160,7 +160,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "MATA2600",
@@ -171,7 +171,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "MATA2700",
@@ -185,7 +185,7 @@
           "Formal software verification"
         ],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "MATA2710",
@@ -196,7 +196,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "MATA280",
@@ -207,7 +207,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "MATP121",
@@ -218,7 +218,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "MATP1700",
@@ -229,7 +229,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "MATP211",
@@ -240,7 +240,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "MATP212",
@@ -251,7 +251,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "MATP213",
@@ -262,7 +262,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "TEKA3003",
@@ -273,7 +273,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "TEKP1110",
@@ -284,7 +284,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "TIEA2048",
@@ -295,7 +295,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "TIEA2120",
@@ -306,7 +306,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "TIEA301",
@@ -317,7 +317,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "TIEA302",
@@ -328,7 +328,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "TIEA303",
@@ -339,7 +339,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "TIEA304",
@@ -350,7 +350,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "TIEA3810",
@@ -361,7 +361,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "TIEP111",
@@ -377,7 +377,7 @@
           "User interface programming"
         ],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "TIEP112",
@@ -388,7 +388,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "TIEP114",
@@ -399,7 +399,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "TIEP115",
@@ -410,7 +410,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "TIEP1200",
@@ -421,7 +421,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "TIEP1300",
@@ -432,7 +432,7 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     },
     {
         "code": "TILP2400",
@@ -443,6 +443,6 @@
         "credits": 5,
         "outcomes": [],
         "skill-prerequisites": [],
-        "period": []
+        "periods": []
     }
 ]

@@ -23,6 +23,16 @@
       ;; Assert semester limits to each course variable.
       (define bs1 (list (and (>= (cdr v1) sem-min)
                              (<= (cdr v1) sem-max))))
+      (solver-assert solver bs1)
+
+      ;; If strict period constraints exists, apply them.
+      ;; I.e course is kept in first semster of each year
+      ;; and therefore to be in semester 1, 5 and 9.
+      (when (not (equal? (course-periods (car v1)) '()))
+        (define bs2 (list (or (apply (lambda (x) (equal? (car x) (cdr x)))
+                                     (for/list ((p (course-periods (car v1))))
+                                               (cons (cdr v1) p))))))
+        (solver-assert solver bs2))
 
       ;; Assert that prequisites come later that the course (if they exist).
       (for ((v2 vars))
@@ -30,9 +40,9 @@
         (when (member (course-code (car v1))
                       (course-prerequisite-courses (car v2)))
           ;; c2 has to be taken before c1.
-          (define bs2 (list (> (cdr v2) (cdr v1))))
-          (solver-assert solver bs2)))
-      (solver-assert solver bs1))
+          (define bs3 (list (> (cdr v2) (cdr v1))))
+          (solver-assert solver bs3)))
+)
 
     ;; Check that each semester has at most/least n credits bound to it.
     (for ((s sems))
