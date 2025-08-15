@@ -1,13 +1,16 @@
-.PHONY: tmp-folder distance solve clean
+.PHONY: tmp-folder compile distance solve clean
 
-all: tmp-folder distance solve visualize
+all: tmp-folder compile
 
 tmp-folder:
 	mkdir -p tmp
+compile:
+	raco exe -o tmp/distance src/distance.rkt
+	raco exe -o tmp/dot src/dot.rkt
 solve:
-	racket src/dot.rkt
+	./tmp/dot
 distance:
-	racket src/distance.rkt > tmp/distance.dot
+	./tmp/distance
 visualize:
 	xdot tmp/distance.dot &
 	xdot tmp/courses.dot &

@@ -29,10 +29,8 @@
       ;; I.e course is kept in first semster of each year
       ;; and therefore to be in semester 1, 5 and 9.
       (when (not (equal? (course-periods (car v1)) '()))
-        (define bs2 (list (or (apply (lambda (x) (equal? (car x) (cdr x)))
-                                     (for/list ((p (course-periods (car v1))))
-                                               (cons (cdr v1) p))))))
-        (solver-assert solver bs2))
+        (for ((p (course-periods (car v1))))
+             (solver-assert solver (list (equal? (cdr v1) p)))))
 
       ;; Assert that prequisites come later that the course (if they exist).
       (for ((v2 vars))
@@ -41,8 +39,7 @@
                       (course-prerequisite-courses (car v2)))
           ;; c2 has to be taken before c1.
           (define bs3 (list (> (cdr v2) (cdr v1))))
-          (solver-assert solver bs3)))
-)
+          (solver-assert solver bs3))))
 
     ;; Check that each semester has at most/least n credits bound to it.
     (for ((s sems))

@@ -62,6 +62,8 @@
 (define (mygraphviz g
                     id
                     rank
+                    nsubs
+                    draw-arrows
                   #:colors [colors #f]
                   #:graph-attributes [graph-attrs null]
                   #:edge-attributes [edge-attrs null]
@@ -96,21 +98,26 @@
                 (attrs->string attrs)))
 
       ;; Create grouped subgraphs for each semester.
-      (define sems (build-list 12 (lambda (x) (+ 1 x))))
-      (for ((s sems))
+      (define subs (build-list nsubs (lambda (x) (+ 1 x))))
+      (for ((s subs))
            (printf "        subgraph cluster_sem~a { graph[bgcolor=white, style=dotted, label=\"Semester ~a\"];" s s)
            (map (lambda (v) (printf " ~a; " (id v)))
                 (filter (lambda (c) (= (rank c) s))
                         (get-vertices g)))
            (printf " {rank=\"same\"")
+           (printf " h~a [style=invisible]; t~a [style=invisible]; " s s)
            (map (lambda (v) (printf " ~a; " (id v)))
                 (filter (lambda (c) (= (rank c) s))
                         (get-vertices g)))
            (printf "}}\n"))
 
+      (for ((s subs))
+          (when (< s nsubs)
+              (printf "t~a -> h~a [style=invisible, arrowhead=none];\n" s (+ 1 s))))
+
       ; Write undirected edges as one subgraph
-      (printf "\tsubgraph U {\n")
-      (printf "\t\tedge [dir=none];\n")
+      (printf "  subgraph U {\n")
+      (printf "    edge [dir=none];\n")
       (define undirected-edges
         (for/fold ([added (set)])
                   ([e (in-edges g)]
@@ -121,25 +128,27 @@
           (define attrs
             (append (edge-attrs-get-val edge-attrs e)
                     (weight-attr weighted? g e)))
-          (printf "\t\t~a -> ~a [~a];\n"
+          (printf "    ~a -> ~a [~a];\n"
                   (node-id-table-ref! (first e))
                   (node-id-table-ref! (second e))
                   (attrs->string attrs))
           (set-add (set-add added e) (list (second e) (first e)))))
-      (printf "\t}\n")
+      (printf "  }\n")
 
       ; Write directed edges as another subgraph
-      (printf "\tsubgraph D {\n")
-      (for ([e (in-edges g)] #:unless (set-member? undirected-edges e))
-        (define attrs
-          (append (edge-attrs-get-val edge-attrs e)
-                  (weight-attr weighted? g e)))
-        (printf "\t\t~a -> ~a [~a];\n"
-                (first e)
-                (second e)
-                (attrs->string attrs)))
-      (printf "\t}\n")
+      (when draw-arrows
+        (printf "  subgraph D {\n")
+        (for ([e (in-edges g)] #:unless (set-member? undirected-edges e))
+          (define attrs
+            (append (edge-attrs-get-val edge-attrs e)
+                    (weight-attr weighted? g e)))
+          (printf "    ~a -> ~a [~a];\n"
+                  (second e)
+                  (first e)
+                  (attrs->string attrs)))
+        (printf "  }\n"))
       (printf "}\n")))
+
   (if port
       (generate-graph)
       (with-output-to-string generate-graph)))

@@ -13,7 +13,7 @@
 ;; Building and running the solver.
 (require "smt.rkt")
 
-(define (gen-dot courses sem-pairs)
+(define (gen-dot max-sem courses sem-pairs)
   (define (symbolic->string symbolic)
     (format "~s" symbolic))
   (define adj (map (lambda (c) (cons (course-code c)
@@ -35,6 +35,8 @@
   (mygraphviz g
               id
               semester
+              max-sem
+              #f
               #:output (open-output-file "tmp/courses.dot"
                                          #:exists 'replace)
               #:graph-attributes (list (list 'rankdir "TB")
@@ -42,17 +44,21 @@
               #:vertex-attributes (list (list 'semester semester)
                                         (list 'label label))))
 
-(define (safe-gen-dot courses sem-pairs)
+(define (safe-gen-dot max-sem courses sem-pairs)
   (define (error-message)
     (raise "Error: could not solve for model"))
   (if (equal? sem-pairs '())
       (error-message)
-      (gen-dot courses sem-pairs))
+      (gen-dot max-sem courses sem-pairs))
   #t)
 
 (define (main)
   (define data (hash-to-struct (json-read "tmp/output.json")))
-  (define schedule (build-and-solve data 3 4 0 20))
-  (safe-gen-dot data schedule))
+  (define years 3)
+  (define sems 4)
+  (define min-cred 2)
+  (define max-cred 20)
+  (define schedule (build-and-solve data years sems min-cred max-cred))
+  (safe-gen-dot (* years sems) data schedule))
 
 (main)

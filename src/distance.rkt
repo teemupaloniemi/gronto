@@ -6,6 +6,8 @@
 (require "io.rkt")
 ;; Data queries.
 (require "utils.rkt")
+;; Precomputed distances for ontology.
+(require "precomputed.rkt")
 
 ;; Constant for edges that are infinite.
 (define INF +inf.0)
@@ -62,6 +64,7 @@
     ;; each other) should be in distance-function but because of bad design the
     ;; algorithm would run for every course pair and we dont want that.
     (let ((all-pair-distances (johnson (unweighted-graph/adj t))))
+    ;(let ((all-pair-distances precomputed-hash))
       (map (lambda (p)
                    ;; For each pair
                    (list (course-code (car  p))
@@ -69,7 +72,7 @@
                          ;; compute the distance.
                          (f all-pair-distances
                             (course-skill-outcomes (car  p))
-                            (course-skill-outcomes (cadr p))
+                            (course-skill-prerequisites (cadr p))
                             (course-credits (car  p))
                             (course-credits (cadr p)))))
            (cartesian-product C C))))
@@ -110,54 +113,54 @@
 
 
 ;; Visualize :)
-(define (print-dot-graph edges courses)
-  (let* ((weights (map caddr edges))
-         (min-weight (apply min weights))
-         (max-weight (apply max weights)))
+(define (print-dot-graph edges courses port)
+  (parameterize ([current-output-port (open-output-file port #:exists 'replace)])
+    (let* ((weights (map caddr edges))
+           (min-weight (apply min weights))
+           (max-weight (apply max weights)))
 
-    ;; Normalized weight [0 (min) to 1 (max)]
-    (define (scaled w)
-      (/ (- w min-weight) (max 1 (- max-weight min-weight))))
+      ;; Normalized weight [0 (min) to 1 (max)]
+      (define (scaled w)
+        (/ (- w min-weight) (max 1 (- max-weight min-weight))))
 
-    ;; Color based on original (non-inverted) scaled value
-    (define (color w)
-      (let ((s (scaled w)))
-        (cond ((< s 0.50) "green")
-              ((< s 0.75) "yellow")
-              ((< s 0.85) "orange")
-              (else "brown"))))
+      ;; Color based on original (non-inverted) scaled value
+      (define (color w)
+        (let ((s (scaled w)))
+          (cond ((< s 0.50) "green")
+                ((< s 0.75) "yellow")
+                ((< s 0.85) "orange")
+                (else "brown"))))
 
-    ;; Print each edge with label, width, and color
-    (define (print-edge p)
-      (let* ((src-course (search-by-code courses (car p) 'struct))
-             (dst-course (search-by-code courses (cadr p) 'struct))
-             (src-name (course-name src-course))
-             (dst-name (course-name dst-course))
-             (w (caddr p)))
-        (display "    \"")
-        (display src-name) (display "\" -> \"") (display dst-name)
-        (display "\" [label=\"")
-        (display (scaled w))
-        (display "\" penwidth=2")
-        (display ", color=")
-        (display (color w))
-        (display ", style=dashed")
-        (display "];") (newline)))
+      ;; Print each edge with label, width, and color
+      (define (print-edge p)
+        (let* ((src-course (search-by-code courses (car p) 'struct))
+               (dst-course (search-by-code courses (cadr p) 'struct))
+               (src-name (course-name src-course))
+               (dst-name (course-name dst-course))
+               (w (caddr p)))
+          (display "    \"")
+          (display src-name) (display "\" -> \"") (display dst-name)
+          (display "\" [label=\"")
+          (display (scaled w))
+          (display "\" penwidth=2")
+          (display ", color=")
+          (display (color w))
+          (display ", style=dashed")
+          (display "];") (newline)))
 
-    (display "digraph Distances {") (newline)
-    (display "label=\"Prerequisite Graph\";\n")
-    (display "labelloc=\"t\";\n")
-    (display "center=true;\n")
-    (display "rankdir=TB;\n")
-    (display "node [shape=box style=filled fillcolor=lightblue];\n") (newline)
-    (map print-edge edges)
-    (display "}") (newline)))
+      (display "digraph Distances {") (newline)
+      (display "label=\"Prerequisite Graph\";\n")
+      (display "labelloc=\"t\";\n")
+      (display "center=true;\n")
+      (display "rankdir=BT;\n")
+      (display "node [shape=box style=filled fillcolor=lightblue];\n") (newline)
+      (map print-edge edges)
+      (display "}") (newline))))
 
 
 ;; Assign prerequsite courses to courses and save them for scheduling.
 ;; TODO: Get rid of course-hashes.
 (define (save-results filename graph course-hashes course-structs)
-
   ;; Get a list of all known course codes.
   (define course-codes
     (map (lambda (c) (course-code c))
@@ -192,8 +195,8 @@
   (define ontology       (hash-to-adjacency-lists (json-read "data/acm.json")))
   (define u              (G ontology distance course-structs))
   (define ũ              (H u 100/1))
-
-  (print-dot-graph ũ course-structs)
+  (when (> (length ũ) 0)
+      (print-dot-graph ũ course-structs "tmp/distance.dot"))
   (save-results "tmp/output.json" ũ course-hashes course-structs))
 
 (main)
