@@ -8,7 +8,7 @@ compile:
 	raco exe -o tmp/distance src/distance.rkt
 	raco exe -o tmp/dot src/dot.rkt
 solve:
-	./tmp/dot
+	racket src/dot.rkt
 distance:
 	./tmp/distance
 visualize:

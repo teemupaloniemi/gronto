@@ -2,11 +2,13 @@
 
 ;; For shortest path algorithm.
 (require graph)
+;; For saving precomputed data.
+(require racket/serialize)
 ;; Reading from file.
 (require "io.rkt")
 ;; Data queries.
 (require "utils.rkt")
-;; Precomputed distances for ontology.
+;; For precomputed data.
 (require "precomputed.rkt")
 
 ;; Constant for edges that are infinite.
@@ -55,6 +57,23 @@
         (* weight1 weight2 (average-closest-neighbour-distance outs pres))))
 
 
+;; Write data and return the data back.
+(define (write-precomputed data)
+  (displayln "Writing precomputed data.")
+  (call-with-output-file "src/precomputed.rkt"
+    (lambda (out)
+      (fprintf out "#lang racket\n\n(provide precomputed)\n(define precomputed\n  ~s)\n" data))
+    #:exists 'replace)
+  data)
+
+;; A wrapper for deciding which way we get the distance map.
+;; If a precomputed file exists we load it. Otherwse the values
+;; are computed, saved to a precomputed file and returned.
+(define (get-all-pair-distances t)
+    (if (hash? precomputed)
+       precomputed
+       (write-precomputed (johnson (unweighted-graph/adj t)))))
+
 ;; Find the distance graph among the courses according to the distance function f.
 ;; Save results in triples:
 ;;     (src dst dist)
@@ -63,8 +82,7 @@
     ;; In theory this (computing the distance between all ontology items from
     ;; each other) should be in distance-function but because of bad design the
     ;; algorithm would run for every course pair and we dont want that.
-    (let ((all-pair-distances (johnson (unweighted-graph/adj t))))
-    ;(let ((all-pair-distances precomputed-hash))
+    (let ((all-pair-distances (get-all-pair-distances t)))
       (map (lambda (p)
                    ;; For each pair
                    (list (course-code (car  p))

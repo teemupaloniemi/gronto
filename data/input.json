@@ -1,520 +1,215 @@
 [
-    {
-        "code": "TIES4211",
-        "title": "Algoritmit 2",
-        "course-prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Aineopinnot",
-        "credits": 5,
-        "outcomes": [ "Shortest paths","Control path algorithms","Paths and connectivity problems","Computational thinking","Graph algorithms","Dynamic graph algorithms","Graph algorithms analysis","Complexity classes","Dynamic programming","Program reasoning" ],
-        "skill-prerequisites": [ "Complexity classes","Designing software","Procedures, functions and subroutines","Classes and objects","Sorting and searching" ],
-        "periods": []
-    },
-    {
-        "code": "MATA2520",
-        "title": "Joukko-oppi ja graafiteoria",
-        "course-prerequisites": [],
-        "department": "Matematiikan ja tilastotieteen laitos",
-        "level": "Aineopinnot",
-        "credits": 5,
-        "outcomes": [
-            "Graph theory"
-        ],
-        "skill-prerequisites": [
-            "Logic",
-            "Combinatorics",
-            "Probability and statistics"
-        ],
-        "periods": []
-    },
-    {
-        "code": "TIEA341",
-        "title": "Funktio-ohjelmointi",
-        "course-prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Aineopinnot",
-        "credits": 5,
-        "outcomes": [
-          "Recursion",
-          "Polymorphism",
-          "Abstract data types",
-          "Inheritance",
-          "Functional languages",
-          "Logic"
-        ],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "TIEA1130",
-        "title": "Oliosuuntautunut suunnittelu ja ohjelmointi",
-        "course-prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Aineopinnot",
-        "credits": 5,
-        "outcomes": [
-          "Object oriented languages",
-          "Object oriented architectures",
-          "Unified Modeling Language (UML)"
-        ],
-        "skill-prerequisites": [
-          "Procedures, functions and subroutines",
-          "Classes and objects",
-          "Object oriented languages"
-        ],
-        "periods": []
-    },
-    {
-        "code": "ITKP102",
-        "title": "Ohjelmointi 1",
-        "course-prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Perusopinnot",
-        "credits": 5,
-        "outcomes": [
-          "Object oriented development",
-          "Object oriented languages",
-          "Computer games",
-          "Software configuration management and version control systems",
-          "Software development techniques",
-          "Software testing and debugging",
-          "Data types and structures",
-          "Classes and objects",
-          "Modules / packages",
-          "Procedures, functions and subroutines"
-        ],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "ITKP104",
-        "title": "Tietoverkot",
-        "course-prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Perusopinnot",
-        "credits": 5,
-        "outcomes": [
-          "Network components",
-          "Network protocols"
-        ],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "ITKA2004",
-        "title": "Tietokannat ja tiedonhallinta",
-        "course-prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Aineopinnot",
-        "credits": 5,
-        "outcomes": [
-          "Database design and models",
-          "Database transaction processing",
-          "Structured Query Language"
-        ],
-        "skill-prerequisites": [
-          "Procedures, functions and subroutines",
-          "Software development techniques"
-        ],
-        "periods": []
-    },
-    {
-        "code": "ITKA201",
-        "title": "Algoritmit 1",
-        "course-prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Aineopinnot",
-        "credits": 5,
-        "outcomes": [
-          "Complexity classes",
-          "Data structures design and analysis"
-        ],
-        "skill-prerequisites": [
-          "Procedures, functions and subroutines",
-          "Software development techniques",
-          "Software testing and debugging",
-          "Data types and structures"
-        ],
-        "periods": []
-    },
-    {
-        "code": "ITKA2030",
-        "title": "K\u00e4ytt\u00f6j\u00e4rjestelmien ja pilvipalveluiden perusteet",
-        "course-prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Aineopinnot",
-        "credits": 5,
-        "outcomes": [
-          "Memory management",
-          "Process management",
-          "Virtual worlds software",
-          "Assembly languages",
-          "Cloud computing"
-        ],
-        "skill-prerequisites": [
-          "Object oriented architectures",
-          "Language features",
-          "Procedures, functions and subroutines"
-        ],
-        "periods": []
-    },
-    {
-        "code": "ITKP0008",
-        "title": "Kvanttilaskennan aakkoset - osa A",
-        "course-prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Perusopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "ITKP1010",
-        "title": "Digitaalisen osaamisen perusteet",
-        "course-prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Perusopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "ITKP1011",
-        "title": "Web-julkaiseminen",
-        "course-prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Perusopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "MATA2600",
-        "title": "Todenn\u00e4k\u00f6isyysmatematiikka",
-        "course-prerequisites": [],
-        "department": "Matematiikan ja tilastotieteen laitos",
-        "level": "Aineopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "MATA2700",
-        "title": "Todistamisen ja p\u00e4\u00e4ttelyn perusteet tekniikan alalle",
-        "course-prerequisites": [],
-        "department": "Matematiikan ja tilastotieteen laitos",
-        "level": "Aineopinnot",
-        "credits": 5,
-        "outcomes": [
-          "Complexity classes",
-          "Formal software verification",
-          "Program reasoning"
-        ],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "MATA2710",
-        "title": "Lineaarialgebra ja derivointi tekniikan alalla",
-        "course-prerequisites": [],
-        "department": "Matematiikan ja tilastotieteen laitos",
-        "level": "Aineopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "MATA280",
-        "title": "Stokastiikan perusteet",
-        "course-prerequisites": [],
-        "department": "Matematiikan ja tilastotieteen laitos",
-        "level": "Aineopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "MATP121",
-        "title": "Lineaarinen algebra ja geometria 1",
-        "course-prerequisites": [],
-        "department": "Matematiikan ja tilastotieteen laitos",
-        "level": "Perusopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "MATP1700",
-        "title": "Tekniikan alan matematiikan valmistava kurssi",
-        "course-prerequisites": [],
-        "department": "Matematiikan ja tilastotieteen laitos",
-        "level": "Perusopinnot",
-        "credits": 5,
-        "outcomes": [
-          "Logic",
-          "Physical sciences and engineering"
-        ],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "MATP211",
-        "title": "Calculus 1",
-        "course-prerequisites": [],
-        "department": "Matematiikan ja tilastotieteen laitos",
-        "level": "Perusopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "MATP212",
-        "title": "Calculus 2",
-        "course-prerequisites": [],
-        "department": "Matematiikan ja tilastotieteen laitos",
-        "level": "Perusopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "MATP213",
-        "title": "Calculus 3",
-        "course-prerequisites": [],
-        "department": "Matematiikan ja tilastotieteen laitos",
-        "level": "Perusopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "TEKA3003",
-        "title": "Ohjelmistotuotanto",
-        "course-prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Aineopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "TEKP1110",
-        "title": "Yritys ja toimintaymp\u00e4rist\u00f6",
-        "course-prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Perusopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "TIEA2048",
-        "title": "Tietokoneen rakenne ja arkkitehtuuri 2",
-        "course-prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Aineopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "TIEA2120",
-        "title": "Web-k\u00e4ytt\u00f6liittymien ohjelmointi",
-        "course-prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Aineopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "skill-prerequisites": [
-          "Object oriented architectures",
-          "Language features",
-          "Relational database model",
-          "User interface programming"
-        ],
-        "periods": []
-    },
-    {
-        "code": "TIEA301",
-        "title": "Kandidaattiseminaari",
-        "course-prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Aineopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "TIEA302",
-        "title": "Kandidaatintutkielma",
-        "course-prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Aineopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "TIEA303",
-        "title": "Kypsyysn\u00e4yte",
-        "course-prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Aineopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "TIEA304",
-        "title": "Harjoittelu",
-        "course-prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Aineopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "TIEA3810",
-        "title": "Sovellettu predikaattilogiikka",
-        "course-prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Aineopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "TIEP111",
-        "title": "Ohjelmointi 2",
-        "course-prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Perusopinnot",
-        "credits": 5,
-        "outcomes": [
-          "Object oriented architectures",
-          "Language features",
-          "Relational database model",
-          "User interface programming"
-        ],
-        "skill-prerequisites": [
-          "Object oriented development",
-          "Object oriented languages",
-          "Computer games",
-          "Software configuration management and version control systems",
-          "Software development techniques",
-          "Software testing and debugging",
-          "Data types and structures",
-          "Classes and objects",
-          "Modules / packages",
-          "Procedures, functions and subroutines"
-        ],
-        "periods": []
-    },
-    {
-        "code": "TIEP112",
-        "title": "Ohjelmointi 2, C++",
-        "course-prerequisites": ["TIEP111"],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Perusopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "skill-prerequisites": [
-          "Object oriented development",
-          "Object oriented languages",
-          "Computer games",
-          "Software configuration management and version control systems",
-          "Software development techniques",
-          "Software testing and debugging",
-          "Data types and structures",
-          "Classes and objects",
-          "Modules / packages",
-          "Procedures, functions and subroutines",
-          "Object oriented architectures",
-          "Language features",
-          "Relational database model",
-          "User interface programming"
-        ],
-        "periods": []
-    },
-    {
-        "code": "TIEP114",
-        "title": "Tietokoneen rakenne ja arkkitehtuuri",
-        "course-prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Perusopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "TIEP115",
-        "title": "Johdatus tietotekniikkaan",
-        "course-prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Perusopinnot",
-        "credits": 5,
-        "outcomes": [
-          "Procedures, functions and subroutines",
-          "Software and its engineering",
-          "Hardware",
-          "Computing literacy"
-        ],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "TIEP1200",
-        "title": "Teko\u00e4lyn alkeet",
-        "course-prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Perusopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "TIEP1300",
-        "title": "Python ohjelmointi",
-        "course-prerequisites": [],
-        "department": "Informaatioteknologian tiedekunta",
-        "level": "Perusopinnot",
-        "credits": 5,
-        "outcomes": [
-          "Language features",
-          "Computational thinking"
-        ],
-        "skill-prerequisites": [],
-        "periods": []
-    },
-    {
-        "code": "TILP2400",
-        "title": "Datan esitt\u00e4minen ja analysointi",
-        "course-prerequisites": [],
-        "department": "Matematiikan ja tilastotieteen laitos",
-        "level": "Perusopinnot",
-        "credits": 5,
-        "outcomes": [],
-        "skill-prerequisites": [],
-        "periods": []
-    }
+ {
+     "code": "MATA2700",
+     "title": "Todistamisen ja p\u00e4\u00e4ttelyn perusteet tekniikan alalle",
+     "course-prerequisites": [],
+     "department": "Matematiikan ja tilastotieteen laitos",
+     "level": "Aineopinnot",
+     "credits": 5,
+     "outcomes": [
+       "Proof theory",
+       "Complexity classes",
+       "Formal software verification",
+       "Invariants"
+     ],
+     "skill-prerequisites": [],
+     "periods": []
+ },
+ {
+     "code": "MATA2520",
+     "title": "Joukko-oppi ja graafiteoria",
+     "course-prerequisites": [],
+     "department": "Matematiikan ja tilastotieteen laitos",
+     "level": "Aineopinnot",
+     "credits": 5,
+     "outcomes": [
+         "Graph theory"
+     ],
+     "skill-prerequisites": [
+         "Proof theory",
+         "Logic",
+         "Combinatorics",
+         "Probability and statistics"
+     ],
+     "periods": []
+ },
+ {
+     "code": "TIEP114",
+     "title": "Tietokoneen rakenne ja arkkitehtuuri",
+     "course-prerequisites": [],
+     "department": "Informaatioteknologian tiedekunta",
+     "level": "Perusopinnot",
+     "credits": 5,
+     "outcomes": [
+       "Assembly languages",
+       "Serial architectures",
+       "Transistors",
+       "Combinatorics"
+     ],
+     "skill-prerequisites": [
+     ],
+     "periods": []
+ },
+ {
+     "code": "ITKA2030",
+     "title": "K\u00e4ytt\u00f6j\u00e4rjestelmien ja pilvipalveluiden perusteet",
+     "course-prerequisites": [],
+     "department": "Informaatioteknologian tiedekunta",
+     "level": "Aineopinnot",
+     "credits": 5,
+     "outcomes": [
+       "Memory management",
+       "Process management",
+       "Communications management",
+       "File systems management",
+       "Assembly languages",
+       "Program specifications",
+       "Concurrency"
+     ],
+     "skill-prerequisites": [
+       "Procedures, functions and subroutines",
+       "Language features",
+       "Program reasoning"
+     ],
+     "periods": []
+ },
+ {
+     "code": "TIEA341",
+     "title": "Funktio-ohjelmointi",
+     "course-prerequisites": [],
+     "department": "Informaatioteknologian tiedekunta",
+     "level": "Aineopinnot",
+     "credits": 5,
+     "outcomes": [
+       "Recursion",
+       "Polymorphism",
+       "Abstract data types",
+       "Inheritance",
+       "Functional languages",
+       "Logic"
+     ],
+     "skill-prerequisites": [],
+     "periods": [ ]
+ },
+ {
+     "code": "TIEA1130",
+     "title": "Oliosuuntautunut suunnittelu ja ohjelmointi",
+     "course-prerequisites": [],
+     "department": "Informaatioteknologian tiedekunta",
+     "level": "Aineopinnot",
+     "credits": 5,
+     "outcomes": [
+       "Object oriented languages",
+       "Object oriented architectures",
+       "Unified Modeling Language (UML)"
+     ],
+     "skill-prerequisites": [
+       "Procedures, functions and subroutines",
+       "Classes and objects",
+       "Object oriented languages"
+     ],
+     "periods": []
+ },
+ {
+     "code": "ITKP102",
+     "title": "Ohjelmointi 1",
+     "course-prerequisites": [],
+     "department": "Informaatioteknologian tiedekunta",
+     "level": "Perusopinnot",
+     "credits": 5,
+     "outcomes": [
+       "Object oriented development",
+       "Object oriented languages",
+       "Computer games",
+       "Software configuration management and version control systems",
+       "Software development techniques",
+       "Software testing and debugging",
+       "Data types and structures",
+       "Classes and objects",
+       "Modules / packages",
+       "Procedures, functions and subroutines"
+     ],
+     "skill-prerequisites": [],
+     "periods": []
+ },
+ {
+     "code": "TIEP111",
+     "title": "Ohjelmointi 2",
+     "course-prerequisites": [],
+     "department": "Informaatioteknologian tiedekunta",
+     "level": "Perusopinnot",
+     "credits": 5,
+     "outcomes": [
+       "Object oriented architectures",
+       "Sorting and searching",
+       "Language features",
+       "Relational database model",
+       "User interface programming",
+       "Program reasoning"
+     ],
+     "skill-prerequisites": [
+       "Object oriented development",
+       "Object oriented languages",
+       "Computer games",
+       "Software configuration management and version control systems",
+       "Software development techniques",
+       "Software testing and debugging",
+       "Data types and structures",
+       "Classes and objects",
+       "Modules / packages",
+       "Procedures, functions and subroutines"
+     ],
+     "periods": []
+ },
+ {
+     "code": "ITKA201",
+     "title": "Algoritmit 1",
+     "course-prerequisites": [],
+     "department": "Informaatioteknologian tiedekunta",
+     "level": "Aineopinnot",
+     "credits": 5,
+     "outcomes": [
+       "Complexity classes",
+       "Data structures design and analysis"
+     ],
+     "skill-prerequisites": [
+       "Procedures, functions and subroutines",
+       "Software development techniques",
+       "Software testing and debugging",
+       "Data types and structures"
+     ],
+     "periods": []
+ },
+ {
+     "code": "TIES4211",
+     "title": "Algoritmit 2",
+     "course-prerequisites": [],
+     "department": "Informaatioteknologian tiedekunta",
+     "level": "Aineopinnot",
+     "credits": 5,
+     "outcomes": [
+         "Shortest paths",
+         "Control path algorithms",
+         "Paths and connectivity problems",
+         "Computational thinking",
+         "Graph algorithms",
+         "Dynamic graph algorithms",
+         "Graph algorithms analysis",
+         "Complexity classes",
+         "Dynamic programming",
+         "Program reasoning",
+         "Programming logic"
+     ],
+     "skill-prerequisites": [
+         "Complexity classes",
+         "Designing software",
+         "Procedures, functions and subroutines",
+         "Classes and objects",
+         "Sorting and searching",
+         "Program reasoning",
+         "Graph theory",
+         "Invariants"
+     ],
+     "periods": []
+ }
 ]

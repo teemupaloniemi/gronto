@@ -80,7 +80,7 @@
                      (begin0 (format "node~a" node-count)
                        (set! node-count (add1 node-count))))))
       (printf "digraph G {\n")
-      (printf "label=\"Schedule\";\n")
+      (printf "label=\"Aikataulu\";\n")
       (printf "labelloc=\"t\";\n")
       (printf "center=true;\n")
 
@@ -100,12 +100,12 @@
       ;; Create grouped subgraphs for each semester.
       (define subs (build-list nsubs (lambda (x) (+ 1 x))))
       (for ((s subs))
-           (printf "        subgraph cluster_sem~a { graph[bgcolor=white, style=dotted, label=\"Semester ~a\"];" s s)
+           (printf "        subgraph cluster_sem~a { graph[bgcolor=white, style=dotted, label=\"Periodi ~a\"];" s s)
            (map (lambda (v) (printf " ~a; " (id v)))
                 (filter (lambda (c) (= (rank c) s))
                         (get-vertices g)))
            (printf " {rank=\"same\"")
-           (printf " h~a [style=invisible]; t~a [style=invisible]; " s s)
+           (printf " h~a [style=invisible, fixedsize=true, width=0.1, height=0.1]; t~a [style=invisible, fixedsize=true, width=0.1, height=0.1]; " s s)
            (map (lambda (v) (printf " ~a; " (id v)))
                 (filter (lambda (c) (= (rank c) s))
                         (get-vertices g)))

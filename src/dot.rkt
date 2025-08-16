@@ -54,10 +54,10 @@
 
 (define (main)
   (define data (hash-to-struct (json-read "tmp/output.json")))
-  (define years 3)
+  (define years 1)
   (define sems 4)
-  (define min-cred 2)
-  (define max-cred 20)
+  (define min-cred 1)
+  (define max-cred 15)
   (define schedule (build-and-solve data years sems min-cred max-cred))
   (safe-gen-dot (* years sems) data schedule))
 
