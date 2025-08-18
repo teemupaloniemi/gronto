@@ -89,7 +89,7 @@
        "Logic"
      ],
      "skill-prerequisites": [],
-     "periods": [ ]
+     "periods": []
  },
  {
      "code": "TIEA1130",
@@ -211,5 +211,29 @@
          "Invariants"
      ],
      "periods": []
+ },
+ {
+   "title": "Ohjelmistotuotanto",
+   "code": "TEKA3003",
+   "credits": 5,
+   "skill-prerequisites": [
+     "Software version control",
+     "Software configuration management and version control systems",
+     "Software design engineering",
+     "Software design techniques",
+     "Software organization and properties"
+   ],
+   "outcomes": [
+     "Designing software",
+     "Software development methods",
+     "Software development techniques",
+     "Software verification and validation",
+     "Software post-development issues",
+     "Collaboration in software development",
+     "Software functional properties"
+   ],
+   "extra": "",
+   "course-prerequisites": [],
+   "periods": []
  }
 ]

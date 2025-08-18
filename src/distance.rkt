@@ -167,7 +167,7 @@
           (display "];") (newline)))
 
       (display "digraph Distances {") (newline)
-      (display "label=\"Prerequisite Graph\";\n")
+      (display "label=\"Esitietoisuudet\";\n")
       (display "labelloc=\"t\";\n")
       (display "center=true;\n")
       (display "rankdir=BT;\n")
