@@ -6,6 +6,43 @@ benefits to curriculum design. We also touch some topics from [graph
 theory](https://en.wikipedia.org/wiki/Graph_theory), and [satisfiability
 solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
 
+# Prerequisites
+
+- make
+- racket / raco
+  - Racket Generic Graph Library (`raco pkg install graph`)
+  - Solver library (`raco pkg install rosette`)
+- xdot
+- sha256sum
+
+# Compile
+
+We must first compile the code (make), then compute
+all-pair-distances of our ontology network (make distance), and finally compile again to link
+the newly computed part to main program (make compile).
+
+```
+make
+make distance
+make compile
+```
+
+Now we have a compiled version of the system.
+
+# Running
+
+```
+./demo.sh
+```
+
+Now you can open the file `data/input.json`, in your favourite text editor,
+which contains the course data and start manipulating it. `demo.sh` will start
+a new xdot session and track the state of `data/input.json`. If it is change
+then `make distance solve` is executed.
+
+You can also change the restrictions for the solver in `src/dot.rkt` to change
+number of years, semsters, semester limits etc.
+
 # TODO
 
 1. Yes, but why?
