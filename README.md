@@ -31,17 +31,17 @@ Now we have a compiled version of the system.
 
 # Running
 
+`demo.sh` will start a new xdot session and track the state of
+`data/input.json`. If it is change then `make distance solve` is executed.
+
 ```
 ./demo.sh
 ```
 
 Now you can open the file `data/input.json`, in your favourite text editor,
-which contains the course data and start manipulating it. `demo.sh` will start
-a new xdot session and track the state of `data/input.json`. If it is change
-then `make distance solve` is executed.
-
-You can also change the restrictions for the solver in `src/dot.rkt` to change
-number of years, semsters, semester limits etc.
+which contains the course data and start manipulating it. You can also change
+the restrictions for the solver in `src/dot.rkt` to change number of years,
+semsters, semester limits etc.
 
 # TODO
 
@@ -155,6 +155,3 @@ number of years, semsters, semester limits etc.
      process is synthetically documented. People often leave the organization
      but their ideas and decicions are captured by the system.
 
-## Running
-
-`make`
