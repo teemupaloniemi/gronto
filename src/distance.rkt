@@ -15,7 +15,7 @@
 (define INF +inf.0)
 
 ;; Distance between one course (c1) outcomes and another (c2) prerequisites
-;; in ontology (t).
+;; in ontology (t) weighted by the course credits.
 (provide distance)
 (define (distance all-pair-distances outs pres weight1 weight2)
     ;; Self made heuristic on distance between two partitions in the ontology.
@@ -28,19 +28,25 @@
               (if (equal? a b)
                 0
                 (hash-ref all-pair-distances (list (string->symbol a) (string->symbol b)))))
-            (map (lambda (x)
-                         (list (car x)
-                               (cadr x)
-                               (pair-distance (car x) (cadr x))))
+            (define (make-pair-distance x)
+              (list (caar x)
+                    (caadr x)
+                    (* (cadar x) (cadadr x) (pair-distance (caar x) (caadr x)))))
+            (map make-pair-distance
                  (cartesian-product l1 l2)))
 
         ;; Find closest neighbour of all (c1) outcomes.
         (define closest-neighbours
           (let ((p (filter-relevant-distances outs pres)))
             ;; For each outcome (o) find the minimum in relevant pairs (p).
+            ;; caddr is d (the precomputed distance) in the triple in (A B d).
             (for*/list ((o outs))
-              (let* ((f (filter (lambda (x) (equal? (car x) o)) p))
+                      ;; Filter the ones that have o as the first key.
+              (let* ((f (filter (lambda (x) (equal? (car x) (car o))) p))
+                      ;; Sort them based on the precomputed distance.
                      (s (sort f (lambda (x y) (< (caddr x) (caddr y))))))
+                ;; Return the precomputed distance of the first element if it
+                ;; exists else return INF.
                 (if (> (length f) 0)
                     (caddar s)
                     INF)))))
@@ -212,7 +218,7 @@
   (define course-structs (hash-to-struct course-hashes))
   (define ontology       (hash-to-adjacency-lists (json-read "data/acm.json")))
   (define u              (G ontology distance course-structs))
-  (define ũ              (H u 100/1))
+  (define ũ              (H u 1000/1))
   (when (> (length ũ) 0)
       (print-dot-graph ũ course-structs "tmp/distance.dot"))
   (save-results "tmp/output.json" ũ course-hashes course-structs))

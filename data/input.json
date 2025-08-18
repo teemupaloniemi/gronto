@@ -7,10 +7,10 @@
      "level": "Aineopinnot",
      "credits": 5,
      "outcomes": [
-       "Proof theory",
-       "Complexity classes",
-       "Formal software verification",
-       "Invariants"
+       ["Proof theory", 1],
+       ["Complexity classes", 5],
+       ["Formal software verification", 2],
+       ["Invariants", 2]
      ],
      "skill-prerequisites": [],
      "periods": []
@@ -23,141 +23,13 @@
      "level": "Aineopinnot",
      "credits": 5,
      "outcomes": [
-         "Graph theory"
+       ["Graph theory", 2]
      ],
      "skill-prerequisites": [
-         "Proof theory",
-         "Logic",
-         "Combinatorics",
-         "Probability and statistics"
-     ],
-     "periods": []
- },
- {
-     "code": "TIEP114",
-     "title": "Tietokoneen rakenne ja arkkitehtuuri",
-     "course-prerequisites": [],
-     "department": "Informaatioteknologian tiedekunta",
-     "level": "Perusopinnot",
-     "credits": 5,
-     "outcomes": [
-       "Assembly languages",
-       "Serial architectures",
-       "Transistors",
-       "Combinatorics"
-     ],
-     "skill-prerequisites": [
-     ],
-     "periods": []
- },
- {
-     "code": "ITKA2030",
-     "title": "K\u00e4ytt\u00f6j\u00e4rjestelmien ja pilvipalveluiden perusteet",
-     "course-prerequisites": [],
-     "department": "Informaatioteknologian tiedekunta",
-     "level": "Aineopinnot",
-     "credits": 5,
-     "outcomes": [
-       "Memory management",
-       "Process management",
-       "Communications management",
-       "File systems management",
-       "Assembly languages",
-       "Program specifications",
-       "Concurrency"
-     ],
-     "skill-prerequisites": [
-       "Procedures, functions and subroutines",
-       "Language features",
-       "Program reasoning"
-     ],
-     "periods": []
- },
- {
-     "code": "TIEA341",
-     "title": "Funktio-ohjelmointi",
-     "course-prerequisites": [],
-     "department": "Informaatioteknologian tiedekunta",
-     "level": "Aineopinnot",
-     "credits": 5,
-     "outcomes": [
-       "Recursion",
-       "Polymorphism",
-       "Abstract data types",
-       "Inheritance",
-       "Functional languages",
-       "Logic"
-     ],
-     "skill-prerequisites": [],
-     "periods": []
- },
- {
-     "code": "TIEA1130",
-     "title": "Oliosuuntautunut suunnittelu ja ohjelmointi",
-     "course-prerequisites": [],
-     "department": "Informaatioteknologian tiedekunta",
-     "level": "Aineopinnot",
-     "credits": 5,
-     "outcomes": [
-       "Object oriented languages",
-       "Object oriented architectures",
-       "Unified Modeling Language (UML)"
-     ],
-     "skill-prerequisites": [
-       "Procedures, functions and subroutines",
-       "Classes and objects",
-       "Object oriented languages"
-     ],
-     "periods": []
- },
- {
-     "code": "ITKP102",
-     "title": "Ohjelmointi 1",
-     "course-prerequisites": [],
-     "department": "Informaatioteknologian tiedekunta",
-     "level": "Perusopinnot",
-     "credits": 5,
-     "outcomes": [
-       "Object oriented development",
-       "Object oriented languages",
-       "Computer games",
-       "Software configuration management and version control systems",
-       "Software development techniques",
-       "Software testing and debugging",
-       "Data types and structures",
-       "Classes and objects",
-       "Modules / packages",
-       "Procedures, functions and subroutines"
-     ],
-     "skill-prerequisites": [],
-     "periods": []
- },
- {
-     "code": "TIEP111",
-     "title": "Ohjelmointi 2",
-     "course-prerequisites": [],
-     "department": "Informaatioteknologian tiedekunta",
-     "level": "Perusopinnot",
-     "credits": 5,
-     "outcomes": [
-       "Object oriented architectures",
-       "Sorting and searching",
-       "Language features",
-       "Relational database model",
-       "User interface programming",
-       "Program reasoning"
-     ],
-     "skill-prerequisites": [
-       "Object oriented development",
-       "Object oriented languages",
-       "Computer games",
-       "Software configuration management and version control systems",
-       "Software development techniques",
-       "Software testing and debugging",
-       "Data types and structures",
-       "Classes and objects",
-       "Modules / packages",
-       "Procedures, functions and subroutines"
+       ["Proof theory", 2],
+       ["Logic", 5],
+       ["Combinatorics", 3],
+       ["Probability and statistics", 3]
      ],
      "periods": []
  },
@@ -169,15 +41,12 @@
      "level": "Aineopinnot",
      "credits": 5,
      "outcomes": [
-       "Complexity classes",
-       "Data structures design and analysis"
+       ["Complexity classes", 2],
+       ["Program reasoning", 5],
+       ["Programming logic", 4]
      ],
      "skill-prerequisites": [
-       "Procedures, functions and subroutines",
-       "Software development techniques",
-       "Software testing and debugging",
-       "Data types and structures"
-     ],
+      ],
      "periods": []
  },
  {
@@ -188,52 +57,14 @@
      "level": "Aineopinnot",
      "credits": 5,
      "outcomes": [
-         "Shortest paths",
-         "Control path algorithms",
-         "Paths and connectivity problems",
-         "Computational thinking",
-         "Graph algorithms",
-         "Dynamic graph algorithms",
-         "Graph algorithms analysis",
-         "Complexity classes",
-         "Dynamic programming",
-         "Program reasoning",
-         "Programming logic"
+       ["Shortest paths", 1],
+       ["Control path algorithms", 5]
      ],
      "skill-prerequisites": [
-         "Complexity classes",
-         "Designing software",
-         "Procedures, functions and subroutines",
-         "Classes and objects",
-         "Sorting and searching",
-         "Program reasoning",
-         "Graph theory",
-         "Invariants"
+       ["Complexity classes", 3],
+       ["Procedures, functions and subroutines", 4],
+       ["Graph theory", 5]
      ],
      "periods": []
- },
- {
-   "title": "Ohjelmistotuotanto",
-   "code": "TEKA3003",
-   "credits": 5,
-   "skill-prerequisites": [
-     "Software version control",
-     "Software configuration management and version control systems",
-     "Software design engineering",
-     "Software design techniques",
-     "Software organization and properties"
-   ],
-   "outcomes": [
-     "Designing software",
-     "Software development methods",
-     "Software development techniques",
-     "Software verification and validation",
-     "Software post-development issues",
-     "Collaboration in software development",
-     "Software functional properties"
-   ],
-   "extra": "",
-   "course-prerequisites": [],
-   "periods": []
  }
 ]
