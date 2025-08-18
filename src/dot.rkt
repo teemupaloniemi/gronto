@@ -36,7 +36,7 @@
               id
               semester
               max-sem
-              #f
+              #t
               #:output (open-output-file "tmp/courses.dot"
                                          #:exists 'replace)
               #:graph-attributes (list (list 'rankdir "TB")
@@ -56,7 +56,7 @@
   (define data (hash-to-struct (json-read "tmp/output.json")))
   (define years 1)
   (define sems 4)
-  (define min-cred 1)
+  (define min-cred 0)
   (define max-cred 15)
   (define schedule (build-and-solve data years sems min-cred max-cred))
   (safe-gen-dot (* years sems) data schedule))
