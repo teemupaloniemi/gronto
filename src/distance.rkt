@@ -10,6 +10,8 @@
 (require "utils.rkt")
 ;; For precomputed data.
 (require "precomputed.rkt")
+;; For the ontology.
+(require "ontology.rkt")
 
 ;; Constant for edges that are infinite.
 (define INF +inf.0)
@@ -173,7 +175,6 @@
             (display ", style=dashed")
             (display "];")
             (newline))
-          (display '(src-name dst-name) (current-error-port))
           (when (not (equal? src-name dst-name))
             (print-edge))))
 
@@ -221,7 +222,7 @@
   ;; Specifically we sill assign prerequisite courses based on our computation.
   (define course-hashes  (json-read "data/input.json"))
   (define course-structs (hash-to-struct course-hashes))
-  (define ontology       (hash-to-adjacency-lists (json-read "data/acm.json")))
+  ;; Ontology comes from import.
   (define u              (G ontology distance course-structs))
   (define ũ              (H u 1000/1))
   (when (> (length ũ) 0)
