@@ -66,5 +66,28 @@
        ["Graph theory", 5]
      ],
      "periods": []
+ },
+ {
+   "title": "Ohjelmistotuotanto",
+   "code": "TEKA3003",
+   "credits": 5,
+   "skill-prerequisites": [
+     ["Software version control", 3],
+     ["Software configuration management and version control systems", 3],
+     ["Software design engineering", 4],
+     ["Software design techniques", 4],
+     ["Software organization and properties", 5]
+   ],
+   "outcomes": [
+     ["Designing software", 3],
+     ["Software development methods", 4],
+     ["Software development techniques", 4],
+     ["Software verification and validation", 4],
+     ["Software post-development issues", 4],
+     ["Collaboration in software development", 3],
+     ["Software functional properties", 4]
+   ],
+   "course-prerequisites": [],
+   "periods": []
  }
 ]
