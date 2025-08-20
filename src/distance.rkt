@@ -4,6 +4,8 @@
 (require graph)
 ;; For saving precomputed data.
 (require racket/serialize)
+;; Mean
+(require math/statistics)
 ;; Reading from file.
 (require "io.rkt")
 ;; Data queries.
@@ -99,8 +101,8 @@
                          (f all-pair-distances
                             (course-skill-outcomes (car  p))
                             (course-skill-prerequisites (cadr p))
-                            (course-credits (car  p))
-                            (course-credits (cadr p)))))
+                            (mean (course-credits (car  p)))
+                            (mean (course-credits (cadr p))))))
            (cartesian-product C C))))
 
 

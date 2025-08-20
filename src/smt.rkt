@@ -8,6 +8,9 @@
 ;; Data queries.
 (require "utils.rkt")
 
+;; Mean.
+(require math/statistics)
+
 ;; For solvers.
 (require rosette/safe)
 (require rosette/solver/smt/z3)
@@ -45,12 +48,12 @@
     (for ((s sems))
       (define bs (list (and (>= (apply + (for/list ((v vars))
                                                    (if (= (cdr v) s)
-                                                     (course-credits (car v))
+                                                     (mean (course-credits (car v)))
                                                      0)))
                                 min-cred-sem)
                             (<= (apply + (for/list ((v vars))
                                                    (if (= (cdr v) s)
-                                                     (course-credits (car v))
+                                                     (mean (course-credits (car v)))
                                                      0)))
                                 max-cred-sem))))
       (solver-assert solver bs))
