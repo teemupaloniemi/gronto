@@ -4,7 +4,15 @@
 (require "io.rkt")
 
 (provide (struct-out course))
-(struct course (name code credits periods prerequisite-courses skill-prerequisites skill-outcomes))
+(struct course (name
+                code
+                credits
+                periods
+                prerequisite-courses
+                skill-prerequisites
+                skill-outcomes))
+
+(define (sqr x) (* x x))
 
 ;; Map our JSON hash to course struct for readability.
 (provide hash-to-struct)

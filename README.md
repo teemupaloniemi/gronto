@@ -43,7 +43,21 @@ which contains the course data and start manipulating it. You can also change
 the restrictions for the solver in `src/dot.rkt` to change number of years,
 semsters, semester limits etc.
 
-# TODO
+# Formally
+
+- ${C}$ denotes all courses.
+- ${N}$ denotes all ontology nodes.
+- ${W}$ denotes integer weights [1,2,3,4,5,6].
+- ${Cred} : {C} \mapsto \mathbb{N}$ maps a course to credits.
+- ${P} : {C} \mapsto ({N}\times{W})\times ... \times({N}\times{W})$ maps a course to a list of weighted prerequisites.
+- ${O} : {C} \mapsto ({N}\times{W})\times ... \times({N}\times{W})$ maps a course to a list of weighted outcomes.
+- ${f} : ({N}\times{W}) \times ({N}\times{W}) \mapsto ({N} \times {N} \times \mathbb{Q})$ gives the distance between two weighted ontology nodes.
+- ${G} : (({N}\times{W})\times ... \times({N}\times{W})) \times (({N}\times{W})\times ... \times({N}\times{W})) \mapsto \mathbb{Q}$ gives the distance between two lists of weighted ontology nodes.
+  - ${G}$ is implemented as the average of the cartesian product of ${O}(c1)$ and ${P}(c2)$ mapped to ${f}$ and filtered by the minimum for each pair where the first element is element of ${O}(c1)$.
+- ${D} : {C} \times {C} \mapsto ({C} \times {C} \times \mathbb{Q})$ gives the distance between two courses.
+  - Here ${D}(c1, c2) = (c1, c2, {Cred}(c1) * {Cred}(c2) * {G}({O}(c1), {P}(c2)))$ for $c1,c2 : {C}$.
+
+# Discussion
 
 1. Yes, but why?
    - Course prerequisite assignment seems to be the biggest unsolved problem in
@@ -63,7 +77,8 @@ semsters, semester limits etc.
 
 4. Test other possible distance metrics?
 
-5. Test other possible ontologies?
+ 
+5. . Test other possible ontologies?
    - [2020 Mathematics Subject Classification System](https://mathscinet.ams.org/mathscinet/msc/msc2020.html)
    - What properties should thes have for them to work?
       - General

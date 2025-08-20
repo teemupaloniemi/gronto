@@ -18,55 +18,6 @@
 ;; Constant for edges that are infinite.
 (define INF +inf.0)
 
-;; Distance between one course (c1) outcomes and another (c2) prerequisites
-;; in ontology (t) weighted by the course credits.
-(provide distance)
-(define (distance all-pair-distances outs pres weight1 weight2)
-    ;; Self made heuristic on distance between two partitions in the ontology.
-    (define (average-closest-neighbour-distance outs pres)
-
-        ;; Select from all-pair-distances the ones that are relevant to given
-        ;; courses.
-        (define (filter-relevant-distances l1 l2)
-            (define (pair-distance a b)
-              (if (equal? a b)
-                0
-                (hash-ref all-pair-distances (list (string->symbol a) (string->symbol b)))))
-            (define (make-pair-distance x)
-              (list (caar x)
-                    (caadr x)
-                    (* (cadar x) (cadadr x) (pair-distance (caar x) (caadr x)))))
-            (map make-pair-distance
-                 (cartesian-product l1 l2)))
-
-        ;; Find closest neighbour of all (c1) outcomes.
-        (define closest-neighbours
-          (let ((p (filter-relevant-distances outs pres)))
-            ;; For each outcome (o) find the minimum in relevant pairs (p).
-            ;; caddr is d (the precomputed distance) in the triple in (A B d).
-            (for*/list ((o outs))
-                      ;; Filter the ones that have o as the first key.
-              (let* ((f (filter (lambda (x) (equal? (car x) (car o))) p))
-                      ;; Sort them based on the precomputed distance.
-                     (s (sort f (lambda (x y) (< (caddr x) (caddr y))))))
-                ;; Return the precomputed distance of the first element if it
-                ;; exists else return INF.
-                (if (> (length f) 0)
-                    (caddar s)
-                    INF)))))
-
-        ;; Average the results based on number of ourcomes.
-        (if (> (length closest-neighbours) 0)
-            (/ (foldr + 0 closest-neighbours) (length closest-neighbours))
-            INF))
-
-    ;; If ether is empty return large value.
-    ;; We cant compute distance to nothing!
-    (if (or (equal? outs 0) (equal? pres 0))
-        INF
-        (* weight1 weight2 (average-closest-neighbour-distance outs pres))))
-
-
 ;; Write data and return the data back.
 (define (write-precomputed data)
   (displayln "Writing precomputed data.")
@@ -76,34 +27,76 @@
     #:exists 'replace)
   data)
 
+
 ;; A wrapper for deciding which way we get the distance map.
 ;; If a precomputed file exists we load it. Otherwse the values
 ;; are computed, saved to a precomputed file and returned.
-(define (get-all-pair-distances t)
-    (if (hash? precomputed)
-       precomputed
-       (write-precomputed (johnson (unweighted-graph/adj t)))))
+(define all-pair-distances (if (hash? precomputed)
+                               precomputed
+                               (write-precomputed (johnson (unweighted-graph/adj ontology)))))
 
-;; Find the distance graph among the courses according to the distance function f.
-;; Save results in triples:
-;;     (src dst dist)
+
+;; Distance of two ontology nodes n1 and n2 in distance pairs p.
+(define (f pair)
+  (define (weight-factor ow pw)
+    (if (< ow pw)
+      (- 1
+         (/ (sqr (abs (- ow pw)))
+            (sqr 6))) ;; 6 is the maximum.
+      1))
+
+  ;; TODO: Problems will araise if o == p, because then
+  ;;       the hash-ref will return 0 but weight factor
+  ;;       might imply that expectations between courses
+  ;;       don't align. Needs a fix!
+  (define (distance o p)
+    (* (weight-factor (cadr o)
+                      (cadr p))
+       (hash-ref all-pair-distances
+                 (list (string->symbol (car o))
+                       (string->symbol (car p))))))
+  (list (caar pair)
+        (caadr pair)
+        (distance (car pair) (cadr pair))))
+
+
+;; Distance between one course (c1) outcomes and another (c2) prerequisites
+;; in ontology (t).
 (provide G)
-(define (G t f C)
-    ;; In theory this (computing the distance between all ontology items from
-    ;; each other) should be in distance-function but because of bad design the
-    ;; algorithm would run for every course pair and we dont want that.
-    (let ((all-pair-distances (get-all-pair-distances t)))
-      (map (lambda (p)
-                   ;; For each pair
-                   (list (course-code (car  p))
-                         (course-code (cadr p))
-                         ;; compute the distance.
-                         (f all-pair-distances
-                            (course-skill-outcomes (car  p))
-                            (course-skill-prerequisites (cadr p))
-                            (mean (course-credits (car  p)))
-                            (mean (course-credits (cadr p))))))
-           (cartesian-product C C))))
+(define (G outs pres)
+
+    ;; Self made heuristic on distance between two partitions in the ontology.
+    (define (average-closest-neighbour-distance outs pres)
+        (define closest-neighbours
+          (let ((p (map f
+                        (cartesian-product outs
+                                           pres))))
+            (for/list ((o outs))
+              (let ((sorted (sort (filter (lambda (x) (equal? (car x) (car o)))
+                                           p)
+                                  (lambda (x y) (< (caddr x) (caddr y))))))
+                (if (> (length sorted) 0)
+                    (caddar sorted)
+                    INF)))))
+        (if (> (length closest-neighbours) 0)
+            (mean closest-neighbours)
+            INF))
+
+    (if (or (equal? outs 0) (equal? pres 0))
+        INF
+        (average-closest-neighbour-distance outs pres)))
+
+
+(provide D)
+(define (D c1 c2)
+  ;; For each pair
+  (list (course-code c1)
+        (course-code c2)
+        ;; Compute the distance and weight by course credits.
+        (* (mean (course-credits c1))
+           (mean (course-credits c2))
+           (G (course-skill-outcomes c1)
+              (course-skill-prerequisites c2)))))
 
 
 ;; TODO: Could consider making bidirectionals a one component. If two courses
@@ -224,11 +217,12 @@
   ;; Specifically we sill assign prerequisite courses based on our computation.
   (define course-hashes  (json-read "data/input.json"))
   (define course-structs (hash-to-struct course-hashes))
-  ;; Ontology comes from import.
-  (define u              (G ontology distance course-structs))
-  (define ũ              (H u 1000/1))
-  (when (> (length ũ) 0)
-      (print-dot-graph ũ course-structs "tmp/distance.dot"))
-  (save-results "tmp/output.json" ũ course-hashes course-structs))
+  (define g (H (map (lambda (p) (D (car p) (cadr p)))
+                    (cartesian-product course-structs
+                                       course-structs))
+               1000))
+  (when (> (length g) 0)
+      (print-dot-graph g course-structs "tmp/distance.dot"))
+  (save-results "tmp/output.json" g course-hashes course-structs))
 
 (main)
