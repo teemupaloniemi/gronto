@@ -61,30 +61,21 @@
 
 
 ;; Distance between one course (c1) outcomes and another (c2) prerequisites
-;; in ontology (t).
+;; by function (f).
 (provide G)
 (define (G outs pres)
-
-    ;; Self made heuristic on distance between two partitions in the ontology.
-    (define (mean-min-distance outs pres)
-        (define closest-neighbours
-          (let ((p (map f
-                        (cartesian-product outs
-                                           pres))))
-            (for/list ((o outs))
-              (let ((sorted (sort (filter (lambda (x) (equal? (car x) (car o)))
-                                           p)
-                                  (lambda (x y) (< (caddr x) (caddr y))))))
-                (if (> (length sorted) 0)
-                    (caddar sorted)
-                    INF)))))
-        (if (> (length closest-neighbours) 0)
-            (mean closest-neighbours)
-            INF))
-
-    (if (or (equal? outs 0) (equal? pres 0))
-        INF
-        (mean-min-distance outs pres)))
+  (define (closest)
+    (let ((p (map f (cartesian-product outs pres))))
+      (for/list ((o outs))
+        (let ((sorted (sort (filter (lambda (x) (equal? (car x) (car o)))
+                                     p)
+                            (lambda (x y) (< (caddr x) (caddr y))))))
+          (if (> (length sorted) 0)
+              (caddar sorted)
+              INF)))))
+  (if (and (> (length outs) 0) (> (length pres) 0))
+      (mean (closest))
+      INF))
 
 
 (provide D)

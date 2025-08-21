@@ -76,8 +76,35 @@ semsters, semester limits etc.
       - Scheduling depends on all courses. This might be unstable!
 
 4. Test other possible distance metrics?
+   - Current is the min-mean-distance.
 
- 
+   ```lisp
+   (provide G)
+   (define (G outs pres)
+     (define (closest)
+       (let ((p (map f (cartesian-product outs pres))))
+         (for/list ((o outs))
+           (let ((sorted (sort (filter (lambda (x) (equal? (car x) (car o)))
+                                        p)
+                               (lambda (x y) (< (caddr x) (caddr y))))))
+             (if (> (length sorted) 0)
+                 (caddar sorted)
+                 INF)))))
+     (if (and (> (length outs) 0) (> (length pres) 0))
+         (mean (closest))
+         INF))
+   ```
+
+   - Weighted by the course credits.
+
+   ```lisp
+   ;; In distance function D.
+   (* (mean (course-credits c1)) ;; Course credits is a list of integers.
+      (mean (course-credits c2)) ;; Course credits is a list of integers.
+      (G (course-skill-outcomes c1)
+         (course-skill-prerequisites c2)))
+   ```
+
 5. . Test other possible ontologies?
    - [2020 Mathematics Subject Classification System](https://mathscinet.ams.org/mathscinet/msc/msc2020.html)
    - What properties should thes have for them to work?
