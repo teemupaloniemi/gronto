@@ -66,7 +66,7 @@
 (define (G outs pres)
 
     ;; Self made heuristic on distance between two partitions in the ontology.
-    (define (average-closest-neighbour-distance outs pres)
+    (define (mean-min-distance outs pres)
         (define closest-neighbours
           (let ((p (map f
                         (cartesian-product outs
@@ -84,7 +84,7 @@
 
     (if (or (equal? outs 0) (equal? pres 0))
         INF
-        (average-closest-neighbour-distance outs pres)))
+        (mean-min-distance outs pres)))
 
 
 (provide D)
