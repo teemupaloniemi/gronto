@@ -48,13 +48,13 @@ semsters, semester limits etc.
 - ${C}$ denotes all courses.
 - ${N}$ denotes all ontology nodes.
 - ${W}$ denotes integer weights [1,2,3,4,5,6].
-- ${Cred} : {C} \mapsto \mathbb{N}$ maps a course to credits.
-- ${P} : {C} \mapsto ({N}\times{W})\times ... \times({N}\times{W})$ maps a course to a list of weighted prerequisites.
-- ${O} : {C} \mapsto ({N}\times{W})\times ... \times({N}\times{W})$ maps a course to a list of weighted outcomes.
-- ${f} : ({N}\times{W}) \times ({N}\times{W}) \mapsto ({N} \times {N} \times \mathbb{Q})$ gives the distance between two weighted ontology nodes.
-- ${G} : (({N}\times{W})\times ... \times({N}\times{W})) \times (({N}\times{W})\times ... \times({N}\times{W})) \mapsto \mathbb{Q}$ gives the distance between two lists of weighted ontology nodes.
+- ${Cred} : {C} \to \mathbb{N}$ maps a course to credits.
+- ${P} : {C} \to ({N}\times{W})\times ... \times({N}\times{W})$ maps a course to a list of weighted prerequisites.
+- ${O} : {C} \to ({N}\times{W})\times ... \times({N}\times{W})$ maps a course to a list of weighted outcomes.
+- ${f} : ({N}\times{W}) \times ({N}\times{W}) \to ({N} \times {N} \times \mathbb{Q})$ gives the distance between two weighted ontology nodes.
+- ${G} : (({N}\times{W})\times ... \times({N}\times{W})) \times (({N}\times{W})\times ... \times({N}\times{W})) \to \mathbb{Q}$ gives the distance between two lists of weighted ontology nodes.
   - ${G}$ is implemented as the average of ${f}$ mapped to the the cartesian product of ${O}(c1)$ and ${P}(c2)$ and filtered by the minimum for each pair where the first element is element of ${O}(c1)$.
-- ${D} : {C} \times {C} \mapsto ({C} \times {C} \times \mathbb{Q})$ gives the distance between two courses.
+- ${D} : {C} \times {C} \to ({C} \times {C} \times \mathbb{Q})$ gives the distance between two courses.
   - Here ${D}(c1, c2) = (c1, c2, {Cred}(c1) * {Cred}(c2) * {G}({O}(c1), {P}(c2)))$ for $c1,c2 : {C}$.
 
 # Discussion
