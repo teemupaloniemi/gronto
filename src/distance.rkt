@@ -84,8 +84,8 @@
   (list (course-code c1)
         (course-code c2)
         ;; Compute the distance and weight by course credits.
-        (* (mean (course-credits c1))
-           (mean (course-credits c2))
+        (* (mean (mean (course-credits c1))
+                 (mean (course-credits c2)))
            (G (course-skill-outcomes c1)
               (course-skill-prerequisites c2)))))
 

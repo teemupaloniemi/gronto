@@ -98,11 +98,10 @@ semsters, semester limits etc.
    - Weighted by the course credits.
 
    ```lisp
-   ;; In distance function D.
-   (* (mean (course-credits c1)) ;; Course credits is a list of integers.
-      (mean (course-credits c2)) ;; Course credits is a list of integers.
+   (* (mean (mean (course-credits c1))  ;; Course credits is a list of integers.
+            (mean (course-credits c2))) ;; So we take the mean of means.
       (G (course-skill-outcomes c1)
-         (course-skill-prerequisites c2)))
+         (course-skill-prerequisites c2)))))
    ```
 
 5. . Test other possible ontologies?
