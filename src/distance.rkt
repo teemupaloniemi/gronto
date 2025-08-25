@@ -1,6 +1,6 @@
 #lang racket
 
-;; For shortest path algorithm.
+;; Shortest path algorithm.
 (require graph)
 ;; For saving precomputed data.
 (require racket/serialize)
@@ -126,39 +126,26 @@
 
 ;; Visualize :)
 (define (print-dot-graph edges courses port)
-  (parameterize ([current-output-port (open-output-file port #:exists 'replace)])
-    (let* ((weights (map caddr edges))
-           (min-weight (apply min weights))
-           (max-weight (apply max weights)))
+  ;; Print each edge with label, width, and color
+  (define (conditional-print-edge p)
+    (let* ((src-course (search-by-code courses (car p) 'struct))
+           (dst-course (search-by-code courses (cadr p) 'struct))
+           (src-name (course-name src-course))
+           (dst-name (course-name dst-course))
+           (w (caddr p)))
+      (define (print-edge)
+        (display "    \"")
+        (display src-name) (display "\" -> \"") (display dst-name)
+        (display "\" [label=\"")
+        (display w)
+        (display "\"")
+        (display ", style=dashed")
+        (display "];")
+        (newline))
+      (when (not (equal? src-name dst-name))
+        (print-edge))))
 
-      ;; Print each edge with label, width, and color
-      (define (conditional-print-edge p)
-        (let* ((src-course (search-by-code courses (car p) 'struct))
-               (dst-course (search-by-code courses (cadr p) 'struct))
-               (src-name (course-name src-course))
-               (dst-name (course-name dst-course))
-               (w (caddr p)))
-          (define (print-edge)
-            (display "    \"")
-            (display src-name) (display "\" -> \"") (display dst-name)
-            (display "\" [label=\"")
-            (display w)
-            (display "\"")
-            (display ", style=dashed")
-            (display "];")
-            (newline))
-          (when (not (equal? src-name dst-name))
-            (print-edge))))
-
-      (display "digraph Distances {") (newline)
-      (display "label=\"Esitietoisuudet\";\n")
-      (display "labelloc=\"t\";\n")
-      (display "center=true;\n")
-      (display "rankdir=BT;\n")
-      (display "node [shape=box style=filled fillcolor=lightblue];\n") (newline)
-      (map conditional-print-edge edges)
-      (display "}") (newline))))
-
+  (map conditional-print-edge edges))
 
 ;; Assign prerequsite courses to courses and save them for scheduling.
 ;; TODO: Get rid of course-hashes.
