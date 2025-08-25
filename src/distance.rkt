@@ -131,18 +131,6 @@
            (min-weight (apply min weights))
            (max-weight (apply max weights)))
 
-      ;; Normalized weight [0 (min) to 1 (max)]
-      (define (scaled w)
-        (/ (- w min-weight) (max 1 (- max-weight min-weight))))
-
-      ;; Color based on original (non-inverted) scaled value
-      (define (color w)
-        (let ((s (scaled w)))
-          (cond ((< s 0.50) "green")
-                ((< s 0.75) "yellow")
-                ((< s 0.85) "orange")
-                (else "brown"))))
-
       ;; Print each edge with label, width, and color
       (define (conditional-print-edge p)
         (let* ((src-course (search-by-code courses (car p) 'struct))
@@ -154,10 +142,8 @@
             (display "    \"")
             (display src-name) (display "\" -> \"") (display dst-name)
             (display "\" [label=\"")
-            (display (scaled w))
-            (display "\" penwidth=2")
-            (display ", color=")
-            (display (color w))
+            (display w)
+            (display "\"")
             (display ", style=dashed")
             (display "];")
             (newline))
