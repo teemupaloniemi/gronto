@@ -25,26 +25,28 @@ solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
 1. Yes, but why?
 
    - Attending and passing a course without prerequisite knowledge requires
-     more effort than needed. This means students waste time won't learn things.
+     more effort than needed. This means students waste time and won't learn
+     things.
 
    - Teaching and planning a course for students without prerequisite knowledge
-     is near impossible. Most subjects don't have "the one way" to teach.
+     is near impossible. Most subjects don't have "the one way" to teach
+     because incoming students vary.
 
    - Some sort of prerequisite and outcome documentation is performed
-     currently, but it relieas on free text fields and varying language. This
+     currently, but it relies on free text fields and varying language. This
      means that everyone uses different phrasing and level of detail which
      easily leads to misunderstanding.
 
-   - Often prerequisites are documented as courses (TIEP112 has a prerequisites
-     TIEP111) or course titles (Programming 1 is prerequisite for this course).
-     It is really hard to know what courses university is currently offering
-     and what is taught in them --- parially because of the point above,
-     documentation is sloppy.
+   - Often prerequisites are documented as course codes (TIEP112 has a
+     prerequisites TIEP111) or course titles (Programming 1 is prerequisite for
+     Programming 2). It is really hard to know (1) what is meant by that, (2)
+     what courses university is currently offering or (3) what is taught in
+     them --- partially because documentation is sloppy.
 
    - When this happens systematically accross the whole curriculum (downstream
-     effect is large and) graduation times get longer, curriculum outcomes are
-     not reached, and overall students are much worse equipped to become
-     researchers or professionals.
+     effect is large) graduation times get longer, curriculum outcomes are not
+     reached, and graduates are much worse equipped to become researchers or
+     professionals.
 
    - This organization forgets what, how and why it makes decicions. Curriculum
      planning is a massive hurdle each 4 years, even when not that much has
