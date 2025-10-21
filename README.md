@@ -146,23 +146,23 @@ solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
                  measurement of any two courses, and this is a question of
                  semantics. We could use propabilistic solutions i.e. sentence
                  embeddings, but we strive for deterministic methods. Ontology
-                 gives semantics and as long as we comply with our requirements (Q
+                 gives semantics and as long as we comply with our requirements
                  in choosing ontology we have a deterministic way of measuring
                  similarity.
 
-               - Ok, but why is probabilistic bad? Can we order propabilistic vs
-                 deterministic?
+               - Ok, but why is probabilistic bad or worse?
 
            - Graphs
 
-               - Because they provide a distance between items inctrinsically.
-                 Graphs because they are nice to visualize. Graphs because the
-                 ACM ontology is a graph.
+               - They provide a distance between items inctrinsically.
+               - They are nice to visualize.
+               - ACM ontology is a graph.
+               - Construction process can be made deterministic.
 
        - Schedule courses based on prerequisites (and semester limits).
 
            - SMT (This was the first thing we tried. Could we show that this is
-             the best? or argue that it is Good enough?
+             the best? or argue that it is Good enough?)
 
                - There exists lots of literature on University Course
                  Scheduling Problem or UCSP and the likes. From the two class
