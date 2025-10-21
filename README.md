@@ -117,6 +117,8 @@ solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
 
       - [Graph properties](https://en.wikipedia.org/wiki/Graph_property)?
 
+        - No cycles, infinite [girth](https://en.wikipedia.org/wiki/Girth_(graph_theory))
+
 6. How to evaluate and validate the effectiveness of the system?
 
    - **Short term**
@@ -213,7 +215,7 @@ solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
 
    - Limits for the solver. (How many years, what work load, etc.)
 
-   - Individual courses embedded into the ontology. (A questionnaire part of
+   - Individual courses embedded into the ontology. (A [questionnaire](https://users.jyu.fi/~tealjapa/kysely) part of
      this masters thesis.)
 
    - An ontology. As an adjacency matrix/ adjacency lists (ACM included).
