@@ -91,18 +91,61 @@ solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
      - Modeling the example curriculum (which most students end up following)
        is done by hand and it is error prone.
 
-3. Is the solution usable more than once?
+3. What end user gets?
+
+   - Curriculum development does not have to start from scrach each year.
+
+   - A scheduled curricula. Fast. What we mean is that the system can be
+     incorporated in day-to-day operations or the organization.
+
+       - Do we have dependency cycles in the current curriculum?
+
+       - Is there a course that is important but does not have enough
+         prerequisites. Could someone teach them? Should we hire someone? What
+         kind of skills we need?
+
+       - Is the same information taught somewhere twice? Can we combine
+         courses, or introduce people with similar courses to each other?
+
+       - What is the lightest curriculum that can build? What is the heaviest?
+
+   - This also gives more tools for student counceling. For example we can
+     give a lower bound in how many semesters the student can graduate.
+
+       - No there is no way you can graduate in a year, if you take one course
+         per semester!.
+
+       - If you are willing to work, you can graduate before next christmas if
+         you take these courses in this order.
+
+       - Desining model curricula for different students. Some are working and
+         can do only 5 credits per semester. How should they proceed?
+
+       - Someone has to graduate fast, does not matter what courses to take. No
+         problem, check if curricula with a 6 month timelimit is possible!
+
+4. What end used has to provide?
+
+   - Limits for the solver. (How many years, what work load, etc.)
+
+   - Individual courses embedded into the ontology. (A [questionnaire](https://users.jyu.fi/~tealjapa/kysely) part of
+     this masters thesis.)
+
+   - An ontology. As an adjacency matrix/ adjacency lists (ACM included).
+
+
+5. Is the solution usable more than once?
 
    - Computing the prerequisite courses is iterable. This feels stable, I have
      no proof.
 
    - Scheduling depends on all courses. This might be unstable!
 
-4. Test other possible distance metrics?
+6. Test other possible distance metrics?
 
    - Current is the min-mean-distance weighted by the course credits.
 
-5. Why particular ontology?
+7. Why particular ontology?
 
    - What else could be used?
 
@@ -119,7 +162,7 @@ solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
 
         - No cycles, infinite [girth](https://en.wikipedia.org/wiki/Girth_(graph_theory))
 
-6. How to evaluate and validate the effectiveness of the system?
+8. How to evaluate and validate the effectiveness of the system?
 
    - **Short term**
 
@@ -133,7 +176,7 @@ solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
 
       - Quality of graduating students, grades, jobs, publications, etc.
 
-7. Why did we choose this method/these methods (racket, smt, graphs, ontology, etc) ?
+9. Why did we choose this method/these methods (racket, smt, graphs, ontology, etc) ?
 
    - Well first we have two problems.
 
@@ -177,48 +220,6 @@ solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
                  but SMT has many different implementations, is simple, well
                  maintained, understandable and it generalizes well to this
                  class of problems.
-
-8. What end user gets?
-
-   - Curriculum development does not have to start from scrach each year.
-
-   - A scheduled curricula. Fast. What we mean is that the system can be
-     incorporated in day-to-day operations or the organization.
-
-       - Do we have dependency cycles in the current curriculum?
-
-       - Is there a course that is important but does not have enough
-         prerequisites. Could someone teach them? Should we hire someone? What
-         kind of skills we need?
-
-       - Is the same information taught somewhere twice? Can we combine
-         courses, or introduce people with similar courses to each other?
-
-       - What is the lightest curriculum that can build? What is the heaviest?
-
-   - This also gives more tools for student counceling. For example we can
-     give a lower bound in how many semesters the student can graduate.
-
-       - No there is no way you can graduate in a year, if you take one course
-         per semester!.
-
-       - If you are willing to work, you can graduate before next christmas if
-         you take these courses in this order.
-
-       - Desining model curricula for different students. Some are working and
-         can do only 5 credits per semester. How should they proceed?
-
-       - Someone has to graduate fast, does not matter what courses to take. No
-         problem, check if curricula with a 6 month timelimit is possible!
-
-9. What end used has to provide?
-
-   - Limits for the solver. (How many years, what work load, etc.)
-
-   - Individual courses embedded into the ontology. (A [questionnaire](https://users.jyu.fi/~tealjapa/kysely) part of
-     this masters thesis.)
-
-   - An ontology. As an adjacency matrix/ adjacency lists (ACM included).
 
 10. Compare to other solutions?
    - [STOPS – A Graph-Based Study Planning and Curriculum Development Tool](https://dl.acm.org/doi/pdf/10.1145/2674683.2674689)
