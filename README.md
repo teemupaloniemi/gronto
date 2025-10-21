@@ -39,23 +39,46 @@ solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
 
    - Often prerequisites are documented as course codes (TIEP112 has a
      prerequisites TIEP111) or course titles (Programming 1 is prerequisite for
-     Programming 2). It is really hard to know (1) what is meant by that, (2)
-     what courses university is currently offering or (3) what is taught in
-     them --- partially because documentation is sloppy.
+     Programming 2). It is really hard to know what is expected from the
+     incoming student.
+
+   - Curriculum module building and scheduling relies on these
+     "course-connections" rather than "knowledge-connetions". Paths like
+     "Programming 1 -> Programming 2 -> Programming 3" might seem obvious. But
+     it is not obvious how much and what knowledge the student has after those
+     courses.
+
+   - Not all courses are named with an ordinal attached to them. In which order
+     should a student take courses like "signal processing, computer vision,
+     and machine learning"?
 
    - When this happens systematically accross the whole curriculum (downstream
      effect is large) graduation times get longer, curriculum outcomes are not
      reached, and graduates are much worse equipped to become researchers or
      professionals.
 
-   - This organization forgets what, how and why it makes decicions. Curriculum
-     planning is a massive hurdle each 4 years, even when not that much has
-     changed. New people are responsible for planning the curriculum and they
-     start everything from scratch. Nothing is remembered what was done last
-     time or 10 years ago. Making the process a bit more automatic and
-     invariant of people would help.
+   - An organization easily forgets what, how and why it makes decicions.
+     Curriculum planning is a massive hurdle each 4 years, even when not that
+     much has changed. New people are responsible for planning the curriculum
+     and they start everything from scratch. No-one remembers what was done
+     last time or 10 years ago. Making the process a bit more automatic and
+     invariant to people would help.
 
 2. Is the problem social or technical?
+
+   - **Social**
+
+     - Course prerequisites are based on personal knowledge that might be
+       outdated or misguided. "I know what person A and B teach in their
+       course." --- person C.
+
+     - The documentation is currently hard to maintain. Teachers and staff
+       don't believe that documenting (and scheduling) helps or they just don't
+       want to do extra work. "The course topics evolve each year as new
+       discoveries are made and research goes forward." - Teacher C
+
+     - Techers want to hold on their freedom to teach and don't want to be
+       monitored.
 
    - **Technical**
 
@@ -65,19 +88,8 @@ solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
      - Extracting some information is not made easy. Try to come up with a list
        of courses and their contents, of the current curriculum.
 
-   - **Social**
-
-     - Techers want to hold on their freedom to teach and don't want to be monitored.
-
-     - Teachers and staff don't believe that documenting (and scheduling) helps
-       or they just don't want to do extra work.
-
-     - "The course topics evolve each year, new discoveries are made and research
-       goes forward!"
-
-     - "I know what person A and B teach in their course." --- person C. Course
-       prerequisites are based on personal knowledge that might be outdated or
-       misguided.
+     - Modeling the example curriculum (which most students end up following)
+       is done by hand and it is error prone.
 
 3. Is the solution usable more than once?
 
