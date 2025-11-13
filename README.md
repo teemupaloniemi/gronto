@@ -1,10 +1,6 @@
 # What?
 
-Gronto is short for `GRaphs and ONTology to Opetussuunnitelma`. Gronto aims to
-bring the [ACM Compute Classification System's](https://dl.acm.org/ccs)
-benefits to curriculum design. We also touch some topics from [graph
-theory](https://en.wikipedia.org/wiki/Graph_theory), and [satisfiability
-solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
+Gronto is short for `GRaphs and ONTology to Opetussuunnitelma`.
 
 > One of the essential goals of software development is the communication of
 > ideas. To ensure that those ideas are communicated correctly, the tools of
@@ -20,17 +16,28 @@ solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
 > If any of the methods described raise an alarm that the software is not
 > working properly corrective actions are taken.
 
-> We feel that curriculum development should be viewed the same way as software
-> development. First, the requirements of the curricula are agreed in the
-> admistrative ladder. Then these goals are split into smaller functional
-> components, by the teaching staff, which serve a specific learning goal.
-> Finally those components are grouped and sequenced together to work as guiding
-> path -- much like a program -- to give birth to an educated individual.
+> In this thesis I argue that curriculum development could be viewed the same
+> way as software development. First, the requirements of the curricula are
+> agreed in the admistrative ladder. Then these goals are split into smaller
+> functional components, by the teaching staff, which serve a specific learning
+> goal. Finally those components are grouped and sequenced together to work as
+> guiding path -- much like a program -- to give birth to an educated
+> individual.
 
 > But how does one ensure that a curricula does indeed meet the requirements
 > and ideals that the admistrative ladder has crafted? What are the unit tests,
 > assertion statements and proofs in the realm of curriculum development? How
 > does one know when to take corrective actions with their curriculum?
+
+> Exams, projects and theses work as unit tests. They tell that students who
+> pass a course have learned the intended material, regardless of the teaching
+> method. Prerequisite tests and pop quizes work as runtime assertions during
+> teaching by making sure that students are on track.
+
+> These methods have been studied in considerable length and are in use in most
+> university teaching. However in this theses we propose, an other mechanism
+> for ensuring quality, which tries to bring same rigorousness to curriculum
+> planning as proofs in software development.
 
 # Formally
 
