@@ -6,6 +6,32 @@ benefits to curriculum design. We also touch some topics from [graph
 theory](https://en.wikipedia.org/wiki/Graph_theory), and [satisfiability
 solvers](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories).
 
+> One of the essential goals of software development is the communication of
+> ideas. To ensure that those ideas are communicated correctly, the tools of
+> software testing and quality assurance are used.
+
+> For example, one ought to write unit tests to ensure that small fuctional
+> components of the software produce same results as expected, regardless of
+> the implementation. To top this, some assertions statements are often placed
+> inside the implementation to check that things which should stay invariant
+> stay that way. In the most rigorous cases, when the correctness of the
+> software is crucial, one must prove that the software works as intended.
+
+> If any of the methods described raise an alarm that the software is not
+> working properly corrective actions are taken.
+
+> We feel that curriculum development should be viewed the same way as software
+> development. First, the requirements of the curricula are agreed in the
+> admistrative ladder. Then these goals are split into smaller functional
+> components, by the teaching staff, which serve a specific learning goal.
+> Finally those components are grouped and sequenced together to work as guiding
+> path -- much like a program -- to give birth to an educated individual.
+
+> But how does one ensure that a curricula does indeed meet the requirements
+> and ideals that the admistrative ladder has crafted? What are the unit tests,
+> assertion statements and proofs in the realm of curriculum development? How
+> does one know when to take corrective actions with their curriculum?
+
 # Formally
 
 - ${C}$ denotes all courses.
