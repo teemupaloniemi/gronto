@@ -43,6 +43,11 @@ to bring same rigorousness to curriculum planning as proofs in software
 development. And this proof can be constructed before the curriculum is moved
 to production and students', teachers' and admistrators' time is wasted.
 
+The limitation of this method is that it only concerns the course interfaces,
+which are the prerequisites and outcomes. The method is build on the assumption
+that *if incoming students are equipped with right prerequisite knowledge then
+they will achieve the course outcomes*.
+
 # Formally
 
 - ${C}$ denotes all courses.
