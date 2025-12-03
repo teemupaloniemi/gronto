@@ -1,5 +1,85 @@
 [
  {
+     "code": "TIES4600",
+     "title": "Koneoppiminen",
+     "course-prerequisites": [],
+     "department": "Informaatioteknologian laitos",
+     "level": "Aineopinnot",
+     "credits": [5],
+     "outcomes": [
+       ["Machine learning theory", 3],
+       ["Machine learning approaches", 5],
+       ["Machine learning algorithms", 2],
+       ["Regression analysis", 2],
+       ["Clustering and classification", 3],
+       ["Classification and regression trees", 3],
+       ["Supervised learning by classification", 3]
+     ],
+     "skill-prerequisites": [
+       ["Linear algebra algorithms", 3],
+       ["Probability and statistics", 3]
+     ],
+     "periods": []
+ },
+ {
+     "code": "TIES4700",
+     "title": "Syväoppiminen",
+     "course-prerequisites": [],
+     "department": "Informaatioteknologian laitos",
+     "level": "Aineopinnot",
+     "credits": [5],
+     "outcomes": [
+       ["Neural networks", 3]
+     ],
+     "skill-prerequisites": [
+       ["Machine learning theory", 3],
+       ["Information theory", 3]
+     ],
+     "periods": []
+ },
+ {
+     "code": "TIES3240",
+     "title": "Signaalikäsittely ja aikasarja-analyysi",
+     "course-prerequisites": [],
+     "department": "Informaatioteknologian laitos",
+     "level": "Aineopinnot",
+     "credits": [5],
+     "outcomes": [
+       ["Digital signal processing", 3],
+       ["Signal integrity and noise analysis", 3],
+       ["Noise reduction", 2]
+     ],
+     "skill-prerequisites": [
+       ["Discrete mathematics", 3],
+       ["Mathematics of computing", 3]
+     ],
+     "periods": []
+ },
+ {
+     "code": "TIES411",
+     "title": "Konenäkö ja kuva-analyysi",
+     "course-prerequisites": [],
+     "department": "Matematiikan ja tilastotieteen laitos",
+     "level": "Aineopinnot",
+     "credits": [5],
+     "outcomes": [
+       ["Image segmentation", 3],
+       ["Computer vision tasks", 1],
+       ["Computer vision representations", 3],
+       ["Computer vision problems", 3],
+       ["Image representations", 1],
+       ["Image compression", 1],
+       ["Image processing", 1],
+       ["Camera calibration", 1]
+     ],
+     "skill-prerequisites": [
+       ["Discrete mathematics", 5],
+       ["Digital signal processing", 3],
+       ["Neural networks", 5]
+     ],
+     "periods": []
+ },
+ {
      "code": "MATA2700",
      "title": "Todistamisen ja p\u00e4\u00e4ttelyn perusteet tekniikan alalle",
      "course-prerequisites": [],
@@ -68,25 +148,69 @@
      "periods": []
  },
  {
-   "title": "Ohjelmistotuotanto",
-   "code": "TIES314",
+   "title": "Funktio-ohjelmointi",
+   "code": "TIEA341",
    "credits": [5],
    "skill-prerequisites": [
-     ["Software design techniques",2],
-     ["Software implementation planning",4],
-     ["Software testing and debugging",5],
-     ["Software version control",2]
+     [
+       "Procedures, functions and subroutines",
+       2
+     ],
+     [
+       "Trees",
+       2
+     ],
+     [
+       "Recursive functions",
+       2
+     ],
+     [
+       "Classes and objects",
+       3
+     ],
+     [
+       "Differential calculus",
+       2
+     ],
+     [
+       "Linear algebra algorithms",
+       1
+     ]
    ],
    "outcomes": [
-     ["Software development techniques",5],
-     ["Software development methods",4],
-     ["Software functional properties",2],
-     ["Extra-functional properties",2],
-     ["Software verification and validation",5],
-     ["Programming teams",3],
-     ["Risk management",3]
+     [
+       "Procedures, functions and subroutines",
+       3
+     ],
+     [
+       "Recursion",
+       3
+     ],
+     [
+       "Higher order logic",
+       2
+     ],
+     [
+       "Lambda calculus",
+       1
+     ],
+     [
+       "Abstraction",
+       3
+     ],
+     [
+       "Abstraction, modeling and modularity",
+       3
+     ],
+     [
+       "Data types and structures",
+       3
+     ],
+     [
+       "MapReduce algorithms",
+       2
+     ]
    ],
-   "info": "Ontologiaan voisi lisätä sanan \"Software and its engineering/Software organization and properties/Software development process management/Cost boundaries\". Painotan siis sitä, että osataan huomioida ohjelmistotuotannon kustannuksia kurssien jälkeen.",
    "course-prerequisites": [],
    "periods": []
  }
