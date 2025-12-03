@@ -1,0 +1,3 @@
+[submodule "kysely"]
+	path = kysely
+	url = git@github.com:teemupaloniemi/kysely.git
