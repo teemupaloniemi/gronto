@@ -54,7 +54,7 @@
 
 (define (main)
   (define data (hash-to-struct (json-read "tmp/output.json")))
-  (define years 1)
+  (define years 2)
   (define sems 4)
   (define min-cred 0)
   (define max-cred 15)
