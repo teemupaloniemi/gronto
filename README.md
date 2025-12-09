@@ -1,6 +1,10 @@
-# What?
+# What is Gronto?
 
 Gronto is short for `Graphs and Ontology to Opetussuunnitelma`.
+
+# Discussion
+
+<details>
 
 One of the essential goals of software development is the communication of
 ideas. To ensure that those ideas are communicated correctly, the tools of
@@ -47,10 +51,6 @@ The limitation of this method is that it only concerns the course interfaces,
 which are the prerequisites and outcomes. The method is build on the assumption
 that *if incoming students are equipped with right prerequisite knowledge then
 they will achieve the course outcomes*.
-
-# Discussion
-
-<details>
 
 1. Yes, but why?
 
