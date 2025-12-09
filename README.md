@@ -286,7 +286,7 @@ they will achieve the course outcomes*.
 - xdot
 - sha256sum
 
-# Compile
+# Compiling
 
 We must first compile the code (make), then compute
 all-pair-distances of our ontology network (make distance), and finally compile again to link
@@ -298,15 +298,23 @@ make distance
 make
 ```
 
-Now we have a compiled version of the system.
+As output two binaries, `./tmp/prerequisites` and `./tmp/scheduler` will be
+created.
 
 # Running
 
-`demo.sh` will start a new xdot session and track the state of
-`data/input.json`. If it is change then `make distance solve` is executed.
-
 ```
-./demo.sh
+# Compute the prerequisitenes of courses from arg1, visualize graph to arg2,
+# and save updated arg1 to arg3.
+./tmp/prerequisites data/input.json tmp/prerequisites.dot tmp/output.json 10
+
+# Schedule the courses from arg1, with solver params in arg3-6, and save results
+# to arg2.
+./tmp/scheduler tmp/output.json tmp/shedule.dot 2 4 5 10
+
+# Visualize
+xdot tmp/prerequisites.dot &
+xdot tmp/schedule.dot &
 ```
 
 Now you can open the file `data/input.json`, in your favourite text editor,
