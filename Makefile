@@ -12,7 +12,7 @@ compile-distance: src/distance.rkt
 solve:
 	./tmp/dot tmp/output.json 2 4 0 15
 distance:
-	./tmp/distance data/input.json tmp/distance.dot tmp/output.json
+	./tmp/distance data/input.json tmp/distance.dot tmp/output.json 10
 visualize:
 	xdot tmp/distance.dot &
 	xdot tmp/courses.dot &

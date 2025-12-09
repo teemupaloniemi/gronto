@@ -189,7 +189,7 @@
   (define g (H (map (lambda (p) (D (car p) (cadr p)))
                     (cartesian-product course-structs
                                        course-structs))
-               1000))
+               (string->number (vector-ref args 3))))
   (when (> (length g) 0)
       (print-dot-graph g course-structs (vector-ref args 1)))
   (save-results (vector-ref args 2) g course-hashes course-structs))
