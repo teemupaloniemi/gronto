@@ -16,7 +16,7 @@
 ;; Building and running the solver.
 (require "smt.rkt")
 
-(define (gen-dot max-sem courses sem-pairs)
+(define (gen-dot max-sem courses sem-pairs outputport)
   (define (symbolic->string symbolic)
     (format "~s" symbolic))
   (define adj (map (lambda (c) (cons (course-code c)
@@ -40,8 +40,7 @@
               semester
               max-sem
               #t
-              #:output (open-output-file "tmp/courses.dot"
-                                         #:exists 'replace)
+              #:output outputport
               #:graph-attributes (list (list 'rankdir "TB")
                                        (list 'ranksep 1))
               #:vertex-attributes (list (list 'semester semester)
@@ -57,11 +56,12 @@
 
 (define (main args)
   (define data (hash-to-struct (json-read (vector-ref args 0))))
-  (define years (string->number (vector-ref args 1)))
-  (define sems (string->number (vector-ref args 2)))
-  (define min-cred (string->number (vector-ref args 3)))
-  (define max-cred (string->number (vector-ref args 4)))
-  (define schedule (build-and-solve data years sems min-cred max-cred))
+  (define years (string->number (vector-ref args 2)))
+  (define sems (string->number (vector-ref args 3)))
+  (define min-cred (string->number (vector-ref args 4)))
+  (define max-cred (string->number (vector-ref args 5)))
+  (define outputport (open-output-file (vector-ref args 1)  #:exists 'replace))
+  (define schedule (build-and-solve data years sems min-cred max-cred outputport))
   (safe-gen-dot (* years sems) data schedule))
 
 (main (current-command-line-arguments))
