@@ -48,20 +48,6 @@ which are the prerequisites and outcomes. The method is build on the assumption
 that *if incoming students are equipped with right prerequisite knowledge then
 they will achieve the course outcomes*.
 
-# Formally
-
-- ${C}$ denotes all courses.
-- ${N}$ denotes all ontology nodes.
-- ${W}$ denotes integer weights [1,2,3,4,5,6].
-- ${Cred} : {C} \to \mathbb{N}$ maps a course to credits.
-- ${P} : {C} \to ({N}\times{W})^\ast$ maps a course to a list of weighted prerequisites.
-- ${O} : {C} \to ({N}\times{W})^\ast$ maps a course to a list of weighted outcomes.
-- ${f} : {({N}\times{W})}^2 \to ({N} \times {N} \times \mathbb{Q})$ gives the distance between two weighted ontology nodes.
-- ${G} : ({N}\times{W})^\ast \times ({N}\times{W})^\ast \to \mathbb{Q}$ gives the distance between two lists of weighted ontology nodes.
-  - ${G}$ is implemented as the average of ${f}$ mapped to the the cartesian product of ${O}(c1)$ and ${P}(c2)$ and filtered by the minimum for each pair where the first element is element of ${O}(c1)$.
-- ${D} : {C} \times {C} \to ({C} \times {C} \times \mathbb{Q})$ gives the distance between two courses.
-  - Here ${D}(c1, c2) = (c1, c2, {Cred}(c1) * {Cred}(c2) * {G}({O}(c1), {P}(c2)))$ for $c1,c2 : {C}$.
-
 # Discussion
 
 <details>
@@ -320,3 +306,19 @@ created.
 xdot tmp/prerequisites.dot &
 xdot tmp/schedule.dot &
 ```
+
+# Formally
+
+- ${C}$ denotes all courses.
+- ${N}$ denotes all ontology nodes.
+- ${W}$ denotes integer weights [1,2,3,4,5,6].
+- ${Cred} : {C} \to \mathbb{N}$ maps a course to credits.
+- ${P} : {C} \to ({N}\times{W})^\ast$ maps a course to a list of weighted prerequisites.
+- ${O} : {C} \to ({N}\times{W})^\ast$ maps a course to a list of weighted outcomes.
+- ${f} : {({N}\times{W})}^2 \to ({N} \times {N} \times \mathbb{Q})$ gives the distance between two weighted ontology nodes.
+- ${G} : ({N}\times{W})^\ast \times ({N}\times{W})^\ast \to \mathbb{Q}$ gives the distance between two lists of weighted ontology nodes.
+  - ${G}$ is implemented as the average of ${f}$ mapped to the the cartesian product of ${O}(c1)$ and ${P}(c2)$ and filtered by the minimum for each pair where the first element is element of ${O}(c1)$.
+- ${D} : {C} \times {C} \to ({C} \times {C} \times \mathbb{Q})$ gives the distance between two courses.
+  - Here ${D}(c1, c2) = (c1, c2, {Cred}(c1) * {Cred}(c2) * {G}({O}(c1), {P}(c2)))$ for $c1,c2 : {C}$.
+
+
