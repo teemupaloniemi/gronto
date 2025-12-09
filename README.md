@@ -319,6 +319,4 @@ xdot tmp/schedule.dot &
 - ${G} : ({N}\times{W})^\ast \times ({N}\times{W})^\ast \to \mathbb{Q}$ gives the distance between two lists of weighted ontology nodes.
   - ${G}$ is implemented as the average of ${f}$ mapped to the the cartesian product of ${O}(c1)$ and ${P}(c2)$ and filtered by the minimum for each pair where the first element is element of ${O}(c1)$.
 - ${D} : {C} \times {C} \to ({C} \times {C} \times \mathbb{Q})$ gives the distance between two courses.
-  - Here ${D}(c1, c2) = (c1, c2, {Cred}(c1) * {Cred}(c2) * {G}({O}(c1), {P}(c2)))$ for $c1,c2 : {C}$.
-
-
+  - ${D}(c1, c2) = (c1, c2, {Cred}(c1) * {Cred}(c2) * {G}({O}(c1), {P}(c2)))$ for $c1,c2 : {C}$.
