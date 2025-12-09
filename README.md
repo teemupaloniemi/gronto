@@ -64,6 +64,8 @@ they will achieve the course outcomes*.
 
 # Discussion
 
+<details>
+
 1. Yes, but why?
 
    - Attending and passing a course without prerequisite knowledge requires
@@ -277,6 +279,8 @@ they will achieve the course outcomes*.
     obsolete? Will the ideas become obsolete? Will the system be adaptable
     to other universities?
 
+</details>
+
 # Prerequisites
 
 - make
@@ -316,8 +320,3 @@ created.
 xdot tmp/prerequisites.dot &
 xdot tmp/schedule.dot &
 ```
-
-Now you can open the file `data/input.json`, in your favourite text editor,
-which contains the course data and start manipulating it. You can also change
-the restrictions for the solver in `src/dot.rkt` to change number of years,
-semsters, semester limits etc.
