@@ -269,20 +269,28 @@ they will achieve the course outcomes*.
 
 # Prerequisites
 
-- make
-- racket and raco
-  - Racket Generic Graph Library (`raco pkg install graph`)
-  - Solver library (`raco pkg install rosette`)
-- xdot
-- sha256sum
+```bash
+# Make and xdot
+sudo apt-get install build-essential xdot
+
+# Racket
+sudo add-apt-repository ppa:plt/racket -y
+sudo apt-get install racket -y
+
+# Racket Generic Graph Library
+raco pkg install graph
+
+# Solver library
+raco pkg install rosette
+```
 
 # Compiling
 
-We must first compile the code (make), then compute
-all-pair-distances of our ontology network (make distance), and finally compile again to link
-the newly computed part to main program (make compile).
+We must first compile the code `make`, then compute all-pair-distances of our
+ontology network `make distance`, and finally compile again to link the newly
+computed part to main program `make compile`.
 
-```
+```bash
 make
 make distance
 make
@@ -293,7 +301,7 @@ created.
 
 # Running
 
-```
+```bash
 # Compute the prerequisitenes of courses from arg1, visualize graph to arg2,
 # and save updated arg1 to arg3.
 ./tmp/prerequisites data/input.json tmp/prerequisites.dot tmp/output.json 10
