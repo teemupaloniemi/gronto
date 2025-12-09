@@ -280,7 +280,7 @@ they will achieve the course outcomes*.
 # Prerequisites
 
 - make
-- racket / raco
+- racket and raco
   - Racket Generic Graph Library (`raco pkg install graph`)
   - Solver library (`raco pkg install rosette`)
 - xdot
@@ -295,7 +295,7 @@ the newly computed part to main program (make compile).
 ```
 make
 make distance
-make compile
+make
 ```
 
 Now we have a compiled version of the system.
@@ -313,6 +313,3 @@ Now you can open the file `data/input.json`, in your favourite text editor,
 which contains the course data and start manipulating it. You can also change
 the restrictions for the solver in `src/dot.rkt` to change number of years,
 semsters, semester limits etc.
-
-
-

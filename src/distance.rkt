@@ -1,5 +1,7 @@
 #lang racket
 
+;; Arguments
+(require racket/cmdline)
 ;; Shortest path algorithm.
 (require graph)
 ;; For saving precomputed data.
@@ -179,17 +181,17 @@
   (json-write filename (map assign-prerequisites course-codes)))
 
 
-(define (main)
+(define (main args)
   ;; Courses hash is still needed as we will mutate and save them later.
   ;; Specifically we sill assign prerequisite courses based on our computation.
-  (define course-hashes  (json-read "data/input.json"))
+  (define course-hashes  (json-read (vector-ref args 0)))
   (define course-structs (hash-to-struct course-hashes))
   (define g (H (map (lambda (p) (D (car p) (cadr p)))
                     (cartesian-product course-structs
                                        course-structs))
                1000))
   (when (> (length g) 0)
-      (print-dot-graph g course-structs "tmp/distance.dot"))
-  (save-results "tmp/output.json" g course-hashes course-structs))
+      (print-dot-graph g course-structs (vector-ref args 1)))
+  (save-results (vector-ref args 2) g course-hashes course-structs))
 
-(main)
+(main (current-command-line-arguments))

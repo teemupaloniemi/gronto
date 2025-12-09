@@ -1,5 +1,8 @@
 #lang racket
 
+;; Arguments
+(require racket/cmdline)
+
 ;; For graphviz.
 (require graph)
 (require "graphviz.rkt")
@@ -52,13 +55,13 @@
       (gen-dot max-sem courses sem-pairs))
   #t)
 
-(define (main)
-  (define data (hash-to-struct (json-read "tmp/output.json")))
-  (define years 2)
-  (define sems 4)
-  (define min-cred 0)
-  (define max-cred 15)
+(define (main args)
+  (define data (hash-to-struct (json-read (vector-ref args 0))))
+  (define years (string->number (vector-ref args 1)))
+  (define sems (string->number (vector-ref args 2)))
+  (define min-cred (string->number (vector-ref args 3)))
+  (define max-cred (string->number (vector-ref args 4)))
   (define schedule (build-and-solve data years sems min-cred max-cred))
   (safe-gen-dot (* years sems) data schedule))
 
-(main)
+(main (current-command-line-arguments))
