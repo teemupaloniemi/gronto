@@ -2,6 +2,11 @@
 
 Gronto is short for `Graphs and Ontology to Opetussuunnitelma`.
 
+# TODO
+
+- Better data abstraction
+- Better demonstrations
+
 # Discussion
 
 <details>
