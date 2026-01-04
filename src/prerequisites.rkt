@@ -88,58 +88,7 @@
                    course-structs)))
 
 
-
-(define (bloom-difference-weight out-bloom prereq-bloom)
-  (if (< out-bloom
-         prereq-bloom)
-      (let ((m 6)) ;; maximum difference
-        (/ (- m
-              (- prereq-bloom
-                 out-bloom))
-           m))
-      1))
-
-
-(define (competence-distance n1 n2)
-  (hash-ref all-pair-distances
-            (list (string->symbol n1)
-                  (string->symbol n2))))
-
-
-(define (distance o p)
-  (* (bloom-difference-weight (cadr o)
-                              (cadr p))
-     (competence-distance (car o)
-                          (car p))))
-
-
-(define (fs outs pres)
-  (map f
-       (cartesian-product outs
-                          pres)))
-
-
-(define (sort-pairs pairs one)
-  (sort (filter (lambda (x) (equal? (car x)
-                                    (car one)))
-                pairs)
-        (lambda (x y) (< (caddr x)
-                         (caddr y)))))
-
-
-(define (closest outs pres)
-  (let ((pairs (fs outs
-                   pres)))
-    (for/list ((one outs))
-      (let ((sorted (sort-pairs pairs
-                                one)))
-        (if (> (length sorted)
-               0)
-            (caddar sorted)
-            INF)))))
-
-
-
+;; Code : C --> S
 (define (Code c)
   (course-code c))
 
@@ -159,54 +108,133 @@
   (course-skill-outcomes c))
 
 
-;; f : (N x W)^2 --> (N x N x Q)
-(define (f pair)
-  (list (caar pair)
-        (caadr pair)
-        (distance (car pair)
-                  (cadr pair))))
+(define (bloom-difference-weight out-bloom pre-bloom)
+  (if (< out-bloom
+         pre-bloom)
+      (let ((m 6)) ;; The maximum difference is 6.
+        (/ (- m
+              (- pre-bloom
+                 out-bloom))
+           m))
+      1))
+
+
+(define (competence-distance node-1 node-2)
+  (hash-ref all-pair-distances
+            (list (string->symbol node-1)
+                  (string->symbol node-2))))
+
+
+;; shortest-pair : (N x N x Q)* x N --> Q
+;; Returns:
+;;   Shortest of the triplets containing "one".
+(define (shortest-pair distances one)
+
+  ;; Consider only pairs with "one" in outcomes.
+  (define f (filter (lambda (x) (equal? (car x)
+                                        (car one)))
+                    distances))
+
+  ;; Sort them in "shortest first" order.
+  (define s (sort f
+                  (lambda (x y) (< (car (reverse x))
+                                   (car (reverse y))))))
+
+  ;; Return the shortest.
+  (if (equal? s '())
+      INF
+      (car (reverse (car s)))))
+
+
+;; f : (N x W) x (N x W) --> Q
+;; Returns:
+;;   Distance between the two ontology nodes.
+(define (f node-1 node-2)
+  (* (bloom-difference-weight (cadr node-1)
+                              (cadr node-2))
+     (competence-distance (car node-1)
+                          (car node-2))))
+
+
+;; fs : (N x W)* x (N x W)* --> (N x N x Q)*
+;; Returns:
+;;   Distances between pairs of ontology nodes (with associated nodes).
+(define (fs outcomes prerequisites)
+  (map (lambda (p) (list (caar p)
+                         (caadr p)
+                         (f (car p)
+                            (cadr p))))
+       (cartesian-product outcomes
+                          prerequisites)))
+
+
+;; closest : (N x W)* x (N x W)* --> Q*
+;; Returns:
+;;   List of distances (one for each outcome).
+(define (closest outcomes prerequisites)
+
+  ;; Get all distances.
+  (define distances (fs outcomes
+                        prerequisites))
+
+  ;; Return the shortest for each outcome.
+  (map (lambda (o) (shortest-pair distances
+                                  o))
+       outcomes))
 
 
 ;; G : (N x W)* x (N x W)* --> Q
-(define (G outs pres)
-  (if (and (> (length outs)
+;; Returns:
+;;   Distance between two lists of weighted ontology nodes.
+(define (G outcomes prerequirements)
+  (if (and (> (length outcomes)
               0)
-           (> (length pres)
+           (> (length prerequirements)
               0))
-      (mean (closest outs
-                     pres))
+      (mean (closest outcomes
+                     prerequirements))
       INF))
 
 
 ;; D : C x C --> (S x S x Q)
-(define (D c1 c2)
-  (list (Code c1)
-        (Code c2)
-        (* (mean (mean (Cred c1))
-                 (mean (Cred c2)))
-           (G (O c1)
-              (P c2)))))
+;; Returns:
+;;  Distance between two courses (and names associated).
+(define (D course-1 course-2)
+  (list (Code course-1)
+        (Code course-2)
+        (* (mean (mean (Cred course-1))
+                 (mean (Cred course-2)))
+           (G (O course-1)
+              (P course-2)))))
 
 
 (define (main args)
-  (define course-hashes (json-read (vector-ref args
-                                               0)))
+
+  ;; Input arguments from command line.
+  (define input-file       (vector-ref args 0))
+  (define graph-file       (vector-ref args 1))
+  (define output-file      (vector-ref args 2))
+  (define filter-threshold (string->number (vector-ref args 3)))
+
+  ;; Computation
+  (define course-hashes  (json-read input-file))
   (define course-structs (hash-to-struct course-hashes))
-  (define g (H (map (lambda (p) (D (car p)
+  (define graph (H (map (lambda (p) (D (car p)
                                    (cadr p)))
-                    (cartesian-product course-structs
-                                       course-structs))
-               (string->number (vector-ref args
-                                           3))))
-  (when (> (length g)
+                        (cartesian-product course-structs
+                                           course-structs))
+                   filter-threshold))
+
+  ;; Visualize
+  (when (> (length graph)
            0)
-      (print-dot-graph g
+      (print-dot-graph graph
                        course-structs
-                       (vector-ref args
-                                   1)))
-  (save-results (vector-ref args
-                            2)
-                g
+                       graph-file))
+
+  ;; Save results
+  (save-results output-file
+                graph
                 course-hashes
                 course-structs))
 
