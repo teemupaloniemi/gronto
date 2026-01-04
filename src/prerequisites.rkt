@@ -1,28 +1,19 @@
 #lang racket
-
-;; Arguments
 (require racket/cmdline)
-;; Shortest path algorithm.
 (require graph)
-;; For saving precomputed data.
 (require racket/serialize)
-;; Mean
 (require math/statistics)
-;; Reading from file.
 (require "io.rkt")
-;; Data queries.
 (require "utils.rkt")
-;; For precomputed data.
 (require "precomputed.rkt")
-;; For the ontology.
 (require "ontology.rkt")
+(require "graphviz.rkt")
 
-;; Constant for edges that are infinite.
+
 (define INF +inf.0)
 
-;; Write data and return the data back.
+
 (define (write-precomputed data)
-  (displayln "Writing precomputed data.")
   (call-with-output-file "src/precomputed.rkt"
     (lambda (out)
       (fprintf out "#lang racket\n\n(provide precomputed)\n(define precomputed\n  ~s)\n" data))
@@ -30,168 +21,169 @@
   data)
 
 
-;; A wrapper for deciding which way we get the distance map.
-;; If a precomputed file exists we load it. Otherwse the values
-;; are computed, saved to a precomputed file and returned.
-(define all-pair-distances (if (hash? precomputed)
-                               precomputed
-                               (write-precomputed (johnson (unweighted-graph/adj ontology)))))
+(define all-pair-distances
+  (if (hash? precomputed)
+      precomputed
+      (write-precomputed (johnson (unweighted-graph/adj ontology)))))
 
 
-;; Distance of two ontology nodes n1 and n2 in distance pairs p.
+(define (bloom-difference-weight out-bloom prereq-bloom)
+  (let ((m 6)) ;; maximum difference
+    (/ (- m
+          (- prereq-bloom
+             out-bloom))
+       m)))
+
+
+(define (competence-distance n1 n2)
+  (hash-ref all-pair-distances
+            (list (string->symbol n1)
+                  (string->symbol n2))))
+
+
+(define (distance o p)
+  (* (bloom-difference-weight (cadr o)
+                              (cadr p))
+     (competence-distance (car o)
+                          (car p))))
+
+
 (define (f pair)
-  (define (weight-factor ow pw)
-    (if (< ow pw)
-      (- 1
-         (/ (sqr (abs (- ow pw)))
-            (sqr 6))) ;; 6 is the maximum.
-      1))
-
-  ;; TODO: Problems will araise if o == p, because then
-  ;;       the hash-ref will return 0 but weight factor
-  ;;       might imply that expectations between courses
-  ;;       don't align. Needs a fix!
-  (define (distance o p)
-    (* (weight-factor (cadr o)
-                      (cadr p))
-       (hash-ref all-pair-distances
-                 (list (string->symbol (car o))
-                       (string->symbol (car p))))))
   (list (caar pair)
         (caadr pair)
-        (distance (car pair) (cadr pair))))
+        (distance (car pair)
+                  (cadr pair))))
 
 
-;; Distance between one course (c1) outcomes and another (c2) prerequisites
-;; by function (f).
-(provide G)
+(define (fs outs pres)
+  (map f
+       (cartesian-product outs
+                          pres)))
+
+
+(define (sort-pairs pairs one)
+  (sort (filter (lambda (x) (equal? (car x)
+                                    (car one)))
+                pairs)
+        (lambda (x y) (< (caddr x)
+                         (caddr y)))))
+
+
+(define (closest outs pres)
+  (let ((pairs (fs outs
+                   pres)))
+    (for/list ((one outs))
+      (let ((sorted (sort-pairs pairs
+                                one)))
+        (if (> (length sorted)
+               0)
+            (caddar sorted)
+            INF)))))
+
+
 (define (G outs pres)
-  (define (closest)
-    (let ((p (map f (cartesian-product outs pres))))
-      (for/list ((o outs))
-        (let ((sorted (sort (filter (lambda (x) (equal? (car x) (car o)))
-                                     p)
-                            (lambda (x y) (< (caddr x) (caddr y))))))
-          (if (> (length sorted) 0)
-              (caddar sorted)
-              INF)))))
-  (if (and (> (length outs) 0) (> (length pres) 0))
-      (mean (closest))
+  (if (and (> (length outs)
+              0)
+           (> (length pres)
+              0))
+      (mean (closest outs
+                     pres))
       INF))
 
 
-(provide D)
 (define (D c1 c2)
-  ;; For each pair
   (list (course-code c1)
         (course-code c2)
-        ;; Compute the distance and weight by course credits.
         (* (mean (mean (course-credits c1))
                  (mean (course-credits c2)))
            (G (course-skill-outcomes c1)
               (course-skill-prerequisites c2)))))
 
 
-;; TODO: Could consider making bidirectionals a one component. If two courses
-;; depend on each other make all future courses that depend on either one
-;; depend on both of them and remove the bidirectional. This produces less cycles.
-(provide H)
+;; Remove larger/worse/less prerequisite of bidirectional edges.
+(define (remove-bidirectionals one all)
+  (let* ((f (filter (lambda (new) (and (equal? (car  new)
+                                               (cadr one))
+                                       (equal? (cadr new)
+                                               (car  one))))
+                    all))
+         (other (if (> (length f)
+                       0)
+                    (car f)
+                    '())))
+
+    (if (not (equal? '()
+                     other))
+        (if (< (caddr one)
+               (caddr other))
+            one
+            (if (equal? (caddr one)
+                        (caddr other))
+               (if (string>? (car one)
+                             (cadr one))
+                   one
+                   other)
+               other))
+        one)))
+
+
 (define (H u th)
-  ;; Filter any edges below threshold value.
-  (define f (filter (lambda (x) (< (caddr x) th)) u))
-
-  ;; Remove larger/worse/less prerequisite of bidirectional edges.
-  (define (remove-bidirectionals current)
-    (let* ((r (filter (lambda (new) (and (equal? (car  new) (cadr current))
-                                         (equal? (cadr new) (car  current))))
-                      f))
-           (other (if (> (length r) 0) (car r) '())))
-
-      ;; Find shorter. TODO: Make beautiful with cond. This is hard to read.
-      (if (not (equal? '() other))
-          (if (< (caddr current) (caddr other))
-              ;; Current order is best.
-              current
-              (if (equal? (caddr current) (caddr other))
-                 ;; Use name for predictable behaviour Since it does not really
-                 ;; matter which way we choose.
-                 (if (string>? (car current) (cadr current))
-                     current
-                     other)
-                 other))
-          ;; Only one order.
-          current)))
-
-  (remove-duplicates (for*/list ((p f))
-                       (remove-bidirectionals p))))
+  (let ((f (filter (lambda (x) (< (caddr x) th))
+                   u)))
+  (remove-duplicates (for/list ((p f))
+                       (remove-bidirectionals p
+                                              f)))))
 
 
-;; Visualize :)
-(define (print-dot-graph edges courses port)
-  ;; Print each edge with label, width, and color
-  (parameterize ([current-output-port (or (open-output-file port #:exists 'replace) (current-output-port))])
-    (display "digraph distances {")
-    (define (conditional-print-edge p)
-      (let* ((src-course (search-by-code courses (car p) 'struct))
-             (dst-course (search-by-code courses (cadr p) 'struct))
-             (src-name (course-name src-course))
-             (dst-name (course-name dst-course))
-             (w (caddr p)))
-        (define (print-edge)
-          (display "    \"")
-          (display src-name) (display "\" -> \"") (display dst-name)
-          (display "\" [label=\"")
-          (display w)
-          (display "\"")
-          (display ", style=dashed")
-          (display "];")
-          (newline))
-        (when (not (equal? src-name dst-name))
-          (print-edge))))
+(define (get-prerequisites code graph)
+  (map car
+      (filter (lambda (x) (and (not (eqv? (car x)
+                                          code))
+                               (eqv? (cadr x)
+                                     code)))
+              graph)))
 
-    (map conditional-print-edge edges)
-    (display "}")))
 
-;; Assign prerequsite courses to courses and save them for scheduling.
-;; TODO: Get rid of course-hashes.
-(define (save-results filename graph course-hashes course-structs)
-  ;; Get a list of all known course codes.
-  (define course-codes
-    (map (lambda (c) (course-code c))
-         course-structs))
-
-  ;; Find all edges that point to node with given code.
-  (define (get-prerequisites code)
-    (map car
-         (filter (lambda (x) (and (not (eqv? (car x)
-                                             code))
-                                  (eqv? (cadr x)
-                                        code)))
-                 graph)))
-
-  ;; Mutate the original course by adding a list of prerequisite-courses.
-  (define (assign-prerequisites code)
-    (define mutable (hash-copy (search-by-code course-hashes code 'hash)))
+(define (mutate-prerequisites course-hashes code graph)
+  (let ((mutable (hash-copy (search-by-code course-hashes
+                                            code
+                                            'hash))))
     (hash-set! mutable
-               'course-prerequisites
-               (get-prerequisites code))
-    mutable)
+              'course-prerequisites
+              (get-prerequisites code
+                                 graph))
+    mutable))
 
-  ;; Finally write to a file.
-  (json-write filename (map assign-prerequisites course-codes)))
+
+(define (save-results filename graph course-hashes course-structs)
+  (json-write filename
+              (map (lambda (c) (mutate-prerequisites course-hashes
+                                                     (course-code c)
+                                                     graph))
+                   course-structs)))
 
 
 (define (main args)
-  ;; Courses hash is still needed as we will mutate and save them later.
-  ;; Specifically we sill assign prerequisite courses based on our computation.
-  (define course-hashes  (json-read (vector-ref args 0)))
+  (define course-hashes  (json-read (vector-ref args
+                                                0)))
   (define course-structs (hash-to-struct course-hashes))
-  (define g (H (map (lambda (p) (D (car p) (cadr p)))
+  (define g (H (map (lambda (p) (D (car p)
+                                   (cadr p)))
                     (cartesian-product course-structs
                                        course-structs))
-               (string->number (vector-ref args 3))))
-  (when (> (length g) 0)
-      (print-dot-graph g course-structs (vector-ref args 1)))
-  (save-results (vector-ref args 2) g course-hashes course-structs))
+               (string->number (vector-ref args
+                                           3))))
+  (when (> (length g)
+           0)
+      (print-dot-graph g
+                       course-structs
+                       (vector-ref args
+                                   1)))
+  (save-results (vector-ref args
+                            2)
+                g
+                course-hashes
+                course-structs))
+
 
 (main (current-command-line-arguments))

@@ -66,7 +66,8 @@
   (define mod (build-model solver
                            courses
                            1
-                           (* years sem-per-year)
+                           (* years
+                              sem-per-year)
                            min-cred-sem
                            max-cred-sem))
   (define result (solver-check mod))
