@@ -33,32 +33,31 @@
                                        (equal? (cadr new)
                                                (car  one))))
                     all))
-         (other (if (> (length f)
+         (two (if (> (length f)
                        0)
                     (car f)
                     '())))
-
     (if (not (equal? '()
-                     other))
+                     two))
         (if (< (caddr one)
-               (caddr other))
+               (caddr two))
             one
             (if (equal? (caddr one)
-                        (caddr other))
+                        (caddr two))
                (if (string>? (car one)
                              (cadr one))
                    one
-                   other)
-               other))
+                   two)
+               two))
         one)))
 
 
 (define (H u th)
-  (let ((f (filter (lambda (x) (< (caddr x) th))
+  (let ((û (filter (lambda (x) (< (caddr x) th))
                    u)))
-  (remove-duplicates (for/list ((p f))
+  (remove-duplicates (for/list ((p û))
                        (remove-bidirectionals p
-                                              f)))))
+                                              û)))))
 
 
 (define (get-prerequisites code graph)
