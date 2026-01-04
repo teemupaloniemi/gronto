@@ -325,6 +325,7 @@ xdot tmp/schedule.dot &
 - ${C}$ denotes all courses.
 - ${N}$ denotes all ontology nodes.
 - ${W}$ denotes integer weights [1,2,3,4,5,6].
+- ${Code} : {C} \to {S}$ maps a course to a code.
 - ${Cred} : {C} \to \mathbb{N}$ maps a course to credits.
 - ${P} : {C} \to ({N}\times{W})^\ast$ maps a course to a list of weighted prerequisites.
 - ${O} : {C} \to ({N}\times{W})^\ast$ maps a course to a list of weighted outcomes.

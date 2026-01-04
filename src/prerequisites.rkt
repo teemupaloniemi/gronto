@@ -27,80 +27,6 @@
       (write-precomputed (johnson (unweighted-graph/adj ontology)))))
 
 
-(define (bloom-difference-weight out-bloom prereq-bloom)
-  (let ((m 6)) ;; maximum difference
-    (/ (- m
-          (- prereq-bloom
-             out-bloom))
-       m)))
-
-
-(define (competence-distance n1 n2)
-  (hash-ref all-pair-distances
-            (list (string->symbol n1)
-                  (string->symbol n2))))
-
-
-(define (distance o p)
-  (* (bloom-difference-weight (cadr o)
-                              (cadr p))
-     (competence-distance (car o)
-                          (car p))))
-
-
-(define (f pair)
-  (list (caar pair)
-        (caadr pair)
-        (distance (car pair)
-                  (cadr pair))))
-
-
-(define (fs outs pres)
-  (map f
-       (cartesian-product outs
-                          pres)))
-
-
-(define (sort-pairs pairs one)
-  (sort (filter (lambda (x) (equal? (car x)
-                                    (car one)))
-                pairs)
-        (lambda (x y) (< (caddr x)
-                         (caddr y)))))
-
-
-(define (closest outs pres)
-  (let ((pairs (fs outs
-                   pres)))
-    (for/list ((one outs))
-      (let ((sorted (sort-pairs pairs
-                                one)))
-        (if (> (length sorted)
-               0)
-            (caddar sorted)
-            INF)))))
-
-
-(define (G outs pres)
-  (if (and (> (length outs)
-              0)
-           (> (length pres)
-              0))
-      (mean (closest outs
-                     pres))
-      INF))
-
-
-(define (D c1 c2)
-  (list (course-code c1)
-        (course-code c2)
-        (* (mean (mean (course-credits c1))
-                 (mean (course-credits c2)))
-           (G (course-skill-outcomes c1)
-              (course-skill-prerequisites c2)))))
-
-
-;; Remove larger/worse/less prerequisite of bidirectional edges.
 (define (remove-bidirectionals one all)
   (let* ((f (filter (lambda (new) (and (equal? (car  new)
                                                (cadr one))
@@ -163,9 +89,109 @@
                    course-structs)))
 
 
+
+(define (bloom-difference-weight out-bloom prereq-bloom)
+  (if (< out-bloom
+         prereq-bloom)
+      (let ((m 6)) ;; maximum difference
+        (/ (- m
+              (- prereq-bloom
+                 out-bloom))
+           m))
+      1))
+
+
+(define (competence-distance n1 n2)
+  (hash-ref all-pair-distances
+            (list (string->symbol n1)
+                  (string->symbol n2))))
+
+
+(define (distance o p)
+  (* (bloom-difference-weight (cadr o)
+                              (cadr p))
+     (competence-distance (car o)
+                          (car p))))
+
+
+(define (fs outs pres)
+  (map f
+       (cartesian-product outs
+                          pres)))
+
+
+(define (sort-pairs pairs one)
+  (sort (filter (lambda (x) (equal? (car x)
+                                    (car one)))
+                pairs)
+        (lambda (x y) (< (caddr x)
+                         (caddr y)))))
+
+
+(define (closest outs pres)
+  (let ((pairs (fs outs
+                   pres)))
+    (for/list ((one outs))
+      (let ((sorted (sort-pairs pairs
+                                one)))
+        (if (> (length sorted)
+               0)
+            (caddar sorted)
+            INF)))))
+
+
+
+(define (Code c)
+  (course-code c))
+
+
+;; Cred : C --> N
+(define (Cred c)
+  (course-credits c))
+
+
+;; P : C --> (W x N)*
+(define (P c)
+  (course-skill-prerequisites c))
+
+
+;; O : C --> (W x N)*
+(define (O c)
+  (course-skill-outcomes c))
+
+
+;; f : (N x W)^2 --> (N x N x Q)
+(define (f pair)
+  (list (caar pair)
+        (caadr pair)
+        (distance (car pair)
+                  (cadr pair))))
+
+
+;; G : (N x W)* x (N x W)* --> Q
+(define (G outs pres)
+  (if (and (> (length outs)
+              0)
+           (> (length pres)
+              0))
+      (mean (closest outs
+                     pres))
+      INF))
+
+
+;; D : C x C --> (S x S x Q)
+(define (D c1 c2)
+  (list (Code c1)
+        (Code c2)
+        (* (mean (mean (Cred c1))
+                 (mean (Cred c2)))
+           (G (O c1)
+              (P c2)))))
+
+
 (define (main args)
-  (define course-hashes  (json-read (vector-ref args
-                                                0)))
+  (define course-hashes (json-read (vector-ref args
+                                               0)))
   (define course-structs (hash-to-struct course-hashes))
   (define g (H (map (lambda (p) (D (car p)
                                    (cadr p)))
