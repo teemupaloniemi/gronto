@@ -2,13 +2,6 @@
 
 Gronto is short for `Graphs and Ontology to Opetussuunnitelma`.
 
-# TODO
-
-- Better data abstraction
-- Better demonstrations
-
-# Discussion
-
 <details>
 
 One of the essential goals of software development is the communication of
@@ -272,6 +265,11 @@ they will achieve the course outcomes*.
 
 </details>
 
+
+# TODO
+
+- Better demonstrations
+
 # Prerequisites
 
 ```bash
@@ -309,7 +307,7 @@ created.
 ```bash
 # Compute the prerequisitenes of courses from arg1, visualize graph to arg2,
 # and save updated arg1 to arg3.
-./tmp/prerequisites data/input.json tmp/prerequisites.dot tmp/output.json 10
+./tmp/prerequisites data/input.json tmp/prerequisites.dot tmp/output.json 15
 
 # Schedule the courses from arg1, with solver params in arg3-6, and save results
 # to arg2.
