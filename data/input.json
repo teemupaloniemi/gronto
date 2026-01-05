@@ -1,217 +1,369 @@
 [
- {
-     "code": "TIES4600",
-     "title": "Koneoppiminen",
-     "course-prerequisites": [],
-     "department": "Informaatioteknologian laitos",
-     "level": "Aineopinnot",
-     "credits": [5],
-     "outcomes": [
-       ["Machine learning theory", 3],
-       ["Machine learning approaches", 5],
-       ["Machine learning algorithms", 2],
-       ["Regression analysis", 2],
-       ["Clustering and classification", 3],
-       ["Classification and regression trees", 3],
-       ["Supervised learning by classification", 3]
-     ],
-     "skill-prerequisites": [
-       ["Linear algebra algorithms", 3],
-       ["Probability and statistics", 3]
-     ],
-     "periods": []
- },
- {
-     "code": "TIES4700",
-     "title": "Syväoppiminen",
-     "course-prerequisites": [],
-     "department": "Informaatioteknologian laitos",
-     "level": "Aineopinnot",
-     "credits": [5],
-     "outcomes": [
-       ["Neural networks", 3]
-     ],
-     "skill-prerequisites": [
-       ["Machine learning theory", 3],
-       ["Information theory", 3]
-     ],
-     "periods": []
- },
- {
-     "code": "TIES3240",
-     "title": "Signaalikäsittely ja aikasarja-analyysi",
-     "course-prerequisites": [],
-     "department": "Informaatioteknologian laitos",
-     "level": "Aineopinnot",
-     "credits": [5],
-     "outcomes": [
-       ["Digital signal processing", 3],
-       ["Signal integrity and noise analysis", 3],
-       ["Noise reduction", 2]
-     ],
-     "skill-prerequisites": [
-       ["Discrete mathematics", 3],
-       ["Mathematics of computing", 3]
-     ],
-     "periods": []
- },
- {
-     "code": "TIES411",
-     "title": "Konenäkö ja kuva-analyysi",
-     "course-prerequisites": [],
-     "department": "Matematiikan ja tilastotieteen laitos",
-     "level": "Aineopinnot",
-     "credits": [5],
-     "outcomes": [
-       ["Image segmentation", 3],
-       ["Computer vision tasks", 1],
-       ["Computer vision representations", 3],
-       ["Computer vision problems", 3],
-       ["Image representations", 1],
-       ["Image compression", 1],
-       ["Image processing", 1],
-       ["Camera calibration", 1]
-     ],
-     "skill-prerequisites": [
-       ["Discrete mathematics", 5],
-       ["Digital signal processing", 3],
-       ["Neural networks", 5]
-     ],
-     "periods": []
- },
- {
-     "code": "MATA2700",
-     "title": "Todistamisen ja p\u00e4\u00e4ttelyn perusteet tekniikan alalle",
-     "course-prerequisites": [],
-     "department": "Matematiikan ja tilastotieteen laitos",
-     "level": "Aineopinnot",
-     "credits": [5],
-     "outcomes": [
-       ["Proof theory", 1],
-       ["Complexity classes", 5],
-       ["Formal software verification", 2],
-       ["Invariants", 2]
-     ],
-     "skill-prerequisites": [],
-     "periods": []
- },
- {
-     "code": "MATA2520",
-     "title": "Joukko-oppi ja graafiteoria",
-     "course-prerequisites": [],
-     "department": "Matematiikan ja tilastotieteen laitos",
-     "level": "Aineopinnot",
-     "credits": [5],
-     "outcomes": [
-       ["Graph theory", 2]
-     ],
-     "skill-prerequisites": [
-       ["Proof theory", 2],
-       ["Logic", 5],
-       ["Combinatorics", 3],
-       ["Probability and statistics", 3]
-     ],
-     "periods": []
- },
- {
-     "code": "ITKA201",
-     "title": "Algoritmit 1",
-     "course-prerequisites": [],
-     "department": "Informaatioteknologian tiedekunta",
-     "level": "Aineopinnot",
-     "credits": [5],
-     "outcomes": [
-       ["Complexity classes", 2],
-       ["Program reasoning", 5],
-       ["Programming logic", 4]
-     ],
-     "skill-prerequisites": [
-      ],
-     "periods": []
- },
- {
-     "code": "TIES4211",
-     "title": "Algoritmit 2",
-     "course-prerequisites": [],
-     "department": "Informaatioteknologian tiedekunta",
-     "level": "Aineopinnot",
-     "credits": [5],
-     "outcomes": [
-       ["Shortest paths", 1],
-       ["Control path algorithms", 5]
-     ],
-     "skill-prerequisites": [
-       ["Complexity classes", 3],
-       ["Procedures, functions and subroutines", 4],
-       ["Graph theory", 5]
-     ],
-     "periods": []
- },
- {
-   "title": "Funktio-ohjelmointi",
-   "code": "TIEA341",
-   "credits": [5],
-   "skill-prerequisites": [
-     [
-       "Procedures, functions and subroutines",
-       2
-     ],
-     [
-       "Trees",
-       2
-     ],
-     [
-       "Recursive functions",
-       2
-     ],
-     [
-       "Classes and objects",
-       3
-     ],
-     [
-       "Differential calculus",
-       2
-     ],
-     [
-       "Linear algebra algorithms",
-       1
-     ]
-   ],
-   "outcomes": [
-     [
-       "Procedures, functions and subroutines",
-       3
-     ],
-     [
-       "Recursion",
-       3
-     ],
-     [
-       "Higher order logic",
-       2
-     ],
-     [
-       "Lambda calculus",
-       1
-     ],
-     [
-       "Abstraction",
-       3
-     ],
-     [
-       "Abstraction, modeling and modularity",
-       3
-     ],
-     [
-       "Data types and structures",
-       3
-     ],
-     [
-       "MapReduce algorithms",
-       2
-     ]
-   ],
-   "course-prerequisites": [],
-   "periods": []
- }
+    {
+        "code": "TIES4600",
+        "title": "Koneoppiminen",
+        "course-prerequisites": [],
+        "department": "Informaatioteknologian laitos",
+        "level": "Aineopinnot",
+        "credits": [
+            5
+        ],
+        "outcomes": [
+            [
+                "Machine learning theory",
+                3
+            ],
+            [
+                "Machine learning approaches",
+                5
+            ],
+            [
+                "Machine learning algorithms",
+                2
+            ],
+            [
+                "Regression analysis",
+                2
+            ],
+            [
+                "Clustering and classification",
+                3
+            ],
+            [
+                "Classification and regression trees",
+                3
+            ],
+            [
+                "Supervised learning by classification",
+                3
+            ]
+        ],
+        "skill-prerequisites": [
+            [
+                "Linear algebra algorithms",
+                3
+            ],
+            [
+                "Probability and statistics",
+                3
+            ]
+        ],
+        "periods": []
+    },
+    {
+        "code": "TIES4700",
+        "title": "Syv\u00e4oppiminen",
+        "course-prerequisites": [],
+        "department": "Informaatioteknologian laitos",
+        "level": "Aineopinnot",
+        "credits": [
+            5
+        ],
+        "outcomes": [
+            [
+                "Neural networks",
+                3
+            ]
+        ],
+        "skill-prerequisites": [
+            [
+                "Machine learning theory",
+                3
+            ],
+            [
+                "Information theory",
+                3
+            ]
+        ],
+        "periods": []
+    },
+    {
+        "code": "TIES3240",
+        "title": "Signaalik\u00e4sittely ja aikasarja-analyysi",
+        "course-prerequisites": [],
+        "department": "Informaatioteknologian laitos",
+        "level": "Aineopinnot",
+        "credits": [
+            5
+        ],
+        "outcomes": [
+            [
+                "Digital signal processing",
+                3
+            ],
+            [
+                "Signal integrity and noise analysis",
+                3
+            ],
+            [
+                "Noise reduction",
+                2
+            ]
+        ],
+        "skill-prerequisites": [
+            [
+                "Discrete mathematics",
+                3
+            ],
+            [
+                "Mathematics of computing",
+                3
+            ]
+        ],
+        "periods": []
+    },
+    {
+        "code": "TIES411",
+        "title": "Konen\u00e4k\u00f6 ja kuva-analyysi",
+        "course-prerequisites": [],
+        "department": "Matematiikan ja tilastotieteen laitos",
+        "level": "Aineopinnot",
+        "credits": [
+            5
+        ],
+        "outcomes": [
+            [
+                "Image segmentation",
+                3
+            ],
+            [
+                "Computer vision tasks",
+                1
+            ],
+            [
+                "Computer vision representations",
+                3
+            ],
+            [
+                "Computer vision problems",
+                3
+            ],
+            [
+                "Image representations",
+                1
+            ],
+            [
+                "Image compression",
+                1
+            ],
+            [
+                "Image processing",
+                1
+            ],
+            [
+                "Camera calibration",
+                1
+            ]
+        ],
+        "skill-prerequisites": [
+            [
+                "Discrete mathematics",
+                5
+            ],
+            [
+                "Digital signal processing",
+                3
+            ],
+            [
+                "Neural networks",
+                5
+            ]
+        ],
+        "periods": []
+    },
+    {
+        "code": "MATA2700",
+        "title": "Todistamisen ja p\u00e4\u00e4ttelyn perusteet tekniikan alalle",
+        "course-prerequisites": [],
+        "department": "Matematiikan ja tilastotieteen laitos",
+        "level": "Aineopinnot",
+        "credits": [
+            5
+        ],
+        "outcomes": [
+            [
+                "Proof theory",
+                1
+            ],
+            [
+                "Complexity classes",
+                5
+            ],
+            [
+                "Formal software verification",
+                2
+            ],
+            [
+                "Invariants",
+                2
+            ]
+        ],
+        "skill-prerequisites": [],
+        "periods": []
+    },
+    {
+        "code": "MATA2520",
+        "title": "Joukko-oppi ja graafiteoria",
+        "course-prerequisites": [],
+        "department": "Matematiikan ja tilastotieteen laitos",
+        "level": "Aineopinnot",
+        "credits": [
+            5
+        ],
+        "outcomes": [
+            [
+                "Graph theory",
+                2
+            ]
+        ],
+        "skill-prerequisites": [
+            [
+                "Proof theory",
+                2
+            ],
+            [
+                "Logic",
+                5
+            ],
+            [
+                "Combinatorics",
+                3
+            ],
+            [
+                "Probability and statistics",
+                3
+            ]
+        ],
+        "periods": []
+    },
+    {
+        "code": "ITKA201",
+        "title": "Algoritmit 1",
+        "course-prerequisites": [],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Aineopinnot",
+        "credits": [
+            5
+        ],
+        "outcomes": [
+            [
+                "Complexity classes",
+                2
+            ],
+            [
+                "Program reasoning",
+                5
+            ],
+            [
+                "Programming logic",
+                4
+            ]
+        ],
+        "skill-prerequisites": [],
+        "periods": []
+    },
+    {
+        "code": "TIES4211",
+        "title": "Algoritmit 2",
+        "course-prerequisites": [],
+        "department": "Informaatioteknologian tiedekunta",
+        "level": "Aineopinnot",
+        "credits": [
+            5
+        ],
+        "outcomes": [
+            [
+                "Shortest paths",
+                1
+            ],
+            [
+                "Control path algorithms",
+                5
+            ]
+        ],
+        "skill-prerequisites": [
+            [
+                "Complexity classes",
+                3
+            ],
+            [
+                "Procedures, functions and subroutines",
+                4
+            ],
+            [
+                "Graph theory",
+                5
+            ]
+        ],
+        "periods": []
+    },
+    {
+        "title": "Funktio-ohjelmointi",
+        "code": "TIEA341",
+        "credits": [
+            5
+        ],
+        "skill-prerequisites": [
+            [
+                "Procedures, functions and subroutines",
+                2
+            ],
+            [
+                "Trees",
+                2
+            ],
+            [
+                "Recursive functions",
+                2
+            ],
+            [
+                "Classes and objects",
+                3
+            ],
+            [
+                "Differential calculus",
+                2
+            ],
+            [
+                "Linear algebra algorithms",
+                1
+            ]
+        ],
+        "outcomes": [
+            [
+                "Procedures, functions and subroutines",
+                3
+            ],
+            [
+                "Recursion",
+                3
+            ],
+            [
+                "Higher order logic",
+                2
+            ],
+            [
+                "Lambda calculus",
+                1
+            ],
+            [
+                "Abstraction",
+                3
+            ],
+            [
+                "Abstraction, modeling and modularity",
+                3
+            ],
+            [
+                "Data types and structures",
+                3
+            ],
+            [
+                "MapReduce algorithms",
+                2
+            ]
+        ],
+        "course-prerequisites": [],
+        "periods": []
+    }
 ]
