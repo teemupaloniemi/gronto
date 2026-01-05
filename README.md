@@ -331,13 +331,15 @@ created.
 # and save updated arg1 to arg3.
 ./tmp/prerequisites data/input.json tmp/prerequisites.dot tmp/output.json 15
 
+# Visualize
+xdot tmp/prerequisites.dot
+
 # Schedule the courses from arg1, with solver params in arg3-6, and save results
 # to arg2.
 ./tmp/scheduler tmp/output.json tmp/shedule.dot 2 4 5 10
 
 # Visualize
-xdot tmp/prerequisites.dot &
-xdot tmp/schedule.dot &
+xdot tmp/schedule.dot
 ```
 
 # Formally
