@@ -120,17 +120,29 @@
 
 
 (define (main args)
-  (define courses (hash-to-struct (json-read (vector-ref args 0))))
-  (define outputport (open-output-file (vector-ref args 1)  #:exists 'replace))
+
+  ;; Command line arguments
+  (define input-file (vector-ref args 0))
+  (define graph-file (vector-ref args 1))
   (define years (string->number (vector-ref args 2)))
   (define sems (string->number (vector-ref args 3)))
   (define min-cred (string->number (vector-ref args 4)))
   (define max-cred (string->number (vector-ref args 5)))
+
+  ;; Data and IO
+  (define courses (hash-to-struct (json-read input-file)))
+  (define outputport (open-output-file graph-file
+                                       #:exists
+                                       'replace))
+
+  ;; Computation
   (define schedule (build-and-solve courses
                                     years
                                     sems
                                     min-cred
                                     max-cred))
+
+  ;; Visualization
   (safe-gen-dot courses
                 (* years
                    sems)
