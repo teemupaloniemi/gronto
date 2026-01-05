@@ -306,6 +306,7 @@ make
 <details>
 
 <summary>time differences</summary>
+
 ```
 # distances computed in runtime
 
@@ -321,6 +322,7 @@ make
 > user	0m3,782s
 > sys	0m0,443s
 ```
+
 </details>
 
 As output two binaries, `./tmp/prerequisites` and `./tmp/scheduler` will be
