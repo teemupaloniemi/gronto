@@ -294,9 +294,11 @@ ontology network `make distance`, and finally compile again to link the newly
 computed part to main program `make compile`.
 
 ```bash
+# This suffices if the ontology is small.
 make
-make distance
-make
+
+# We recommend this as the ACM ontology is large.
+./precompute.sh
 ```
 
 As output two binaries, `./tmp/prerequisites` and `./tmp/scheduler` will be
