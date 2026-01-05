@@ -267,11 +267,6 @@ they will achieve the course outcomes*.
 
 </details>
 
-
-# TODO
-
-- Better demonstrations
-
 # Prerequisites
 
 ```bash
@@ -370,3 +365,8 @@ xdot tmp/schedule.dot
   - ${G}$ is implemented as the average of ${f}$ mapped to the the cartesian product of ${O}(c1)$ and ${P}(c2)$ and filtered by the minimum for each pair where the first element is element of ${O}(c1)$.
 - ${D} : {C} \times {C} \to ({C} \times {C} \times \mathbb{Q})$ gives the distance between two courses.
   - ${D}(c1, c2) = (c1, c2, {Cred}(c1) * {Cred}(c2) * {G}({O}(c1), {P}(c2)))$ for $c1,c2 : {C}$.
+
+# TODO
+
+- Better demonstrations
+
