@@ -36,9 +36,10 @@
 ;; Returns:
 ;;    A precomputed value from hash matching the arguments.
 (define (ontology-distance outcome prerequisite)
-  (hash-ref all-pair-distances
-            (list (string->symbol outcome)
-                  (string->symbol prerequisite))))
+  (+ 1
+     (hash-ref all-pair-distances
+               (list (string->symbol outcome)
+                     (string->symbol prerequisite)))))
 
 
 ;; After this there are no two nodes that have arrows pointing to each other.
@@ -46,21 +47,16 @@
 (define (remove-bidirectionals graph x)
 
   ;; Find the reciprocal of "x" and name it "y".
-  (let* ((filtered-graph (filter (lambda (y) (and (equal? (course-pair-first y)
-                                                          (course-pair-second x))
-                                                  (equal? (course-pair-second y)
-                                                          (course-pair-first x))))
-                                 graph))
-         (y (if (> (length filtered-graph)
-                   0)
-                (car filtered-graph)
-                '())))
+  (let ((y (findf (lambda (ŷ) (and (equal? (course-pair-first ŷ)
+                                           (course-pair-second x))
+                                   (equal? (course-pair-second ŷ)
+                                           (course-pair-first x))))
+                                 graph)))
 
     ;; Find the shortest of the two.
     (cond
           ;; no reciprocal found, x is the only one
-          ((equal? '()
-                   y)
+          ((not y)
            x)
 
           ;; x is shorter
@@ -76,7 +72,9 @@
           ;; x and y are equal, alphabetical order is tiebraker
           ((string>? (course-pair-first  x)
                      (course-pair-second x))
-              x)
+           x)
+
+          ;; Keep the Racketnisse happy, as no computation is meaningless!
           (else y))))
 
 
