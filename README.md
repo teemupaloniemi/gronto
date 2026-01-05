@@ -4,6 +4,8 @@ Gronto is short for `Graphs and Ontology to Opetussuunnitelma`.
 
 <details>
 
+<summary>lenghty notes on the topic</summary>
+
 One of the essential goals of software development is the communication of
 ideas. To ensure that those ideas are communicated correctly, the tools of
 software testing and quality assurance are used.
@@ -300,6 +302,26 @@ make
 # We recommend this as the ACM ontology is large.
 ./precompute.sh
 ```
+
+<details>
+
+<summary>time differences</summary>
+```
+# distances computed in runtime
+
+~$ time ./tmp/prerequisites data/input.json tmp/prerequisites.dot tmp/output.json 15
+> real	0m56,886s
+> user	0m55,631s
+> sys	0m1,160s
+
+# using precomputed distances
+
+~$ time ./tmp/prerequisites data/input.json tmp/prerequisites.dot tmp/output.json 15
+> real	0m4,227s
+> user	0m3,782s
+> sys	0m0,443s
+```
+</details>
 
 As output two binaries, `./tmp/prerequisites` and `./tmp/scheduler` will be
 created.

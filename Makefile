@@ -24,3 +24,6 @@ prerequisites: src/prerequisites.rkt
 
 clean:
 	rm -rf tmp
+
+deep-clean: clean
+	rm -f src/utils/precomputed.rkt
