@@ -84,7 +84,7 @@
 ;;   and (in case of two directional edges) only shortest distance is preserved.
 (define (H graph threshold)
 
-  ;; filter arrows that are above the threshold.
+  ;; filter arrows that are below the threshold.
   (let ((filtered-graph (filter (lambda (x) (< (course-pair-distance x)
                                                threshold))
                                 graph)))
