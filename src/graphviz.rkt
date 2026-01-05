@@ -158,25 +158,37 @@
 (provide print-dot-graph)
 (define (print-dot-graph edges courses port)
   ;; Print each edge with label, width, and color
-  (parameterize ([current-output-port (or (open-output-file port #:exists 'replace) (current-output-port))])
+  (parameterize ([current-output-port
+                  (or (open-output-file port
+                                        #:exists
+                                        'replace)
+                      (current-output-port))])
     (display "digraph distances {")
     (define (conditional-print-edge p)
-      (let* ((src-course (search-by-code courses (car p) 'struct))
-             (dst-course (search-by-code courses (cadr p) 'struct))
+      (let* ((src-course (search-by-code courses
+                                         (course-pair-first p)
+                                         'struct))
+             (dst-course (search-by-code courses
+                                         (course-pair-second p)
+                                         'struct))
              (src-name (course-name src-course))
              (dst-name (course-name dst-course))
-             (w (caddr p)))
+             (w (course-pair-distance p)))
         (define (print-edge)
           (display "    \"")
-          (display src-name) (display "\" -> \"") (display dst-name)
+          (display src-name)
+          (display "\" -> \"")
+          (display dst-name)
           (display "\" [label=\"")
           (display w)
           (display "\"")
           (display ", style=dashed")
           (display "];")
           (newline))
-        (when (not (equal? src-name dst-name))
+        (when (not (equal? src-name
+                           dst-name))
           (print-edge))))
 
-    (map conditional-print-edge edges)
+    (map conditional-print-edge
+         edges)
     (display "}")))

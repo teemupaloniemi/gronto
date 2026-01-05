@@ -1,9 +1,10 @@
 #lang racket
+
 (require racket/cmdline)
 (require graph)
 (require racket/serialize)
 (require math/statistics)
-(require "io.rkt")
+
 (require "utils.rkt")
 (require "precomputed.rkt")
 (require "ontology.rkt")
@@ -13,6 +14,9 @@
 (define INF +inf.0)
 
 
+;; Writes the hash for next compilation to use.
+;; Returns:
+;;   The written hash for this run to use.
 (define (write-precomputed data)
   (call-with-output-file "src/precomputed.rkt"
     (lambda (out)
@@ -21,62 +25,104 @@
   data)
 
 
+;; Global variable where all ontology pairs and their distances are computed.
 (define all-pair-distances
   (if (hash? precomputed)
       precomputed
       (write-precomputed (johnson (unweighted-graph/adj ontology)))))
 
 
-(define (remove-bidirectionals one all)
-  (let* ((f (filter (lambda (new) (and (equal? (car  new)
-                                               (cadr one))
-                                       (equal? (cadr new)
-                                               (car  one))))
-                    all))
-         (two (if (> (length f)
-                       0)
-                    (car f)
-                    '())))
-    (if (not (equal? '()
-                     two))
-        (if (< (caddr one)
-               (caddr two))
-            one
-            (if (equal? (caddr one)
-                        (caddr two))
-               (if (string>? (car one)
-                             (cadr one))
-                   one
-                   two)
-               two))
-        one)))
+;; ontology-distance : (N x N) --> Integer
+;; Returns:
+;;    A precomputed value from hash matching the arguments.
+(define (ontology-distance outcome prerequisite)
+  (hash-ref all-pair-distances
+            (list (string->symbol outcome)
+                  (string->symbol prerequisite))))
 
 
-(define (H u th)
-  (let ((û (filter (lambda (x) (< (caddr x) th))
-                   u)))
-  (remove-duplicates (for/list ((p û))
-                       (remove-bidirectionals p
-                                              û)))))
+;; After this there are no two nodes that have arrows pointing to each other.
+;; Which means that one of them is removed. Heuristic is "shortest arrow stays".
+(define (remove-bidirectionals graph x)
+
+  ;; Find the reciprocal of "x" and name it "y".
+  (let* ((filtered-graph (filter (lambda (y) (and (equal? (course-pair-first y)
+                                                          (course-pair-second x))
+                                                  (equal? (course-pair-second y)
+                                                          (course-pair-first x))))
+                    graph))
+         (y (if (> (length filtered-graph)
+                   0)
+                (car filtered-graph)
+                '())))
+
+    ;; Find the shortest of the two.
+    (cond
+          ;; no reciprocal found, x is the only one
+          ((equal? '()
+                   y)
+           x)
+
+          ;; x is shorter
+          ((< (course-pair-distance x)
+              (course-pair-distance y))
+           x)
+
+          ;; y is shorter
+          ((> (course-pair-distance x)
+              (course-pair-distance y))
+           y)
+
+          ;; x and y are equal, alphabetical order is tiebraker
+          ((string>? (course-pair-first  x)
+                     (course-pair-second x))
+              x)
+          (else y))))
 
 
-(define (get-prerequisites code graph)
-  (map car
-      (filter (lambda (x) (and (not (eqv? (car x)
-                                          code))
-                               (eqv? (cadr x)
-                                     code)))
-              graph)))
+;; H : (N x N x Q)* x Q --> (N x N x Q)*
+;; Returns:
+;;   Filtered graph such that courses that are barely related are disconnected
+;;   and (in case of two directional edges) only shortest distance is preserved.
+(define (H graph threshold)
+
+  ;; filter arrows that are above the threshold.
+  (let ((filtered-graph (filter (lambda (x) (< (course-pair-distance x)
+                                               threshold))
+                                graph)))
+
+    ;; Remove bidirectional arrows.
+    (remove-duplicates (for/list ((fgi filtered-graph))
+                         (remove-bidirectionals filtered-graph
+                                                fgi)))))
 
 
+;; get-prerequisites : (N x N x Q)* x code --> code*
+;; Returns:
+;;   List of codes that are prerequisites to current code.
+(define (get-prerequisites graph code)
+
+  ;; Find such arrows that have current "code" as the end point (second).
+  (let ((filtered-graph (filter (lambda (x) (and (not (equal? (course-pair-first x)
+                                                              code))
+                                                 (equal? (course-pair-second x)
+                                                         code)))
+                                graph)))
+
+    ;; Return the start point of those arrows.
+    (map course-pair-first
+         filtered-graph)))
+
+
+;; mutate-prerequisites : C* x code x (code x code x Q) --> C
 (define (mutate-prerequisites course-hashes code graph)
   (let ((mutable (hash-copy (search-by-code course-hashes
                                             code
                                             'hash))))
     (hash-set! mutable
-              'course-prerequisites
-              (get-prerequisites code
-                                 graph))
+               'course-prerequisites
+               (get-prerequisites graph
+                                  code))
     mutable))
 
 
@@ -88,82 +134,59 @@
                    course-structs)))
 
 
-;; Code : C --> S
-(define (Code c)
-  (course-code c))
-
-
-;; Cred : C --> N
-(define (Cred c)
-  (course-credits c))
-
-
-;; P : C --> (W x N)*
-(define (P c)
-  (course-skill-prerequisites c))
-
-
-;; O : C --> (W x N)*
-(define (O c)
-  (course-skill-outcomes c))
-
-
-(define (bloom-difference-weight out-bloom pre-bloom)
-  (if (< out-bloom
-         pre-bloom)
+;; bloom-difference-weight : ([1..6] x [1..6]) --> ([1/6..6/6])
+;; Returns:
+;;   Rational weight describing an arrow between the outcome and prerequisite.
+(define (bloom-difference-weight outcome-bloom prerequisite-bloom)
+  (if (< outcome-bloom
+         prerequisite-bloom)
       (let ((m 6)) ;; The maximum difference is 6.
         (/ (- m
-              (- pre-bloom
-                 out-bloom))
+              (- prerequisite-bloom
+                 outcome-bloom))
            m))
       1))
-
-
-(define (ontology-distance node-1 node-2)
-  (hash-ref all-pair-distances
-            (list (string->symbol node-1)
-                  (string->symbol node-2))))
 
 
 ;; shortest-pair : (N x N x Q)* x N --> Q
 ;; Returns:
 ;;   Shortest of the triplets containing "one".
-(define (shortest-pair distances one)
+(define (shortest-pair ontology-pairs one)
 
   ;; Consider only pairs with "one" in outcomes.
-  (define f (filter (lambda (x) (equal? (car x)
-                                        (skill-name one)))
-                    distances))
+  (define filtered-pairs (filter (lambda (p) (equal? (ontology-pair-outcome p)
+                                                     (ontology-node-name one)))
+                                 ontology-pairs))
 
   ;; Sort them in "shortest first" order.
-  (define s (sort f
-                  (lambda (x y) (< (car (reverse x))
-                                   (car (reverse y))))))
+  (define sorted-pairs (sort filtered-pairs
+                             (lambda (x y) (< (ontology-pair-distance x))
+                                              (ontology-pair-distance y))))
 
-  ;; Return the shortest.
-  (if (equal? s '())
+  ;; Return the shortest (which is first).
+  (if (equal? sorted-pairs '())
       INF
-      (car (reverse (car s)))))
+      (ontology-pair-distance (car sorted-pairs))))
 
 
 ;; f : (N x W) x (N x W) --> Q
 ;; Returns:
 ;;   Distance between the two ontology nodes.
-(define (f node-1 node-2)
-  (* (bloom-difference-weight (skill-bloom node-1)
-                              (skill-bloom node-2))
-     (ontology-distance (skill-name node-1)
-                        (skill-name node-2))))
+(define (f outcome prerequisite)
+  (* (bloom-difference-weight (ontology-node-bloom outcome)
+                              (ontology-node-bloom prerequisite))
+     (ontology-distance (ontology-node-name outcome)
+                        (ontology-node-name prerequisite))))
 
 
 ;; fs : (N x W)* x (N x W)* --> (N x N x Q)*
 ;; Returns:
 ;;   Distances between pairs of ontology nodes (with associated nodes).
 (define (fs outcomes prerequisites)
-  (map (lambda (p) (list (skill-name (car p))
-                         (skill-name (cadr p))
-                         (f (car p)
-                            (cadr p))))
+  (map (lambda (p) (ontology-pair (ontology-node-name (car p))
+                                  (ontology-node-name (cadr p))
+                                  (f (car p)
+                                     (cadr p))))
        (cartesian-product outcomes
                           prerequisites)))
 
@@ -186,55 +209,65 @@
 ;; G : (N x W)* x (N x W)* --> Q
 ;; Returns:
 ;;   Distance between two lists of weighted ontology nodes.
-(define (G outcomes prerequirements)
+(define (G outcomes prerequisites)
   (if (and (> (length outcomes)
               0)
-           (> (length prerequirements)
+           (> (length prerequisites)
               0))
       (mean (closest outcomes
-                     prerequirements))
+                     prerequisites))
       INF))
 
 
-;; D : C x C --> (S x S x Q)
+;; D : C x C --> (code x code x Q)
 ;; Returns:
 ;;  Distance between two courses (and names associated).
 (define (D course-1 course-2)
-  (list (Code course-1)
-        (Code course-2)
-        (* (mean (mean (Cred course-1))
-                 (mean (Cred course-2)))
-           (G (O course-1)
-              (P course-2)))))
+  (course-pair (course-code course-1)
+               (course-code course-2)
+               (* (mean (mean (course-credits course-1))
+                        (mean (course-credits course-2)))
+                  (G (course-skill-outcomes course-1)
+                     (course-skill-prerequisites course-2)))))
+
+
+;; map-D : C* --> (code x code x Q)*
+;; Returns:
+;;  Distance between all courses. List of triples with two codes and a distance.
+(define (map-D course-structs)
+  (map (lambda (p) (D (car p)
+                      (cadr p)))
+       (cartesian-product course-structs
+                          course-structs)))
 
 
 (define (main args)
 
-  ;; Input arguments from command line.
+  ;; Command line arguments
   (define input-file       (vector-ref args 0))
   (define graph-file       (vector-ref args 1))
   (define output-file      (vector-ref args 2))
   (define filter-threshold (string->number (vector-ref args 3)))
 
-  ;; Computation
+  ;; Data
   (define course-hashes  (json-read input-file))
   (define course-structs (hash-to-struct course-hashes))
-  (define graph (H (map (lambda (p) (D (car p)
-                                   (cadr p)))
-                        (cartesian-product course-structs
-                                           course-structs))
-                   filter-threshold))
 
-  ;; Visualize
-  (when (> (length graph)
+  ;; Computation
+  (define graph (map-D course-structs))
+  (define filtered-graph (H graph
+                            filter-threshold))
+
+  ;; Visualization
+  (when (> (length filtered-graph)
            0)
-      (print-dot-graph graph
+      (print-dot-graph filtered-graph
                        course-structs
                        graph-file))
 
-  ;; Save results
+  ;; Saving results
   (save-results output-file
-                graph
+                filtered-graph
                 course-hashes
                 course-structs))
 

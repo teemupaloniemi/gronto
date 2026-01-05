@@ -2,9 +2,6 @@
 
 (require (only-in racket/base (eq? eqt?)))
 
-;; Reading from file.
-(require "io.rkt")
-
 ;; Data queries.
 (require "utils.rkt")
 

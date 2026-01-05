@@ -2,7 +2,6 @@
 (require racket/cmdline)
 (require graph)
 (require "graphviz.rkt")
-(require "io.rkt")
 (require "utils.rkt")
 (require "smt.rkt")
 
