@@ -57,7 +57,7 @@
 ;; Map our JSON hash to course struct for readability.
 (provide hash-to-struct)
 (define (hash-to-struct h)
-  (for*/list ((c h))
+  (for/list ((c h))
     (course (hash-ref c 'title)
             (hash-ref c 'code)
             (hash-ref c 'credits)

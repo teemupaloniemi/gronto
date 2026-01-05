@@ -69,8 +69,8 @@
            x)
 
           ;; y is shorter
-          ((> (course-pair-distance x)
-              (course-pair-distance y))
+          ((< (course-pair-distance y)
+              (course-pair-distance x))
            y)
 
           ;; x and y are equal, alphabetical order is tiebraker
