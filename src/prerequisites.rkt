@@ -18,7 +18,7 @@
 ;; Returns:
 ;;   The written hash for this run to use.
 (define (write-precomputed data)
-  (call-with-output-file "src/precomputed.rkt"
+  (call-with-output-file "src/utils/precomputed.rkt"
     (lambda (out)
       (fprintf out "#lang racket\n\n(provide precomputed)\n(define precomputed\n  ~s)\n" data))
     #:exists 'replace)
