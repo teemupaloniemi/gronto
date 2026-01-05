@@ -50,7 +50,7 @@
                                                           (course-pair-second x))
                                                   (equal? (course-pair-second y)
                                                           (course-pair-first x))))
-                    graph))
+                                 graph))
          (y (if (> (length filtered-graph)
                    0)
                 (car filtered-graph)
