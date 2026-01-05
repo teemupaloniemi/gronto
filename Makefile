@@ -6,9 +6,9 @@ all: tmp-folder precomputed compile
 
 # If the precomputed.rkt file does not exist make one.
 precomputed:
-	if [ ! -f src/precomputed.rkt ]; \
+	if [ ! -f src/utils/precomputed.rkt ]; \
 	then \
-	  printf "#lang racket\n\n(provide precomputed)\n(define precomputed #f)\n" > src/precomputed.rkt ; \
+	  printf "#lang racket\n\n(provide precomputed)\n(define precomputed #f)\n" > src/utils/precomputed.rkt ; \
 	fi;
 
 tmp-folder:

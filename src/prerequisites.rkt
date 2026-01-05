@@ -5,10 +5,10 @@
 (require racket/serialize)
 (require math/statistics)
 
-(require "utils.rkt")
-(require "precomputed.rkt")
-(require "ontology.rkt")
-(require "graphviz.rkt")
+(require "utils/utils.rkt")
+(require "utils/precomputed.rkt")
+(require "utils/ontology.rkt")
+(require "utils/graphviz.rkt")
 
 
 (define INF +inf.0)

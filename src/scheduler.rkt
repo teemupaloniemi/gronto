@@ -5,8 +5,8 @@
 (require math/statistics)
 (require rosette/safe)
 (require rosette/solver/smt/z3)
-(require "graphviz.rkt")
-(require "utils.rkt")
+(require "utils/graphviz.rkt")
+(require "utils/utils.rkt")
 
 (define (build-model solver courses sem-min sem-max min-cred-sem max-cred-sem)
   (let ((sems (for/list ((x (in-range sem-min (+ sem-max 1)))) x))
