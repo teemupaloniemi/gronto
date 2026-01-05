@@ -291,10 +291,6 @@ raco pkg install rosette
 
 # Compiling
 
-We must first compile the code `make`, then compute all-pair-distances of our
-ontology network `make distance`, and finally compile again to link the newly
-computed part to main program `make compile`.
-
 ```bash
 # This suffices if the ontology is small.
 make
