@@ -119,7 +119,7 @@
       1))
 
 
-(define (competence-distance node-1 node-2)
+(define (ontology-distance node-1 node-2)
   (hash-ref all-pair-distances
             (list (string->symbol node-1)
                   (string->symbol node-2))))
@@ -132,7 +132,7 @@
 
   ;; Consider only pairs with "one" in outcomes.
   (define f (filter (lambda (x) (equal? (car x)
-                                        (car one)))
+                                        (skill-name one)))
                     distances))
 
   ;; Sort them in "shortest first" order.
@@ -150,18 +150,18 @@
 ;; Returns:
 ;;   Distance between the two ontology nodes.
 (define (f node-1 node-2)
-  (* (bloom-difference-weight (cadr node-1)
-                              (cadr node-2))
-     (competence-distance (car node-1)
-                          (car node-2))))
+  (* (bloom-difference-weight (skill-bloom node-1)
+                              (skill-bloom node-2))
+     (ontology-distance (skill-name node-1)
+                        (skill-name node-2))))
 
 
 ;; fs : (N x W)* x (N x W)* --> (N x N x Q)*
 ;; Returns:
 ;;   Distances between pairs of ontology nodes (with associated nodes).
 (define (fs outcomes prerequisites)
-  (map (lambda (p) (list (caar p)
-                         (caadr p)
+  (map (lambda (p) (list (skill-name (car p))
+                         (skill-name (cadr p))
                          (f (car p)
                             (cadr p))))
        (cartesian-product outcomes
