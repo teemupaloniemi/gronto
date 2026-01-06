@@ -66,11 +66,10 @@
                      (string->symbol (ontology-node-name prerequisite))))))
 
 
-;; remove-bidirectionals : CP* x CP --> CP*
+;; remove-bidirectional : CP* x CP --> CP
 ;; Returns:
-;;   A graph where one of the arrows x and (reciprocal x) is removed. Heuristic
-;;   is "shortest arrow stays".
-(define (remove-bidirectionals graph x)
+;;   Shorter of the arrows x and (reciprocal x).
+(define (remove-bidirectional graph x)
 
   ;; Find the reciprocal of "x" and name it "y".
   (let ((y (findf (lambda (ŷ) (and (equal? (course-pair-first ŷ)
@@ -117,8 +116,8 @@
 
     ;; Remove bidirectional arrows.
     (remove-duplicates (for/list ((fgi filtered-graph))
-                         (remove-bidirectionals filtered-graph
-                                                fgi)))))
+                         (remove-bidirectional filtered-graph
+                                               fgi)))))
 
 
 ;; get-prerequisites : CP* x S --> S*
