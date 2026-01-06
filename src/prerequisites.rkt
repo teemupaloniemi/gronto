@@ -26,7 +26,7 @@
 ;;     O             ontology items
 ;;     C             courses
 ;;     OP            ontology pair
-;;     CP            course pair
+;;     CP            course pair (the final graph will be of type CP*)
 ;;
 ;;   Operators
 ;;
@@ -121,7 +121,7 @@
                                                 fgi)))))
 
 
-;; get-prerequisites : OP* x S --> S*
+;; get-prerequisites : CP* x S --> S*
 ;; Returns:
 ;;   List of codes that are prerequisites to current code.
 (define (get-prerequisites graph code)
