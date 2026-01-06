@@ -1,11 +1,13 @@
-# What is Gronto?
+# Gronto
 
-Gronto is short for `Graphs and Ontology to Opetussuunnitelma`.
+The primary aim is to ensure that illegal states (i.e. dependency cycles) do
+not appear in a university curriculum.
 
 <details>
 
 <summary>lenghty notes on the topic</summary>
 
+```
 One of the essential goals of software development is the communication of
 ideas. To ensure that those ideas are communicated correctly, the tools of
 software testing and quality assurance are used.
@@ -51,6 +53,7 @@ The limitation of this method is that it only concerns the course interfaces,
 which are the prerequisites and outcomes. The method is build on the assumption
 that *if incoming students are equipped with right prerequisite knowledge then
 they will achieve the course outcomes*.
+```
 
 1. Yes, but why?
 
