@@ -67,8 +67,9 @@
 
 
 ;; remove-bidirectionals : CP* x CP --> CP*
-;; After this there are no two nodes that have arrows pointing to each other.
-;; Which means that one of them is removed. Heuristic is "shortest arrow stays".
+;; Returns:
+;;   A graph where one of the arrows x and (reciprocal x) is removed. Heuristic
+;;   is "shortest arrow stays".
 (define (remove-bidirectionals graph x)
 
   ;; Find the reciprocal of "x" and name it "y".
@@ -138,6 +139,9 @@
 
 
 ;; mutate-prerequisites : C* x S x CP* --> C
+;; Returns:
+;;  A version of course (with code "code") that has newly assigned prerequisite
+;;  courses.
 (define (mutate-prerequisites course-hashes code graph)
   (let ((mutable (hash-copy (search-by-code course-hashes
                                             code
