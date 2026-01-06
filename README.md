@@ -1,7 +1,7 @@
 # Gronto
 
-The primary aim is to ensure that illegal states (i.e. dependency cycles) do
-not appear in a university curriculum.
+Ensures that illegal states (i.e. dependency cycles) do not appear in a
+university curriculum.
 
 # Prerequisites
 
