@@ -11,6 +11,30 @@
 (require "utils/graphviz.rkt")
 
 
+;; Briefly on notation
+;;
+;;   Functions
+;;
+;;     <name> : <input type> --> <output-type>
+;;
+;;   Types
+;;
+;;     W             integers (1..6)
+;;     I             integers (1..INF)
+;;     Q             rational numbers
+;;     S             strings
+;;     O             ontology items
+;;     C             courses
+;;     OP            ontology pair
+;;     CP            course pair
+;;
+;;   Operators
+;;
+;;     <T>*          arbitrary length list of items of type "T"
+;;     <T1> x <T2>   cartesian product of the two types
+
+
+;; Global constant representing infinity.
 (define INF +inf.0)
 
 
@@ -32,16 +56,17 @@
       (write-precomputed (johnson (unweighted-graph/adj ontology)))))
 
 
-;; ontology-distance : (N x N) --> Integer
+;; ontology-distance : S x S --> I
 ;; Returns:
 ;;    A precomputed value from hash matching the arguments.
-(define (ontology-distance outcome prerequisite)
+(define (ontology-distance outcome-name prerequisite-name)
   (+ 1
      (hash-ref all-pair-distances
-               (list (string->symbol outcome)
-                     (string->symbol prerequisite)))))
+               (list (string->symbol outcome-name)
+                     (string->symbol prerequisite-name)))))
 
 
+;; remove-bidirectionals : CP* x CP --> CP*
 ;; After this there are no two nodes that have arrows pointing to each other.
 ;; Which means that one of them is removed. Heuristic is "shortest arrow stays".
 (define (remove-bidirectionals graph x)
@@ -78,7 +103,7 @@
           (else y))))
 
 
-;; H : (N x N x Q)* x Q --> (N x N x Q)*
+;; H : OP* x Q --> OP*
 ;; Returns:
 ;;   Filtered graph such that courses that are barely related are disconnected
 ;;   and (in case of two directional edges) only shortest distance is preserved.
@@ -95,7 +120,7 @@
                                                 fgi)))))
 
 
-;; get-prerequisites : (N x N x Q)* x code --> code*
+;; get-prerequisites : OP* x S --> S*
 ;; Returns:
 ;;   List of codes that are prerequisites to current code.
 (define (get-prerequisites graph code)
@@ -112,7 +137,7 @@
          filtered-graph)))
 
 
-;; mutate-prerequisites : C* x code x (code x code x Q) --> C
+;; mutate-prerequisites : C* x S x CP* --> C
 (define (mutate-prerequisites course-hashes code graph)
   (let ((mutable (hash-copy (search-by-code course-hashes
                                             code
@@ -132,7 +157,7 @@
                    course-structs)))
 
 
-;; bloom-difference-weight : ([1..6] x [1..6]) --> ([1/6..6/6])
+;; bloom-difference-weight : W x W --> (1/6 <= Q <= 6/6)
 ;; Returns:
 ;;   Rational weight describing an arrow between the outcome and prerequisite.
 (define (bloom-difference-weight outcome-bloom prerequisite-bloom)
@@ -146,9 +171,9 @@
       1))
 
 
-;; shortest-pair : (N x N x Q)* x N --> Q
+;; shortest-pair : OP* x O --> Q
 ;; Returns:
-;;   Shortest of the triplets containing "one".
+;;   Shortest of the ontology-pairs containing "one" as outcome.
 (define (shortest-pair ontology-pairs one)
 
   ;; Consider only pairs with "one" in outcomes.
@@ -167,7 +192,7 @@
       (ontology-pair-distance (car sorted-pairs))))
 
 
-;; f : (N x W) x (N x W) --> Q
+;; f : O x O --> Q
 ;; Returns:
 ;;   Distance between the two ontology nodes.
 (define (f outcome prerequisite)
@@ -177,7 +202,7 @@
                         (ontology-node-name prerequisite))))
 
 
-;; fs : (N x W)* x (N x W)* --> (N x N x Q)*
+;; fs : O* x O* --> OP*
 ;; Returns:
 ;;   Distances between pairs of ontology nodes (with associated nodes).
 (define (fs outcomes prerequisites)
@@ -189,7 +214,7 @@
                           prerequisites)))
 
 
-;; closest : (N x W)* x (N x W)* --> Q*
+;; closest : O* x O* --> Q*
 ;; Returns:
 ;;   List of distances (one for each outcome).
 (define (closest outcomes prerequisites)
@@ -204,7 +229,7 @@
        outcomes))
 
 
-;; G : (N x W)* x (N x W)* --> Q
+;; G : O* x O* --> Q
 ;; Returns:
 ;;   Distance between two lists of weighted ontology nodes.
 (define (G outcomes prerequisites)
@@ -217,7 +242,7 @@
       INF))
 
 
-;; D : C x C --> (code x code x Q)
+;; D : C x C --> CP
 ;; Returns:
 ;;  Distance between two courses (and names associated).
 (define (D course-1 course-2)
@@ -229,7 +254,7 @@
                      (course-skill-prerequisites course-2)))))
 
 
-;; map-D : C* --> (code x code x Q)*
+;; map-D : C* --> CP*
 ;; Returns:
 ;;  Distance between all courses. List of triples with two codes and a distance.
 (define (map-D course-structs)
