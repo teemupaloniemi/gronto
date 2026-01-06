@@ -3,6 +3,110 @@
 The primary aim is to ensure that illegal states (i.e. dependency cycles) do
 not appear in a university curriculum.
 
+# Prerequisites
+
+```bash
+# Make and xdot
+sudo apt-get install build-essential xdot
+
+# Racket
+sudo add-apt-repository ppa:plt/racket -y
+sudo apt-get install racket -y
+
+# Racket Generic Graph Library
+raco pkg install graph
+
+# Solver library
+raco pkg install rosette
+```
+
+# Compiling
+
+```bash
+# This suffices if the ontology is small.
+make
+
+# We recommend this as the ACM ontology is large.
+./precompute.sh
+```
+
+Two binaries, `./tmp/prerequisites` and `./tmp/scheduler` will be created.
+
+<details>
+
+<summary>time differences</summary>
+
+```
+# distances computed in runtime
+
+~$ time ./tmp/prerequisites data/input.json tmp/prerequisites.dot tmp/output.json 15
+> real	0m56,886s
+> user	0m55,631s
+> sys	0m1,160s
+
+# using precomputed distances
+
+~$ time ./tmp/prerequisites data/input.json tmp/prerequisites.dot tmp/output.json 15
+> real	0m4,227s
+> user	0m3,782s
+> sys	0m0,443s
+```
+
+</details>
+
+# Running
+
+```bash
+# Compute prerequisites
+#
+# Params:
+#   [in]  "data/input.json"       individual courses in questionnaire format
+#   [out] "tmp/prerequisites.dot" result dot graph
+#   [out] "tmp/output.json"       amended version of input courses
+#   [in]  "15"                    threshold for prerequisiteness
+#
+./tmp/prerequisites data/input.json tmp/prerequisites.dot tmp/output.json 15
+
+# Visualize
+xdot tmp/prerequisites.dot
+
+# Schedule the courses (if possible*)
+#
+# Params:
+#   [in]  "tmp/output.json"       individual courses in questionnaire format
+#   [out] "tmp/schedule.dot"      result dot graph
+#   [in]  "2"                     years in the curriculum
+#   [in]  "4"                     semesters per year
+#   [in]  "5"                     minimum credits per semeter
+#   [in]  "10"                    maximum credits per semeter
+#
+./tmp/scheduler tmp/output.json tmp/shedule.dot 2 4 5 10
+
+# Visualize
+xdot tmp/schedule.dot
+```
+
+# Formally
+
+- ${C}$ denotes all courses.
+- ${N}$ denotes all ontology nodes.
+- ${W}$ denotes integer weights [1,2,3,4,5,6].
+- ${Code} : {C} \to {S}$ maps a course to a code.
+- ${Cred} : {C} \to \mathbb{N}$ maps a course to credits.
+- ${P} : {C} \to ({N}\times{W})^\ast$ maps a course to a list of weighted prerequisites.
+- ${O} : {C} \to ({N}\times{W})^\ast$ maps a course to a list of weighted outcomes.
+- ${f} : {({N}\times{W})}^2 \to ({N} \times {N} \times \mathbb{Q})$ gives the distance between two weighted ontology nodes.
+- ${G} : ({N}\times{W})^\ast \times ({N}\times{W})^\ast \to \mathbb{Q}$ gives the distance between two lists of weighted ontology nodes.
+  - ${G}$ is implemented as the average of ${f}$ mapped to the the cartesian product of ${O}(c1)$ and ${P}(c2)$ and filtered by the minimum for each pair where the first element is element of ${O}(c1)$.
+- ${D} : {C} \times {C} \to ({C} \times {C} \times \mathbb{Q})$ gives the distance between two courses.
+  - ${D}(c1, c2) = (c1, c2, {Cred}(c1) * {Cred}(c2) * {G}({O}(c1), {P}(c2)))$ for $c1,c2 : {C}$.
+
+# TODO
+
+- Better demonstrations
+
+# Notes
+
 <details>
 
 <summary>lenghty notes on the topic</summary>
@@ -269,106 +373,4 @@ they will achieve the course outcomes*.
     to other universities?
 
 </details>
-
-# Prerequisites
-
-```bash
-# Make and xdot
-sudo apt-get install build-essential xdot
-
-# Racket
-sudo add-apt-repository ppa:plt/racket -y
-sudo apt-get install racket -y
-
-# Racket Generic Graph Library
-raco pkg install graph
-
-# Solver library
-raco pkg install rosette
-```
-
-# Compiling
-
-```bash
-# This suffices if the ontology is small.
-make
-
-# We recommend this as the ACM ontology is large.
-./precompute.sh
-```
-
-Two binaries, `./tmp/prerequisites` and `./tmp/scheduler` will be created.
-
-<details>
-
-<summary>time differences</summary>
-
-```
-# distances computed in runtime
-
-~$ time ./tmp/prerequisites data/input.json tmp/prerequisites.dot tmp/output.json 15
-> real	0m56,886s
-> user	0m55,631s
-> sys	0m1,160s
-
-# using precomputed distances
-
-~$ time ./tmp/prerequisites data/input.json tmp/prerequisites.dot tmp/output.json 15
-> real	0m4,227s
-> user	0m3,782s
-> sys	0m0,443s
-```
-
-</details>
-
-# Running
-
-```bash
-# Compute prerequisites
-#
-# Params:
-#   [in]  "data/input.json"       individual courses in questionnaire format
-#   [out] "tmp/prerequisites.dot" result dot graph
-#   [out] "tmp/output.json"       amended version of input courses
-#   [in]  "15"                    threshold for prerequisiteness
-#
-./tmp/prerequisites data/input.json tmp/prerequisites.dot tmp/output.json 15
-
-# Visualize
-xdot tmp/prerequisites.dot
-
-# Schedule the courses (if possible*)
-#
-# Params:
-#   [in]  "tmp/output.json"       individual courses in questionnaire format
-#   [out] "tmp/schedule.dot"      result dot graph
-#   [in]  "2"                     years in the curriculum
-#   [in]  "4"                     semesters per year
-#   [in]  "5"                     minimum credits per semeter
-#   [in]  "10"                    maximum credits per semeter
-#
-./tmp/scheduler tmp/output.json tmp/shedule.dot 2 4 5 10
-
-# Visualize
-xdot tmp/schedule.dot
-```
-
-# Formally
-
-- ${C}$ denotes all courses.
-- ${N}$ denotes all ontology nodes.
-- ${W}$ denotes integer weights [1,2,3,4,5,6].
-- ${Code} : {C} \to {S}$ maps a course to a code.
-- ${Cred} : {C} \to \mathbb{N}$ maps a course to credits.
-- ${P} : {C} \to ({N}\times{W})^\ast$ maps a course to a list of weighted prerequisites.
-- ${O} : {C} \to ({N}\times{W})^\ast$ maps a course to a list of weighted outcomes.
-- ${f} : {({N}\times{W})}^2 \to ({N} \times {N} \times \mathbb{Q})$ gives the distance between two weighted ontology nodes.
-- ${G} : ({N}\times{W})^\ast \times ({N}\times{W})^\ast \to \mathbb{Q}$ gives the distance between two lists of weighted ontology nodes.
-  - ${G}$ is implemented as the average of ${f}$ mapped to the the cartesian product of ${O}(c1)$ and ${P}(c2)$ and filtered by the minimum for each pair where the first element is element of ${O}(c1)$.
-- ${D} : {C} \times {C} \to ({C} \times {C} \times \mathbb{Q})$ gives the distance between two courses.
-  - ${D}(c1, c2) = (c1, c2, {Cred}(c1) * {Cred}(c2) * {G}({O}(c1), {P}(c2)))$ for $c1,c2 : {C}$.
-
-# TODO
-
-- Better demonstrations
 
