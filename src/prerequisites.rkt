@@ -99,9 +99,9 @@
                                 graph)))
 
     ;; Remove bidirectional arrows.
-    (remove-duplicates (for/list ((fgi filtered-graph))
-                         (remove-bidirectional filtered-graph
-                                               fgi)))))
+    (remove-duplicates (map (lambda (x) (remove-bidirectional filtered-graph
+                                                              x))
+                            filtered-graph))))
 
 
 ;; get-prerequisites : CP* x S --> S*
