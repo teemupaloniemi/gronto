@@ -2,14 +2,7 @@
 
 COMPILER=raco exe
 
-all: tmp-folder precomputed compile
-
-# If the precomputed.rkt file does not exist make one.
-precomputed:
-	if [ ! -f src/utils/precomputed.rkt ]; \
-	then \
-	  printf "#lang racket\n\n(provide precomputed)\n(define precomputed #f)\n" > src/utils/precomputed.rkt ; \
-	fi;
+all: tmp-folder compile
 
 tmp-folder:
 	mkdir -p tmp
@@ -24,6 +17,3 @@ prerequisites: src/prerequisites.rkt
 
 clean:
 	rm -rf tmp
-
-deep-clean: clean
-	rm -f src/utils/precomputed.rkt
