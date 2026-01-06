@@ -6,7 +6,6 @@
 (require math/statistics)
 
 (require "utils/utils.rkt")
-(require "utils/precomputed.rkt")
 (require "utils/ontology.rkt")
 (require "utils/graphviz.rkt")
 
@@ -38,32 +37,17 @@
 (define INF +inf.0)
 
 
-;; Writes the hash for next compilation to use.
-;; Returns:
-;;   The written hash for this run to use.
-(define (write-precomputed data)
-  (call-with-output-file "src/utils/precomputed.rkt"
-    (lambda (out)
-      (fprintf out "#lang racket\n\n(provide precomputed)\n(define precomputed\n  ~s)\n" data))
-    #:exists 'replace)
-  data)
-
-
-;; Global variable where all ontology pairs and their distances are computed.
-(define all-pair-distances
-  (if (hash? precomputed)
-      precomputed
-      (write-precomputed (johnson (unweighted-graph/adj ontology)))))
-
-
 ;; ontology-distance : O x O --> I
 ;; Returns:
-;;    A precomputed value from hash matching the arguments.
+;;    Shortest path length between outcome and prerequisite in number of nodes.
 (define (ontology-distance outcome prerequisite)
-  (+ 1
-     (hash-ref all-pair-distances
-               (list (string->symbol (ontology-node-name outcome))
-                     (string->symbol (ontology-node-name prerequisite))))))
+  (let ((path (fewest-vertices-path (unweighted-graph/adj ontology)
+                                    (string->symbol (ontology-node-name outcome))
+                                    (string->symbol (ontology-node-name prerequisite)))))
+    (if (not path)
+        INF
+        (+ 1
+           (length path)))))
 
 
 ;; remove-bidirectional : CP* x CP --> CP
