@@ -297,6 +297,8 @@ make
 ./precompute.sh
 ```
 
+Two binaries, `./tmp/prerequisites` and `./tmp/scheduler` will be created.
+
 <details>
 
 <summary>time differences</summary>
@@ -318,9 +320,6 @@ make
 ```
 
 </details>
-
-As output two binaries, `./tmp/prerequisites` and `./tmp/scheduler` will be
-created.
 
 # Running
 
