@@ -62,8 +62,8 @@
 (define (ontology-distance outcome prerequisite)
   (+ 1
      (hash-ref all-pair-distances
-               (list (string->symbol (ontology-node-name outcome)
-                     (string->symbol (ontology-node-name prerequisite)))))))
+               (list (string->symbol (ontology-node-name outcome))
+                     (string->symbol (ontology-node-name prerequisite))))))
 
 
 ;; remove-bidirectionals : CP* x CP --> CP*
