@@ -56,14 +56,14 @@
       (write-precomputed (johnson (unweighted-graph/adj ontology)))))
 
 
-;; ontology-distance : S x S --> I
+;; ontology-distance : O x O --> I
 ;; Returns:
 ;;    A precomputed value from hash matching the arguments.
-(define (ontology-distance outcome-name prerequisite-name)
+(define (ontology-distance outcome prerequisite)
   (+ 1
      (hash-ref all-pair-distances
-               (list (string->symbol outcome-name)
-                     (string->symbol prerequisite-name)))))
+               (list (string->symbol (ontology-node-name outcome)
+                     (string->symbol (ontology-node-name prerequisite)))))))
 
 
 ;; remove-bidirectionals : CP* x CP --> CP*
@@ -161,17 +161,17 @@
                    course-structs)))
 
 
-;; bloom-difference-weight : W x W --> (1/6 <= Q <= 6/6)
+;; bloom-difference-weight : O x O --> (1/6 <= Q <= 6/6)
 ;; Returns:
 ;;   Rational weight describing an arrow between the outcome and prerequisite.
-(define (bloom-difference-weight outcome-bloom prerequisite-bloom)
-  (if (< outcome-bloom
-         prerequisite-bloom)
+(define (bloom-difference-weight outcome prerequisite)
+  (if (< (ontology-node-bloom outcome)
+         (ontology-node-bloom prerequisite))
       (let ((m 6)) ;; The maximum difference is 6.
         (/ (- m
-              (- prerequisite-bloom
-                 outcome-bloom))
-           m))
+              (- (ontology-node-bloom prerequisite)
+                 (ontology-node-bloom outcome))
+           m)))
       1))
 
 
@@ -200,10 +200,10 @@
 ;; Returns:
 ;;   Distance between the two ontology nodes.
 (define (f outcome prerequisite)
-  (* (bloom-difference-weight (ontology-node-bloom outcome)
-                              (ontology-node-bloom prerequisite))
-     (ontology-distance (ontology-node-name outcome)
-                        (ontology-node-name prerequisite))))
+  (* (bloom-difference-weight outcome
+                              prerequisite)
+     (ontology-distance outcome
+                        prerequisite)))
 
 
 ;; fs : O* x O* --> OP*
