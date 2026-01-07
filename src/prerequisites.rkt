@@ -18,8 +18,7 @@
 ;;
 ;;   Primitive Types
 ;;
-;;     W             integers (1..6)
-;;     I             integers (1..INF)
+;;     I             integers
 ;;     Q             rational numbers
 ;;     S             strings
 ;;
@@ -52,8 +51,7 @@
                                     (string->symbol (ontology-node-name prerequisite)))))
     (if (not path)
         INF
-        (+ 1
-           (length path)))))
+        (length path))))
 
 
 ;; remove-bidirectional : CP* x CP --> CP
@@ -151,17 +149,16 @@
                    course-structs)))
 
 
-;; bloom-difference-weight : O x O --> (1/6 <= Q <= 6/6)
+;; bloom-difference-weight : O x O --> (1/5 <= Q <= 5/5)
 ;; Returns:
 ;;   Rational weight describing an arrow between the outcome and prerequisite.
 (define (bloom-difference-weight outcome prerequisite)
   (if (< (ontology-node-bloom outcome)
          (ontology-node-bloom prerequisite))
-      (let ((m 6)) ;; The maximum difference is 6.
-        (/ (- m
-              (- (ontology-node-bloom prerequisite)
-                 (ontology-node-bloom outcome))
-           m)))
+      (- 1
+         (/ (- (ontology-node-bloom prerequisite)
+               (ontology-node-bloom outcome))
+            5))
       1))
 
 
@@ -276,8 +273,9 @@
                             filter-threshold))
 
   ;; Enjoy visualization
-  (when (> (length filtered-graph)
-           0)
+  (if (equal? filtered-graph
+              '())
+      (displayln "error: \"prerequisite-graph is empty, maybe check data or adjust threshold?\"")
       (print-dot-graph filtered-graph
                        course-structs
                        graph-file))
