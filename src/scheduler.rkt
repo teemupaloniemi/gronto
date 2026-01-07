@@ -1,21 +1,35 @@
 #lang racket
+
 (require (only-in racket/base (eq? eqt?)))
 (require racket/cmdline)
 (require graph)
 (require math/statistics)
 (require rosette/safe)
 (require rosette/solver/smt/z3)
+
 (require "utils/graphviz.rkt")
 (require "utils/utils.rkt")
 
+
+(define (symbolic->string symbolic)
+  (format "~s" symbolic))
+
+
 (define (build-model solver courses sem-min sem-max min-cred-sem max-cred-sem)
-  (let ((sems (for/list ((x (in-range sem-min (+ sem-max 1)))) x))
-        ;; These are the SMT symbolic constants.
+
+        ;; List the semesters we need.
+  (let ((semesters (stream->list (in-range sem-min
+                                           (+ sem-max
+                                              1))))
+
+        ;; Initialize the solver symbolic constants.
         (vars (for/list ((c courses))
-                        (cons c (constant (course-code c)
-                                          integer?)))))
+                        (cons c
+                              (constant (course-code c)
+                                        integer?)))))
 
     (for ((v1 vars))
+
       ;; Assert semester limits to each course variable.
       (define bs1 (list (and (>= (cdr v1) sem-min)
                              (<= (cdr v1) sem-max))))
@@ -30,32 +44,41 @@
 
       ;; Assert that prequisites come later that the course (if they exist).
       (for ((v2 vars))
+
         ;; When c2 is a member of c1 prerequisites
         (when (member (course-code (car v1))
                       (course-prerequisite-courses (car v2)))
+
           ;; c2 has to be taken before c1.
           (define bs3 (list (> (cdr v2) (cdr v1))))
           (solver-assert solver bs3))))
 
     ;; Check that each semester has at most/least n credits bound to it.
-    (for ((s sems))
+    (for ((s semesters))
       (define bs (list (and (>= (apply + (for/list ((v vars))
-                                                   (if (= (cdr v) s)
-                                                     (mean (course-credits (car v)))
-                                                     0)))
+                                                   (if (= (cdr v)
+                                                          s)
+                                                       (mean (course-credits (car v)))
+                                                       0)))
                                 min-cred-sem)
                             (<= (apply + (for/list ((v vars))
-                                                   (if (= (cdr v) s)
-                                                     (mean (course-credits (car v)))
-                                                     0)))
+                                                   (if (= (cdr v)
+                                                          s)
+                                                       (mean (course-credits (car v)))
+                                                       0)))
                                 max-cred-sem))))
-      (solver-assert solver bs))
+      (solver-assert solver
+                     bs))
 
     solver))
 
-(provide build-and-solve)
+
 (define (build-and-solve courses years sem-per-year min-cred-sem max-cred-sem)
+
+  ;; Initilaize solver to use z3.
   (define solver (z3 'QF_LIA))
+
+  ;; Construct the model with given data.
   (define mod (build-model solver
                            courses
                            1
@@ -63,18 +86,22 @@
                               sem-per-year)
                            min-cred-sem
                            max-cred-sem))
+
+  ;; Check result.
   (define result (solver-check mod))
+
+  ;; Return the schedule (model) and result.
   (hash->list (model result)))
 
 
-(define (symbolic->string symbolic)
-  (format "~s" symbolic))
-
-
 (define (gen-dot courses max-sem sem-pairs outputport)
+
+  ;; Construct an adjacency list of the the courses and their prerequisites.
   (define adj (map (lambda (c) (cons (course-code c)
                                      (course-prerequisite-courses c)))
                    courses))
+
+  ;; Initialize graph
   (define g (unweighted-graph/adj adj))
   (define-vertex-property g
                           semester #:init
@@ -86,15 +113,21 @@
                           label
                           #:init
                           "not-set")
-  (for ((c sem-pairs))
-       (semester-set! (symbolic->string (car c))
-                      (cdr c))
-       (id-set! (symbolic->string (car c))
-                (symbolic->string (car c)))
-       (label-set! (symbolic->string (car c))
+
+  ;; Fill data
+  (for ((pair sem-pairs))
+    (let ((code (symbolic->string (car pair)))
+          (semester (cdr pair)))
+       (semester-set! code
+                      semester)
+       (id-set! code
+                code)
+       (label-set! code
                    (course-name (search-by-code courses
-                                                (symbolic->string (car c))
-                                                'struct))))
+                                                code
+                                                'struct)))))
+
+  ;; Draw
   (mygraphviz g
               id
               semester
@@ -107,21 +140,9 @@
                                         (list 'label label))))
 
 
-(define (safe-gen-dot courses max-sem sem-pairs outputport)
-  (define (error-message)
-    (raise "Error: could not solve for model"))
-  (if (equal? sem-pairs '())
-      (error-message)
-      (gen-dot courses
-               max-sem
-               sem-pairs
-               outputport))
-  #t)
-
-
 (define (main args)
 
-  ;; Command line arguments
+  ;; Parse command line arguments
   (define input-file (vector-ref args 0))
   (define graph-file (vector-ref args 1))
   (define years (string->number (vector-ref args 2)))
@@ -129,25 +150,27 @@
   (define min-cred (string->number (vector-ref args 4)))
   (define max-cred (string->number (vector-ref args 5)))
 
-  ;; Data and IO
+  ;; Load data and initilaize IO
   (define courses (hash-to-struct (json-read input-file)))
   (define outputport (open-output-file graph-file
                                        #:exists
                                        'replace))
 
-  ;; Computation
+  ;; Do computation
   (define schedule (build-and-solve courses
                                     years
                                     sems
                                     min-cred
                                     max-cred))
 
-  ;; Visualization
-  (safe-gen-dot courses
-                (* years
-                   sems)
-                schedule
-                outputport))
-
+  ;; Enjoy visualization
+  (if (equal? schedule
+              '())
+      (displayln "error: \"schedule is empty, maybe solver failed?\"")
+      (gen-dot courses
+               (* years
+                  sems)
+               schedule
+               outputport)))
 
 (main (current-command-line-arguments))
