@@ -105,7 +105,7 @@
                                 graph)))
 
     ;; Remove bidirectional arrows. "remove-bidirectional"-function returns
-    ;; the shortest direction of the two we will end up with duplicates.
+    ;; the shortest arrow of the two and will result in duplicate arrows.
     (remove-duplicates (map (lambda (x) (remove-bidirectional filtered-graph
                                                               x))
                             filtered-graph))))
