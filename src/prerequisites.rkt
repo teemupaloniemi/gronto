@@ -104,7 +104,8 @@
                                                threshold))
                                 graph)))
 
-    ;; Remove bidirectional arrows.
+    ;; Remove bidirectional arrows. "remove-bidirectional"-function returns
+    ;; the shortest direction of the two we will end up with duplicates.
     (remove-duplicates (map (lambda (x) (remove-bidirectional filtered-graph
                                                               x))
                             filtered-graph))))
@@ -164,10 +165,10 @@
       1))
 
 
-;; shortest-pair : OP* x O --> Q
+;; shortest-pair-distance : OP* x O --> Q
 ;; Returns:
 ;;   Shortest of the ontology-pairs containing "one" as outcome.
-(define (shortest-pair ontology-pairs one)
+(define (shortest-pair-distance ontology-pairs one)
 
   ;; Consider only pairs with "one" in outcomes.
   (define filtered-pairs (filter (lambda (p) (equal? (ontology-pair-outcome p)
@@ -213,12 +214,12 @@
 (define (closest outcomes prerequisites)
 
   ;; Get all distances.
-  (define distances (fs outcomes
-                        prerequisites))
+  (define ontology-pairs (fs outcomes
+                             prerequisites))
 
-  ;; Return the shortest for each outcome.
-  (map (lambda (o) (shortest-pair distances
-                                  o))
+  ;; Return the shortest for each outcome "o".
+  (map (lambda (o) (shortest-pair-distance ontology-pairs
+                                           o))
        outcomes))
 
 
