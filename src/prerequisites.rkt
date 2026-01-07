@@ -16,12 +16,15 @@
 ;;
 ;;     <name> : <input type> --> <output-type>
 ;;
-;;   Types
+;;   Primitive Types
 ;;
 ;;     W             integers (1..6)
 ;;     I             integers (1..INF)
 ;;     Q             rational numbers
 ;;     S             strings
+;;
+;;   Compound Types
+;;
 ;;     O             ontology items
 ;;     C             courses
 ;;     OP            ontology pair
