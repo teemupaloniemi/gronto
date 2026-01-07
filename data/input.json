@@ -90,14 +90,6 @@
             [
                 "Digital signal processing",
                 3
-            ],
-            [
-                "Signal integrity and noise analysis",
-                3
-            ],
-            [
-                "Noise reduction",
-                2
             ]
         ],
         "skill-prerequisites": [
@@ -158,15 +150,23 @@
         "skill-prerequisites": [
             [
                 "Discrete mathematics",
-                5
+                2
             ],
             [
                 "Digital signal processing",
-                3
+                1
             ],
             [
                 "Neural networks",
-                5
+                2
+            ],
+            [
+                "Program reasoning",
+                2
+            ],
+            [
+                "Language features",
+                4
             ]
         ],
         "periods": []
@@ -183,19 +183,7 @@
         "outcomes": [
             [
                 "Proof theory",
-                1
-            ],
-            [
-                "Complexity classes",
-                5
-            ],
-            [
-                "Formal software verification",
-                2
-            ],
-            [
-                "Invariants",
-                2
+                3
             ]
         ],
         "skill-prerequisites": [],
@@ -219,18 +207,10 @@
         "skill-prerequisites": [
             [
                 "Proof theory",
-                2
+                4
             ],
             [
                 "Logic",
-                5
-            ],
-            [
-                "Combinatorics",
-                3
-            ],
-            [
-                "Probability and statistics",
                 3
             ]
         ],
@@ -274,11 +254,19 @@
         "outcomes": [
             [
                 "Shortest paths",
+                3
+            ],
+            [
+                "Program reasoning",
+                3
+            ],
+            [
+                "Invariants",
                 1
             ],
             [
-                "Control path algorithms",
-                5
+                "Complexity classes",
+                3
             ]
         ],
         "skill-prerequisites": [
@@ -287,12 +275,12 @@
                 3
             ],
             [
-                "Procedures, functions and subroutines",
-                4
+                "Language features",
+                3
             ],
             [
                 "Graph theory",
-                5
+                3
             ]
         ],
         "periods": []
