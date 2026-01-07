@@ -10,7 +10,7 @@
 (require "utils/graphviz.rkt")
 
 
-;; Briefly on notation
+;; Briefly on notation I use in comments
 ;;
 ;;   Functions
 ;;
@@ -31,6 +31,9 @@
 ;;
 ;;     <T>*          arbitrary length list of items of type "T"
 ;;     <T1> x <T2>   cartesian product of the two types
+;;
+;; From here on,
+;; the recommended direction for reading this file is "bottom to top".
 
 
 ;; Global constant representing infinity.
@@ -253,29 +256,29 @@
 
 (define (main args)
 
-  ;; Command line arguments
+  ;; Parse command line arguments
   (define input-file       (vector-ref args 0))
   (define graph-file       (vector-ref args 1))
   (define output-file      (vector-ref args 2))
   (define filter-threshold (string->number (vector-ref args 3)))
 
-  ;; Data
+  ;; Load data
   (define course-hashes  (json-read input-file))
   (define course-structs (hash-to-struct course-hashes))
 
-  ;; Computation
+  ;; Do computation
   (define graph (map-D course-structs))
   (define filtered-graph (H graph
                             filter-threshold))
 
-  ;; Visualization
+  ;; Enjoy visualization
   (when (> (length filtered-graph)
            0)
       (print-dot-graph filtered-graph
                        course-structs
                        graph-file))
 
-  ;; Saving results
+  ;; Save results
   (save-results output-file
                 filtered-graph
                 course-hashes
