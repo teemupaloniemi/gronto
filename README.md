@@ -1,6 +1,6 @@
 # Gronto
 
-We demonstrate how to construct and schedule a university curriculum by just
+We demonstrate how to construct and schedule a university curriculum by
 embedding all courses to a common ontology. The program that does this also
 ensures that illegal states (i.e. dependency cycles or duplicate content) do
 not appear in the curriculum.
