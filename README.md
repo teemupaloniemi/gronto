@@ -1,7 +1,9 @@
 # Gronto
 
-Ensures that illegal states (i.e. dependency cycles) do not appear in a
-university curriculum.
+We demonstrate how to construct and schedule a university curriculum by just
+embedding all courses to a common ontology. The program that does this also
+ensures that illegal states (i.e. dependency cycles or duplicate content) do
+not appear in a university curriculum.
 
 ![Figure 1: Shows on the left the raw data about course prerequisites and outcomes, in the middle the computed relationships between courses, and on the right scheduled courses.](process.png)
 
