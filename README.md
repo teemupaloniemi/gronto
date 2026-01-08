@@ -3,6 +3,8 @@
 Ensures that illegal states (i.e. dependency cycles) do not appear in a
 university curriculum.
 
+![Figure 1: Shows on the left the raw data about course prerequisites and outcomes, in the middle the computed relationships between courses, and on the right scheduled courses.](process.png)
+
 # Prerequisites
 
 ```bash
