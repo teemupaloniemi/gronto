@@ -334,17 +334,14 @@ they will achieve the course outcomes*.
                  combinatorial problem and we just want something that performs
                  better than brute force search.
 
-               - We could push for even better performace with methods described
-                 in [Hossain et.al.](https://pure.ulster.ac.uk/ws/portalfiles/portal/76764440/accepted_version_Optimization_of_University_Course_Scheduling_Problem_NSiddique.pdf)
-                 or [Kyngäs](https://www.utupub.fi/bitstream/handle/10024/72127/D140%20doria.pdf?sequence=1&isAllowed=y)
-                 or [Xiang et.al.](https://doi.org/10.1016/j.eswa.2024.123383),
-                 but SMT has many different implementations, is simple, well
-                 maintained, understandable and it generalizes well to this
-                 class of problems.
-
 10. Compare to other solutions?
+
+   - [Learning Concept Graphs from Online Educational Data](https://jair.org/index.php/jair/article/view/11000/26157)
    - [STOPS – A Graph-Based Study Planning and Curriculum Development Tool](https://dl.acm.org/doi/pdf/10.1145/2674683.2674689)
-       - [Educational Technologies for Supporting Self-Regulated Learning in Online Learning Environments](https://aaltodoc.aalto.fi/server/api/core/bitstreams/9a88834a-affe-4a5f-92fd-6b2340c6336b/content)
+   - [Course-prerequisite networks for analyzing and understanding academic curricula](https://doi.org/10.1007/s41109-023-00543-w)
+   - [Consistency in study programme planning and the complexity of curriculum logics](https://doi.org/10.1080/13562517.2021.1931838)
+   - [The curriculum prerequisite network: a tool for visualizing and analyzing academic curricula](https://doi.org/10.48550/arXiv.1408.5340)
+   - [Data-driven Automated Induction of Prerequisite Structure Graphs](https://www.educationaldatamining.org/EDM2016/proceedings/paper_149.pdf)
 
 11. What remains for even better world?
 
