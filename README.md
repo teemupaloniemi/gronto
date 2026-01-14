@@ -7,7 +7,16 @@ not appear in the curriculum.
 
 ![Figure 1: Shows on the left the raw data about course prerequisites and outcomes, in the middle the computed relationships between courses, and on the right scheduled courses.](process.png)
 
-# Prerequisites
+## Related works
+
+- [Learning Concept Graphs from Online Educational Data](https://jair.org/index.php/jair/article/view/11000/26157)
+- [STOPS – A Graph-Based Study Planning and Curriculum Development Tool](https://dl.acm.org/doi/pdf/10.1145/2674683.2674689)
+- [Course-prerequisite networks for analyzing and understanding academic curricula](https://doi.org/10.1007/s41109-023-00543-w)
+- [Consistency in study programme planning and the complexity of curriculum logics](https://doi.org/10.1080/13562517.2021.1931838)
+- [The curriculum prerequisite network: a tool for visualizing and analyzing academic curricula](https://doi.org/10.48550/arXiv.1408.5340)
+- [Data-driven Automated Induction of Prerequisite Structure Graphs](https://www.educationaldatamining.org/EDM2016/proceedings/paper_149.pdf)
+
+## Prerequisites
 
 ```bash
 # Make and xdot
@@ -24,7 +33,7 @@ raco pkg install graph
 raco pkg install rosette
 ```
 
-# Compiling
+## Compiling
 
 ```bash
 make
@@ -32,7 +41,7 @@ make
 
 Two binaries, `./tmp/prerequisites` and `./tmp/scheduler` will be created.
 
-# Running
+## Running
 
 ```bash
 # Compute prerequisites
@@ -64,7 +73,7 @@ xdot tmp/prerequisites.dot
 xdot tmp/schedule.dot
 ```
 
-# Formally
+## Formal notation
 
 - Atomic types:
   - $\mathbb{Q}$ denotes rational numbers.
@@ -85,11 +94,11 @@ xdot tmp/schedule.dot
   - ${D} : {C} \times {C} \to {CP}$ gives the distance between two courses.
   - ${H} : {CP}^\ast \times \mathbb{Q} \to {CP}^\ast$ gives a list of course pairs with distance less than ${q} : \mathbb{Q}$.
 
-# TODO
+## TODO
 
 - Better demonstrations
 
-# Notes
+## Notes
 
 <details>
 
