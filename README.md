@@ -9,12 +9,12 @@ not appear in the curriculum.
 
 ## Related works
 
-- [Learning Concept Graphs from Online Educational Data](https://jair.org/index.php/jair/article/view/11000/26157)
-- [STOPS – A Graph-Based Study Planning and Curriculum Development Tool](https://dl.acm.org/doi/pdf/10.1145/2674683.2674689)
-- [Course-prerequisite networks for analyzing and understanding academic curricula](https://doi.org/10.1007/s41109-023-00543-w)
-- [Consistency in study programme planning and the complexity of curriculum logics](https://doi.org/10.1080/13562517.2021.1931838)
-- [The curriculum prerequisite network: a tool for visualizing and analyzing academic curricula](https://doi.org/10.48550/arXiv.1408.5340)
-- [Data-driven Automated Induction of Prerequisite Structure Graphs](https://www.educationaldatamining.org/EDM2016/proceedings/paper_149.pdf)
+- [Liu, H., Ma, W., Yang, Y., & Carbonell, J. (2016). Learning concept graphs from online educational data. Journal of Artificial Intelligence Research, 55, 1059-1090.](https://jair.org/index.php/jair/article/view/11000/26157)
+- [Auvinen, T., Paavola, J., & Hartikainen, J. (2014, November). STOPS: a graph-based study planning and curriculum development tool. In Proceedings of the 14th Koli Calling International Conference on Computing Education Research (pp. 25-34).](https://dl.acm.org/doi/pdf/10.1145/2674683.2674689)
+- [Stavrinides, P., & Zuev, K. M. (2023). Course-prerequisite networks for analyzing and understanding academic curricula. Applied Network Science, 8(1), 19.](https://doi.org/10.1007/s41109-023-00543-w)
+- [Prøitz, T. S. (2023). Consistency in study programme planning and the complexity of curriculum logics. Teaching in Higher Education, 28(8), 1815-1830.](https://doi.org/10.1080/13562517.2021.1931838)
+- [Aldrich, P. R. (2014). The curriculum prerequisite network: a tool for visualizing and analyzing academic curricula. arXiv preprint arXiv:1408.5340.](https://doi.org/10.48550/arXiv.1408.5340)
+- [Chaplot, D. S., Yang, Y., Carbonell, J., & Koedinger, K. R. (2016). Data-Driven Automated Induction of Prerequisite Structure Graphs. International Educational Data Mining Society.](https://www.educationaldatamining.org/EDM2016/proceedings/paper_149.pdf)
 
 ## Prerequisites
 
