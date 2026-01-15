@@ -70,7 +70,7 @@ xdot tmp/prerequisites.dot
 #   [in]  "5"                     minimum credits per semeter
 #   [in]  "10"                    maximum credits per semeter
 #
-./tmp/scheduler tmp/output.json tmp/shedule.dot 2 4 5 10
+./tmp/scheduler tmp/output.json tmp/schedule.dot 2 4 5 10
 
 # Visualize
 xdot tmp/schedule.dot
