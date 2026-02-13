@@ -53,9 +53,9 @@ Two binaries, `./tmp/prerequisites` and `./tmp/scheduler` will be created.
 #   [in]  "data/input.json"       individual courses in questionnaire format
 #   [out] "tmp/prerequisites.dot" result dot graph
 #   [out] "tmp/output.json"       amended version of input courses
-#   [in]  "15"                    threshold for prerequisiteness
+#   [in]  "30"                    threshold for prerequisiteness
 #
-./tmp/prerequisites data/input.json tmp/prerequisites.dot tmp/output.json 15
+./tmp/prerequisites data/input.json tmp/prerequisites.dot tmp/output.json 30
 
 # Visualize
 xdot tmp/prerequisites.dot
