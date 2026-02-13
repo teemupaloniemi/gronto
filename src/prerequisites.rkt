@@ -239,8 +239,8 @@
 (define (D course-1 course-2)
   (course-pair (course-code course-1)
                (course-code course-2)
-               (* (mean (mean (course-credits course-1))
-                        (mean (course-credits course-2)))
+               (* (mean (list (mean (course-credits course-1) #f)
+                            (mean (course-credits course-2) #f)))
                   (G (course-skill-outcomes course-1)
                      (course-skill-prerequisites course-2)))))
 
