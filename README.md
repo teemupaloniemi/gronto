@@ -10,15 +10,6 @@ the curriculum.
 
 ![Figure 1: Shows on the left the raw data about course prerequisites and outcomes, in the middle the computed relationships between courses, and on the right scheduled courses.](process.png)
 
-## Related works
-
-- [Liu, H., Ma, W., Yang, Y., & Carbonell, J. (2016). Learning concept graphs from online educational data. Journal of Artificial Intelligence Research, 55, 1059-1090.](https://jair.org/index.php/jair/article/view/11000/26157)
-- [Auvinen, T., Paavola, J., & Hartikainen, J. (2014, November). STOPS: a graph-based study planning and curriculum development tool. In Proceedings of the 14th Koli Calling International Conference on Computing Education Research (pp. 25-34).](https://dl.acm.org/doi/pdf/10.1145/2674683.2674689)
-- [Stavrinides, P., & Zuev, K. M. (2023). Course-prerequisite networks for analyzing and understanding academic curricula. Applied Network Science, 8(1), 19.](https://doi.org/10.1007/s41109-023-00543-w)
-- [Prøitz, T. S. (2023). Consistency in study programme planning and the complexity of curriculum logics. Teaching in Higher Education, 28(8), 1815-1830.](https://doi.org/10.1080/13562517.2021.1931838)
-- [Aldrich, P. R. (2014). The curriculum prerequisite network: a tool for visualizing and analyzing academic curricula. arXiv preprint arXiv:1408.5340.](https://doi.org/10.48550/arXiv.1408.5340)
-- [Chaplot, D. S., Yang, Y., Carbonell, J., & Koedinger, K. R. (2016). Data-Driven Automated Induction of Prerequisite Structure Graphs. International Educational Data Mining Society.](https://www.educationaldatamining.org/EDM2016/proceedings/paper_149.pdf)
-
 ## Prerequisites
 
 ```bash
@@ -76,30 +67,10 @@ xdot tmp/prerequisites.dot
 xdot tmp/schedule.dot
 ```
 
-## Formal notation
-
-- Atomic types:
-  - $\mathbb{Q}$ denotes rational numbers.
-  - ${S}$ denotes strings.
-  - ${W}$ denotes integer weights [1,2,3,4,5,6] representiing Bloom taxonomy.
-- Compund types:
-  - ${O}$ denotes all ontology nodes, which is equal to ${S} \times {W}$.
-  - ${C}$ denotes all courses.
-  - ${OP}$ denotes ontology pairs, which is equal to ${O} \times {O} \times \mathbb{Q}$.
-  - ${CP}$ denotes course pairs, which is equal to ${C} \times {C} \times \mathbb{Q}$.
-- Functions:
-  - ${Code} : {C} \to {S}$ maps a course to a code.
-  - ${Cred} : {C} \to \mathbb{O}$ maps a course to credits.
-  - ${Pre} : {C} \to {O}^\ast$ maps a course to a list of weighted prerequisites.
-  - ${Out} : {C} \to {O}^\ast$ maps a course to a list of weighted outcomes.
-  - ${f} : {O} \times {O} \to \mathbb{Q}$ gives the distance between two weighted ontology nodes.
-  - ${G} : {O}^\ast \times {O}^\ast \to \mathbb{Q}$ gives the distance between two lists of weighted ontology nodes.
-  - ${D} : {C} \times {C} \to {CP}$ gives the distance between two courses.
-  - ${H} : {CP}^\ast \times \mathbb{Q} \to {CP}^\ast$ gives a list of course pairs with distance less than ${q} : \mathbb{Q}$.
-
 ## TODO
 
-- Better demonstrations
+- Create better demonstrations.
+- Get more data.
 
 ## Notes
 
