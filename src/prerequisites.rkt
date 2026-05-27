@@ -4,6 +4,8 @@
 (require racket/serialize)
 (require math/statistics)
 
+; (require graph)
+
 (require "utils/utils.rkt")
 (require "utils/ontology.rkt")
 (require "utils/graphviz.rkt")
@@ -40,57 +42,90 @@
 (define INF +inf.0)
 
 
-(define (get-adj G s)
-  (car (filter (lambda (x) (equal? (car x) s))
-               G)))
-
 ;; Recursively traverse the graph from src until tgt is found.
-(define (first-common-path G src tgt)
+(define (recursive-path G src tgt)
 
-  (define (spl-inner current visited count)
+  (define (get-adj G s)
+    (let ((a (filter (lambda (x) (equal? (car x) s))
+                     G)))
+      (when (equal? a '())
+        (display s)
+        (displayln " is missing from the ontology. Check input!"))
+
+      (if (equal? a '())
+          '()
+          (car a))))
+
+  (define (recursive-path-inner current visited count)
     (cond ;; Empty list
           ((equal? current '()) #f)
           ;; Already visited
           ((member (car current) visited) #f)
           ;; Target found
-          ((member tgt current) (cons (+ count 1) (cons tgt visited)))
+          ((member tgt current) (cons tgt (cons (car current) visited)))
           ;; Search to child nodes
-          (else (ormap (lambda (c) (spl-inner (get-adj G
-                                                       c)
-                                              (cons (car current)
-                                                    visited)
-                                              (+ count 1)))
+          (else (ormap (lambda (c) (recursive-path-inner (get-adj G
+                                                                  c)
+                                                         (cons (car current)
+                                                               visited)
+                                                         (+ count 1)))
                        (cdr current)))))
 
-  (spl-inner (get-adj G
-                      src)
-             '()
-             0))
+  (recursive-path-inner (get-adj G
+                                 src)
+                        '()
+                        0))
 
 
 ;; Return only common items in both l1 and l2.
 (define (common-list l1 l2)
+  (filter (lambda (c) (member c l2))
+          l1))
+
+
+;; Return only not common items beween l1 and l2.
+(define (not-common-list l1 l2)
   (filter (lambda (c) (not (member c l2)))
           l1))
 
 
 ;; Sum path lengths from src to root and tgt to root and subract the common
 ;; part that was counted twice.
-(define (common-path-length G src tgt)
-  (let ((srcp (first-common-path ontology src (string->symbol "Root")))
-        (tgtp (first-common-path ontology tgt (string->symbol "Root"))))
-    (- (+ (length srcp)
-          (length tgtp))
-       (length (common-list srcp tgtp)))))
+(define (first-recursive-path G src tgt)
+  (let (;; Source to root
+        (srcp (recursive-path ontology src (string->symbol "Root")))
+        ;; Target to root
+        (tgtp (recursive-path ontology tgt (string->symbol "Root"))))
+     (flatten (list (reverse (not-common-list srcp tgtp))
+                    (last (common-list srcp tgtp))
+                    (not-common-list tgtp srcp)))))
 
 
 ;; ontology-distance : O x O --> I
 ;; Returns:
 ;;    Shortest path length between outcome and prerequisite in number of nodes.
 (define (ontology-distance outcome prerequisite)
-  (common-path-length ontology
-                      (string->symbol (ontology-node-name outcome))
-                      (string->symbol (ontology-node-name prerequisite))))
+  (length (first-recursive-path ontology
+                                (string->symbol (ontology-node-name outcome))
+                                (string->symbol (ontology-node-name prerequisite)))))
+
+  ;; Test against slow library implementation.
+  ;(let ((a (first-recursive-path ontology
+  ;                               (string->symbol (ontology-node-name outcome))
+  ;                               (string->symbol (ontology-node-name prerequisite))))
+  ;      (b (fewest-vertices-path (unweighted-graph/adj ontology)
+  ;                               (string->symbol (ontology-node-name outcome))
+  ;                               (string->symbol (ontology-node-name prerequisite)))))
+
+  ;  (when (not (equal? (length a)
+  ;                     (length b)))
+  ;    (display (length a))
+  ;    (display " != ")
+  ;    (displayln (length b))
+  ;    (displayln a)
+  ;    (displayln b))
+
+  ;  (length a)))
 
 
 ;; remove-bidirectional : CP* x CP --> CP
