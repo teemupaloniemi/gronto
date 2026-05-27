@@ -1,14 +1,12 @@
 #lang racket
 
 (require racket/cmdline)
-(require graph)
 (require racket/serialize)
 (require math/statistics)
 
 (require "utils/utils.rkt")
 (require "utils/ontology.rkt")
 (require "utils/graphviz.rkt")
-
 
 ;; Briefly on notation I use in comments
 ;;
@@ -42,16 +40,57 @@
 (define INF +inf.0)
 
 
+(define (get-adj G s)
+  (car (filter (lambda (x) (equal? (car x) s))
+               G)))
+
+;; Recursively traverse the graph from src until tgt is found.
+(define (first-common-path G src tgt)
+
+  (define (spl-inner current visited count)
+    (cond ;; Empty list
+          ((equal? current '()) #f)
+          ;; Already visited
+          ((member (car current) visited) #f)
+          ;; Target found
+          ((member tgt current) (cons (+ count 1) (cons tgt visited)))
+          ;; Search to child nodes
+          (else (ormap (lambda (c) (spl-inner (get-adj G
+                                                       c)
+                                              (cons (car current)
+                                                    visited)
+                                              (+ count 1)))
+                       (cdr current)))))
+
+  (spl-inner (get-adj G
+                      src)
+             '()
+             0))
+
+
+;; Return only common items in both l1 and l2.
+(define (common-list l1 l2)
+  (filter (lambda (c) (not (member c l2)))
+          l1))
+
+
+;; Sum path lengths from src to root and tgt to root and subract the common
+;; part that was counted twice.
+(define (common-path-length G src tgt)
+  (let ((srcp (first-common-path ontology src (string->symbol "Root")))
+        (tgtp (first-common-path ontology tgt (string->symbol "Root"))))
+    (- (+ (length srcp)
+          (length tgtp))
+       (length (common-list srcp tgtp)))))
+
+
 ;; ontology-distance : O x O --> I
 ;; Returns:
 ;;    Shortest path length between outcome and prerequisite in number of nodes.
 (define (ontology-distance outcome prerequisite)
-  (let ((path (fewest-vertices-path (unweighted-graph/adj ontology)
-                                    (string->symbol (ontology-node-name outcome))
-                                    (string->symbol (ontology-node-name prerequisite)))))
-    (if (not path)
-        INF
-        (length path))))
+  (common-path-length ontology
+                      (string->symbol (ontology-node-name outcome))
+                      (string->symbol (ontology-node-name prerequisite))))
 
 
 ;; remove-bidirectional : CP* x CP --> CP
@@ -285,6 +324,5 @@
                 filtered-graph
                 course-hashes
                 course-structs))
-
 
 (main (current-command-line-arguments))

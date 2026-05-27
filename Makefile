@@ -2,6 +2,8 @@
 
 COMPILER=raco exe
 
+FLAGS=-v
+
 all: tmp-folder compile
 
 tmp-folder:
@@ -10,10 +12,10 @@ tmp-folder:
 compile: prerequisites scheduler
 
 scheduler: src/scheduler.rkt
-	$(COMPILER) -o tmp/scheduler src/scheduler.rkt
+	$(COMPILER) $(FLAGS) -o tmp/scheduler src/scheduler.rkt
 
 prerequisites: src/prerequisites.rkt
-	$(COMPILER) -o tmp/prerequisites src/prerequisites.rkt
+	$(COMPILER) $(FLAGS) -o tmp/prerequisites src/prerequisites.rkt
 
 clean:
 	rm -rf tmp
