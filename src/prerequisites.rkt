@@ -227,13 +227,15 @@
 ;; Returns:
 ;;   Rational weight describing an arrow between the outcome and prerequisite.
 (define (bloom-difference-weight outcome prerequisite)
-  (if (< (ontology-node-bloom outcome)
-         (ontology-node-bloom prerequisite))
-      (- 1
-         (/ (- (ontology-node-bloom prerequisite)
-               (ontology-node-bloom outcome))
-            5))
-      1))
+  (* (ontology-node-bloom outcome)
+     (ontology-node-bloom prerequisite)))
+  ;(if (< (ontology-node-bloom outcome)
+  ;       (ontology-node-bloom prerequisite))
+  ;    (- 1
+  ;       (/ (- (ontology-node-bloom prerequisite)
+  ;             (ontology-node-bloom outcome))
+  ;          5))
+  ;    1))
 
 
 ;; shortest-pair-distance : OP* x O --> Q
@@ -279,6 +281,20 @@
                           prerequisites)))
 
 
+(define (harm l1)
+  (let ((a (foldl  +
+                    0
+                    (map (lambda (x) (/ 1
+                                        (+ 0.0001
+                                           x)))
+                         l1))))
+    (if (equal? a 0)
+      INF
+      (/ 1
+         (/ a
+            (length l1))))))
+
+
 ;; closest : O* x O* --> Q*
 ;; Returns:
 ;;   List of distances (one for each outcome).
@@ -302,7 +318,7 @@
               0)
            (> (length prerequisites)
               0))
-      (mean (closest outcomes
+      (harm (closest outcomes
                      prerequisites))
       INF))
 
@@ -313,8 +329,9 @@
 (define (D course-1 course-2)
   (course-pair (course-code course-1)
                (course-code course-2)
-               (* (mean (list (mean (course-credits course-1) #f)
-                            (mean (course-credits course-2) #f)))
+               (* (/ 1
+                     (* (mean (course-credits course-1) #f)
+                        (mean (course-credits course-2) #f)))
                   (G (course-skill-outcomes course-1)
                      (course-skill-prerequisites course-2)))))
 

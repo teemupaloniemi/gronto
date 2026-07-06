@@ -139,6 +139,7 @@
       ; Write directed edges as another subgraph
       (when draw-arrows
         (printf "  subgraph D {\n")
+        (printf "    edge [color=\"#00000012\"];\n")
         (for ([e (in-edges g)] #:unless (set-member? undirected-edges e))
           (define attrs
             (append (edge-attrs-get-val edge-attrs e)
@@ -184,7 +185,7 @@
           (display "\" [label=\"")
           (display w)
           (display "\"")
-          (display ", style=dashed")
+          (display ", style=\"dashed\", color=\"#00000033\"")
           (display "];")
           (newline))
         (when (not (equal? src-name
