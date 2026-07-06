@@ -9,4 +9,4 @@ compile:
 	raco make -v src/*.rkt
 
 clean:
-	rm -rf tmp
+	rm -rf tmp src/compiled src/utils/compiled

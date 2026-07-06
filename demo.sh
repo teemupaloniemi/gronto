@@ -1,38 +1,13 @@
-```bash
-# Gronto is a simple university curriculum constructor. The schedule is
-# constructed based on course definitions, in which prerequisites and outcomes
-# are define from ACM CCS ontology. See data/input.json for an example.
-
-## Prerequisites
-
-# Make and xdot
-sudo apt-get install build-essential xdot
-
-# Racket
-sudo add-apt-repository ppa:plt/racket -y
-sudo apt-get install racket -y
-
-# Racket Generic Graph Library
-raco pkg install graph
-
-# Solver library
-raco pkg install rosette
-
-## Compiling
+## Compile
 make
-
-## Running
 
 # Compute prerequisites
 # Params:
 #   [in]  "data/input.json"       individual courses in questionnaire format
 #   [out] "tmp/prerequisites.dot" result dot graph
 #   [out] "tmp/output.json"       amended version of input courses
-#   [in]  "30"                    threshold for prerequisiteness
+#   [in]  "30"                    threshold for prerequisiteness (experimental)
 racket ./src/prerequisites.rkt data/input.json tmp/prerequisites.dot tmp/output.json 30
-
-# Visualize
-xdot tmp/prerequisites.dot
 
 # Schedule the courses (if possible*)
 # Params:
@@ -45,5 +20,5 @@ xdot tmp/prerequisites.dot
 racket ./src/scheduler.rkt tmp/output.json tmp/schedule.dot 2 4 5 10
 
 # Visualize
-xdot tmp/schedule.dot
-```
+xdot tmp/schedule.dot &
+xdot tmp/prerequisites.dot &
