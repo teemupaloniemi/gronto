@@ -1,8 +1,7 @@
 ```bash
 # Gronto is a simple university curriculum constructor. The schedule is
 # constructed based on course definitions, in which prerequisites and outcomes
-# are define from ACM CCS ontology. See [intput.json](data/input.json) for an
-# example.
+# are define from ACM CCS ontology. See data/input.json for an example.
 
 ## Prerequisites
 
