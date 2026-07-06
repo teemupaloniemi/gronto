@@ -1,2 +1,4 @@
 /tmp
 /form/web/node_modules/
+/src/compiled
+/src/utils/compiled/

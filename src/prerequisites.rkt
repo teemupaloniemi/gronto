@@ -38,8 +38,9 @@
 ;; the recommended direction for reading this file is "bottom to top".
 
 
-;; Global constant representing infinity.
-(define INF +inf.0)
+;; Global constant representing infinity and epsilon.
+(define INFINITY +inf.0)
+(define EPSILON (/ 1 10000))
 
 
 ;; Recursively traverse the graph from src until tgt is found.
@@ -255,7 +256,7 @@
 
   ;; Return the shortest (which is first).
   (if (equal? sorted-pairs '())
-      INF
+      INFINITY
       (ontology-pair-distance (car sorted-pairs))))
 
 
@@ -281,15 +282,18 @@
                           prerequisites)))
 
 
+;; harm : N* --> Q
+;; Returns:
+;;   Harmonic mean of a list of integers.
 (define (harm l1)
+  (define (inverse x) (/ 1 x))
   (let ((a (foldl  +
-                    0
-                    (map (lambda (x) (/ 1
-                                        (+ 0.0001
-                                           x)))
-                         l1))))
+                   0
+                   (map (lambda (x) (inverse (+ x
+                                                EPSILON)))
+                        l1))))
     (if (equal? a 0)
-      INF
+      INFINITY
       (/ 1
          (/ a
             (length l1))))))
@@ -320,7 +324,7 @@
               0))
       (harm (closest outcomes
                      prerequisites))
-      INF))
+      INFINITY))
 
 
 ;; D : C x C --> CP
