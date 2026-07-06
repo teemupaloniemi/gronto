@@ -1,5 +1,5 @@
 ## Compile
-make
+CORES=$(nproc)/2 make
 
 # Compute prerequisites
 # Params:
