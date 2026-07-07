@@ -114,7 +114,7 @@
 
       (for ((s subs))
           (when (< s nsubs)
-              (printf "t~a -> h~a [style=invisible, arrowhead=none];\n" s (+ 1 s))))
+              (printf "t~a:s -> h~a:n [style=invisible, arrowhead=none];\n" s (+ 1 s))))
 
       ; Write undirected edges as one subgraph
       (printf "  subgraph U {\n")
@@ -129,7 +129,7 @@
           (define attrs
             (append (edge-attrs-get-val edge-attrs e)
                     (weight-attr weighted? g e)))
-          (printf "    ~a -> ~a [~a];\n"
+          (printf "    ~a:s -> ~a:n [~a];\n"
                   (node-id-table-ref! (first e))
                   (node-id-table-ref! (second e))
                   (attrs->string attrs))
@@ -144,7 +144,7 @@
           (define attrs
             (append (edge-attrs-get-val edge-attrs e)
                     (weight-attr weighted? g e)))
-          (printf "    ~a -> ~a [~a];\n"
+          (printf "    ~a:s -> ~a:n [~a];\n"
                   (second e)
                   (first e)
                   (attrs->string attrs)))
@@ -180,10 +180,10 @@
         (define (print-edge)
           (display "    \"")
           (display src-name)
-          (display "\" -> \"")
+          (display "\":s -> \"")
           (display dst-name)
-          (display "\" [label=\"")
-          (display w)
+          (display "\":n [label=\"")
+          (display (/ (round (* w 100)) 100))
           (display "\"")
           (display ", style=\"dashed\", color=\"#00000033\"")
           (display "];")

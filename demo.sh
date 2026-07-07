@@ -1,8 +1,17 @@
 #!/usr/bin/bash
 
 ## sha256 of the dot files
-prerequisites_sha256=$(sha256sum tmp/prerequisites.dot)
-schedule_sha256=$(sha256sum tmp/schedule.dot)
+if [ -f tmp/prerequisites.dot ]; then
+  prerequisites_sha256=$(sha256sum tmp/prerequisites.dot)
+else
+  prerequisites_sha256=0
+fi
+
+if [ -f tmp/schedule.dot ]; then
+  schedule_sha256=$(sha256sum tmp/schedule.dot)
+else
+  schedule_sha256=0
+fi
 
 ## Compile
 CORES=$(nproc)/2 make

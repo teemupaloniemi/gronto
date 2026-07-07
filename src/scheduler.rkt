@@ -130,7 +130,7 @@
               #t
               #:output outputport
               #:graph-attributes (list (list 'rankdir "TB")
-                                       (list 'ranksep 1))
+                                       (list 'ranksep 3))
               #:vertex-attributes (list (list 'semester semester)
                                         (list 'label label))))
 
