@@ -94,12 +94,7 @@
   (hash->list (model result)))
 
 
-(define (gen-dot courses max-sem sem-pairs outputport)
-
-  ;; Construct an adjacency list of the the courses and their prerequisites.
-  (define adj (map (lambda (c) (cons (course-code c)
-                                     (course-prerequisite-courses c)))
-                   courses))
+(define (gen-dot adj max-sem sem-pairs courses outputport)
 
   ;; Initialize graph
   (define g (unweighted-graph/adj adj))
@@ -156,21 +151,27 @@
                                        #:exists
                                        'replace))
 
-  ;; Do computation
-  (define schedule (build-and-solve courses
+  ;; Construct an adjacency list of the the courses and their prerequisites.
+  (define adj (map (lambda (c) (cons (course-code c)
+                                     (course-prerequisite-courses c)))
+                   courses))
+
+  ;; If there are no prerequisite-cycles, try to schedule courses.
+  (if (not (dag? (unweighted-graph/adj adj)))
+      (displayln "error: \"Prerequisite cycles detected. Check input!\""
+                 (current-error-port))
+      (let ((schedule (build-and-solve courses
                                     years
                                     sems
                                     min-cred
-                                    max-cred))
-
-  ;; Enjoy visualization
-  (if (equal? schedule
-              '())
-      (displayln "error: \"schedule is empty, maybe solver failed?\"")
-      (gen-dot courses
-               (* years
-                  sems)
-               schedule
-               outputport)))
+                                    max-cred)))
+           (if (equal? schedule '())
+               (displayln "error: \"schedule is empty, maybe solver failed?\""
+                          (current-error-port))
+               (gen-dot adj
+                        (* years sems)
+                        schedule
+                        courses
+                        outputport)))))
 
 (main (current-command-line-arguments))
