@@ -13,7 +13,7 @@ CORES=$(nproc)/2 make
 #   [out] "tmp/prerequisites.dot" result dot graph path
 #   [out] "tmp/output.json"       amended version of input courses
 #   [in]  "30"                    threshold for prerequisiteness (experimental)
-racket ./src/prerequisites.rkt data/input.json tmp/prerequisites.dot tmp/output.json 1
+racket ./src/prerequisites.rkt data/input.json tmp/prerequisites.dot tmp/output.json 30
 
 # Schedule the courses (if possible*)
 # Params:
@@ -23,7 +23,7 @@ racket ./src/prerequisites.rkt data/input.json tmp/prerequisites.dot tmp/output.
 #   [in]  "4"                     semesters per year
 #   [in]  "5"                     minimum credits per semeter
 #   [in]  "10"                    maximum credits per semeter
-racket ./src/scheduler.rkt tmp/output.json tmp/schedule.dot 3 4 5 15
+racket ./src/scheduler.rkt tmp/output.json tmp/schedule.dot 1 4 5 10
 
 # Visualize, if files have changed
 if [ "$prerequisites_sha256" != "$(sha256sum tmp/prerequisites.dot)" ]; then
