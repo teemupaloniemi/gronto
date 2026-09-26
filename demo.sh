@@ -19,7 +19,7 @@ CORES=$(nproc)/2 make
 
 # Initial computation of prerequisite graph with large threshold
 # (practically this means no filtering).
-i=32
+i=64
 echo "filter threshold set to $i..."
 racket ./src/prerequisites.rkt data/input.json tmp/prerequisites.dot tmp/output.json $i
 racket ./src/scheduler.rkt tmp/output.json tmp/schedule.dot 2 4 0 20
