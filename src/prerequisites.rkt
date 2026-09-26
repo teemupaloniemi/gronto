@@ -40,8 +40,6 @@
 
 ;; Global constant representing infinity and epsilon.
 (define INFINITY +inf.0)
-(define EPSILON (/ 1 10000))
-
 
 ;; Recursively traverse the graph from src until tgt is found.
 (define (recursive-path G src tgt)
@@ -54,23 +52,23 @@
         (displayln " is missing from the ontology. Check input!"))
 
       (if (equal? a '())
-          '()
-          (car a))))
+        '()
+        (car a))))
 
   (define (recursive-path-inner current visited count)
     (cond ;; Empty list
-          ((equal? current '()) #f)
-          ;; Already visited
-          ((member (car current) visited) #f)
-          ;; Target found
-          ((member tgt current) (cons tgt (cons (car current) visited)))
-          ;; Search to child nodes
-          (else (ormap (lambda (c) (recursive-path-inner (get-adj G
-                                                                  c)
-                                                         (cons (car current)
-                                                               visited)
-                                                         (+ count 1)))
-                       (cdr current)))))
+      ((equal? current '()) #f)
+      ;; Already visited
+      ((member (car current) visited) #f)
+      ;; Target found
+      ((member tgt current) (cons tgt (cons (car current) visited)))
+      ;; Search to child nodes
+      (else (ormap (lambda (c) (recursive-path-inner (get-adj G
+                                                              c)
+                                                     (cons (car current)
+                                                           visited)
+                                                     (+ count 1)))
+                   (cdr current)))))
 
   (recursive-path-inner (get-adj G
                                  src)
@@ -97,9 +95,9 @@
         (srcp (recursive-path ontology src (string->symbol "Root")))
         ;; Target to root
         (tgtp (recursive-path ontology tgt (string->symbol "Root"))))
-     (flatten (list (reverse (not-common-list srcp tgtp))
-                    (last (common-list srcp tgtp))
-                    (not-common-list tgtp srcp)))))
+    (flatten (list (reverse (not-common-list srcp tgtp))
+                   (last (common-list srcp tgtp))
+                   (not-common-list tgtp srcp)))))
 
 
 ;; ontology-distance : O x O --> I
@@ -110,23 +108,119 @@
                                 (string->symbol (ontology-node-name outcome))
                                 (string->symbol (ontology-node-name prerequisite)))))
 
-  ;; Test against slow library implementation.
-  ;(let ((a (first-recursive-path ontology
-  ;                               (string->symbol (ontology-node-name outcome))
-  ;                               (string->symbol (ontology-node-name prerequisite))))
-  ;      (b (fewest-vertices-path (unweighted-graph/adj ontology)
-  ;                               (string->symbol (ontology-node-name outcome))
-  ;                               (string->symbol (ontology-node-name prerequisite)))))
+;; Test against slow library implementation.
+;(let ((a (first-recursive-path ontology
+;                               (string->symbol (ontology-node-name outcome))
+;                               (string->symbol (ontology-node-name prerequisite))))
+;      (b (fewest-vertices-path (unweighted-graph/adj ontology)
+;                               (string->symbol (ontology-node-name outcome))
+;                               (string->symbol (ontology-node-name prerequisite)))))
 
-  ;  (when (not (equal? (length a)
-  ;                     (length b)))
-  ;    (display (length a))
-  ;    (display " != ")
-  ;    (displayln (length b))
-  ;    (displayln a)
-  ;    (displayln b))
+;  (when (not (equal? (length a)
+;                     (length b)))
+;    (display (length a))
+;    (display " != ")
+;    (displayln (length b))
+;    (displayln a)
+;    (displayln b))
 
-  ;  (length a)))
+;  (length a)))
+
+
+;; bloom-distance : O x O --> (0 <= )
+;;
+;; Returns:
+;;  ???
+(define (bloom-distance outcome prerequisite)
+  (+ (abs (- (ontology-node-bloom prerequisite)
+             (ontology-node-bloom outcome)))
+     (/ 1 64)))
+
+
+;; f : O x O --> Q
+;; Returns:
+;;   Distance between the two ontology nodes.
+(define (f outcome prerequisite)
+  (define (sqr x) (* x x))
+  ;; Use inverse bloom distance for amplifying meaningful connections.
+  (* (/ 1
+        (bloom-distance outcome
+                        prerequisite))
+     (sqr (ontology-distance outcome
+                             prerequisite))))
+
+
+;; fs : O* x O* --> OP*
+;; Returns:
+;;   Distances between pairs of ontology nodes (with associated nodes).
+(define (fs outcomes prerequisites)
+  (map (lambda (p) (ontology-pair (ontology-node-name (car p))
+                                  (ontology-node-name (cadr p))
+                                  (f (car p)
+                                     (cadr p))))
+       (cartesian-product outcomes
+                          prerequisites)))
+
+
+;; mean-pair-distance : OP* x O --> Q
+;; Returns:
+;;   Mean distance of the ontology-pairs containing "q" as outcome.
+(define (mean-pair-distance ontology-pairs q)
+
+  ;; Consider only pairs with "q" in outcomes.
+  (define filtered-pairs (filter (lambda (p) (equal? (ontology-pair-outcome p)
+                                                     (ontology-node-name q)))
+                                 ontology-pairs))
+
+  ;; Sort pairs based on distance in "shortest first" order.
+  (define sorted-pairs (sort filtered-pairs
+                             (lambda (x y) (< (ontology-pair-distance x)
+                                              (ontology-pair-distance y)))))
+
+  ;; Return the mean of the first n distances of the sorted pairs.
+  (define n (min (length sorted-pairs)
+                 3)) ;; TODO: Think about this number.
+  (mean (map ontology-pair-distance
+             (take sorted-pairs n))))
+
+
+;; G : O* x O* --> Q
+;; Returns:
+;;   Distance between two lists of weighted ontology nodes.
+(define (G outcomes prerequisites)
+  (define pairs (fs outcomes
+                    prerequisites))
+  (if (and (> (length outcomes)
+              0)
+           (> (length prerequisites)
+              0))
+    (mean (map (lambda (o) (mean-pair-distance pairs
+                                               o))
+               outcomes))
+    INFINITY))
+
+
+;; D : C x C --> CP
+;; Returns:
+;;  Distance between two courses (and names associated).
+(define (D course-1 course-2)
+  (course-pair (course-code course-1)
+               (course-code course-2)
+               ;(* (/ 1
+               ;      (mean (course-credits course-1) #f))
+                  (G (course-skill-outcomes course-1)
+                     (course-skill-prerequisites course-2))))
+               ;)
+
+
+;; map-D : C* --> CP*
+;; Returns:
+;;  Distance between all courses. List of triples with two codes and a distance.
+(define (map-D course-structs)
+  (map (lambda (p) (D (car p)
+                      (cadr p)))
+       (cartesian-product course-structs
+                          course-structs)))
 
 
 ;; remove-bidirectional : CP* x CP --> CP
@@ -139,31 +233,29 @@
                                            (course-pair-second x))
                                    (equal? (course-pair-second ŷ)
                                            (course-pair-first x))))
-                                 graph)))
+                  graph)))
 
     ;; Find the shortest of the two.
     (cond
-          ;; no reciprocal found, x is the only one
-          ((not y)
-           x)
+      ;; no reciprocal found, x is the only one
+      ((not y)
+       x)
 
-          ;; x is shorter
-          ((< (course-pair-distance x)
-              (course-pair-distance y))
-           x)
+      ;; x is shorter
+      ((< (course-pair-distance x)
+          (course-pair-distance y))
+       x)
 
-          ;; y is shorter
-          ((< (course-pair-distance y)
-              (course-pair-distance x))
-           y)
+      ;; y is shorter
+      ((< (course-pair-distance y)
+          (course-pair-distance x))
+       y)
 
-          ;; x and y are equal, alphabetical order is tiebraker
-          ((string>? (course-pair-first  x)
-                     (course-pair-second x))
-           x)
-
-          ;; Keep the Racketnisse happy, as no computation is meaningless!
-          (else y))))
+      ;; x and y are equal, alphabetical order is tiebraker
+      ((string>? (course-pair-first  x)
+                 (course-pair-second x))
+       x)
+      (else y))))
 
 
 ;; H : OP* x Q --> OP*
@@ -181,7 +273,14 @@
     ;; the shortest arrow of the two and will result in duplicate arrows.
     (remove-duplicates (map (lambda (x) (remove-bidirectional filtered-graph
                                                               x))
-                            filtered-graph))))
+                            filtered-graph)
+                       (lambda (x y) (and
+                                       (equal? (course-pair-first x)
+                                               (course-pair-first y))
+                                       (equal? (course-pair-second x)
+                                               (course-pair-second y))
+                                       (= (course-pair-distance x)
+                                          (course-pair-distance y)))))))
 
 
 ;; get-prerequisites : CP* x S --> S*
@@ -224,130 +323,6 @@
                    course-structs)))
 
 
-;; bloom-difference-weight : O x O --> (1/5 <= Q <= 5/5)
-;; Returns:
-;;   Rational weight describing an arrow between the outcome and prerequisite.
-(define (bloom-difference-weight outcome prerequisite)
-  (* (ontology-node-bloom outcome)
-     (ontology-node-bloom prerequisite)))
-  ;(if (< (ontology-node-bloom outcome)
-  ;       (ontology-node-bloom prerequisite))
-  ;    (- 1
-  ;       (/ (- (ontology-node-bloom prerequisite)
-  ;             (ontology-node-bloom outcome))
-  ;          5))
-  ;    1))
-
-
-;; shortest-pair-distance : OP* x O --> Q
-;; Returns:
-;;   Shortest of the ontology-pairs containing "one" as outcome.
-(define (shortest-pair-distance ontology-pairs one)
-
-  ;; Consider only pairs with "one" in outcomes.
-  (define filtered-pairs (filter (lambda (p) (equal? (ontology-pair-outcome p)
-                                                     (ontology-node-name one)))
-                                 ontology-pairs))
-
-  ;; Sort them in "shortest first" order.
-  (define sorted-pairs (sort filtered-pairs
-                             (lambda (x y) (< (ontology-pair-distance x))
-                                              (ontology-pair-distance y))))
-
-  ;; Return the shortest (which is first).
-  (if (equal? sorted-pairs '())
-      INFINITY
-      (ontology-pair-distance (car sorted-pairs))))
-
-
-;; f : O x O --> Q
-;; Returns:
-;;   Distance between the two ontology nodes.
-(define (f outcome prerequisite)
-  (* (bloom-difference-weight outcome
-                              prerequisite)
-     (ontology-distance outcome
-                        prerequisite)))
-
-
-;; fs : O* x O* --> OP*
-;; Returns:
-;;   Distances between pairs of ontology nodes (with associated nodes).
-(define (fs outcomes prerequisites)
-  (map (lambda (p) (ontology-pair (ontology-node-name (car p))
-                                  (ontology-node-name (cadr p))
-                                  (f (car p)
-                                     (cadr p))))
-       (cartesian-product outcomes
-                          prerequisites)))
-
-
-;; harm : N* --> Q
-;; Returns:
-;;   Harmonic mean of a list of integers.
-(define (harm l1)
-  (define (inverse x) (/ 1 x))
-  (let ((a (foldl  +
-                   0
-                   (map (lambda (x) (inverse (+ x
-                                                EPSILON)))
-                        l1))))
-    (if (equal? a 0)
-      INFINITY
-      (/ 1
-         (/ a
-            (length l1))))))
-
-
-;; closest : O* x O* --> Q*
-;; Returns:
-;;   List of distances (one for each outcome).
-(define (closest outcomes prerequisites)
-
-  ;; Get all distances.
-  (define ontology-pairs (fs outcomes
-                             prerequisites))
-
-  ;; Return the shortest for each outcome "o".
-  (map (lambda (o) (shortest-pair-distance ontology-pairs
-                                           o))
-       outcomes))
-
-
-;; G : O* x O* --> Q
-;; Returns:
-;;   Distance between two lists of weighted ontology nodes.
-(define (G outcomes prerequisites)
-  (if (and (> (length outcomes)
-              0)
-           (> (length prerequisites)
-              0))
-      (harm (closest outcomes
-                     prerequisites))
-      INFINITY))
-
-
-;; D : C x C --> CP
-;; Returns:
-;;  Distance between two courses (and names associated).
-(define (D course-1 course-2)
-  (course-pair (course-code course-1)
-               (course-code course-2)
-               (* (/ 1
-                     (* (mean (course-credits course-1) #f)
-                        (mean (course-credits course-2) #f)))
-                  (G (course-skill-outcomes course-1)
-                     (course-skill-prerequisites course-2)))))
-
-
-;; map-D : C* --> CP*
-;; Returns:
-;;  Distance between all courses. List of triples with two codes and a distance.
-(define (map-D course-structs)
-  (map (lambda (p) (D (car p)
-                      (cadr p)))
-       (cartesian-product course-structs
-                          course-structs)))
 
 
 (define (main args)
@@ -370,10 +345,10 @@
   ;; Enjoy visualization
   (if (equal? filtered-graph
               '())
-      (displayln "error: \"prerequisite-graph is empty, maybe check data or adjust threshold?\"")
-      (print-dot-graph filtered-graph
-                       course-structs
-                       graph-file))
+    (displayln "error: \"prerequisite-graph is empty, maybe check data or adjust threshold?\"")
+    (print-dot-graph filtered-graph
+                     course-structs
+                     graph-file))
 
   ;; Save results
   (save-results output-file

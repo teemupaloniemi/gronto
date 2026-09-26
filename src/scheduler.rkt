@@ -17,7 +17,7 @@
 
 (define (build-model solver courses sem-min sem-max min-cred-sem max-cred-sem)
 
-        ;; List the semesters we need.
+  ;; List the semesters we need.
   (let ((semesters (stream->list (in-range sem-min
                                            (+ sem-max
                                               1))))
@@ -30,45 +30,45 @@
 
     (for ((v1 vars))
 
-      ;; Assert semester limits to each course variable.
-      (define bs1 (list (and (>= (cdr v1) sem-min)
-                             (<= (cdr v1) sem-max))))
-      (solver-assert solver bs1)
+         ;; Assert semester limits to each course variable.
+         (define bs1 (list (and (>= (cdr v1) sem-min)
+                                (<= (cdr v1) sem-max))))
+         (solver-assert solver bs1)
 
-      ;; If strict period constraints exists, apply them.
-      ;; I.e course is kept in first semster of each year
-      ;; and therefore to be in semester 1, 5 and 9.
-      (when (not (equal? (course-periods (car v1)) '()))
-        (for ((p (course-periods (car v1))))
-             (solver-assert solver (list (equal? (cdr v1) p)))))
+         ;; If strict period constraints exists, apply them.
+         ;; I.e course is kept in first semster of each year
+         ;; and therefore to be in semester 1, 5 and 9.
+         (when (not (equal? (course-periods (car v1)) '()))
+           (for ((p (course-periods (car v1))))
+                (solver-assert solver (list (equal? (cdr v1) p)))))
 
-      ;; Assert that prequisites come later that the course (if they exist).
-      (for ((v2 vars))
+         ;; Assert that prequisites come later that the course (if they exist).
+         (for ((v2 vars))
 
-        ;; When c2 is a member of c1 prerequisites
-        (when (member (course-code (car v1))
-                      (course-prerequisite-courses (car v2)))
+              ;; When c2 is a member of c1 prerequisites
+              (when (member (course-code (car v1))
+                            (course-prerequisite-courses (car v2)))
 
-          ;; c2 has to be taken before c1.
-          (define bs3 (list (> (cdr v2) (cdr v1))))
-          (solver-assert solver bs3))))
+                ;; c2 has to be taken before c1.
+                (define bs3 (list (> (cdr v2) (cdr v1))))
+                (solver-assert solver bs3))))
 
     ;; Check that each semester has at most/least n credits bound to it.
     (for ((s semesters))
-      (define bs (list (and (>= (apply + (for/list ((v vars))
-                                                   (if (= (cdr v)
-                                                          s)
-                                                       (mean (course-credits (car v)))
-                                                       0)))
-                                min-cred-sem)
-                            (<= (apply + (for/list ((v vars))
-                                                   (if (= (cdr v)
-                                                          s)
-                                                       (mean (course-credits (car v)))
-                                                       0)))
-                                max-cred-sem))))
-      (solver-assert solver
-                     bs))
+         (define bs (list (and (>= (apply + (for/list ((v vars))
+                                                      (if (= (cdr v)
+                                                             s)
+                                                        (mean (course-credits (car v)))
+                                                        0)))
+                                   min-cred-sem)
+                               (<= (apply + (for/list ((v vars))
+                                                      (if (= (cdr v)
+                                                             s)
+                                                        (mean (course-credits (car v)))
+                                                        0)))
+                                   max-cred-sem))))
+         (solver-assert solver
+                        bs))
 
     solver))
 
@@ -111,16 +111,16 @@
 
   ;; Fill data
   (for ((pair sem-pairs))
-    (let ((code (symbolic->string (car pair)))
-          (semester (cdr pair)))
-       (semester-set! code
-                      semester)
-       (id-set! code
-                code)
-       (label-set! code
-                   (course-name (search-by-code courses
-                                                code
-                                                'struct)))))
+       (let ((code (symbolic->string (car pair)))
+             (semester (cdr pair)))
+         (semester-set! code
+                        semester)
+         (id-set! code
+                  code)
+         (label-set! code
+                     (course-name (search-by-code courses
+                                                  code
+                                                  'struct)))))
 
   ;; Draw
   (mygraphviz g
@@ -158,20 +158,20 @@
 
   ;; If there are no prerequisite-cycles, try to schedule courses.
   (if (not (dag? (unweighted-graph/adj adj)))
-      (displayln "error: \"prerequisite cycles detected, check input or change the filter threshold for discarding arrows!\""
-                 (current-error-port))
-      (let ((schedule (build-and-solve courses
-                                    years
-                                    sems
-                                    min-cred
-                                    max-cred)))
-           (if (equal? schedule '())
-               (displayln "error: \"schedule is empty, maybe solver failed?\""
-                          (current-error-port))
-               (gen-dot adj
-                        (* years sems)
-                        schedule
-                        courses
-                        outputport)))))
+    (displayln "error: \"prerequisite cycles detected, check input or change the filter threshold for discarding arrows!\""
+               (current-error-port))
+    (let ((schedule (build-and-solve courses
+                                     years
+                                     sems
+                                     min-cred
+                                     max-cred)))
+      (if (equal? schedule '())
+        (displayln "error: \"schedule is empty, maybe solver failed?\""
+                   (current-error-port))
+        (gen-dot adj
+                 (* years sems)
+                 schedule
+                 courses
+                 outputport)))))
 
 (main (current-command-line-arguments))
