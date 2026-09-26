@@ -158,7 +158,7 @@
 
   ;; If there are no prerequisite-cycles, try to schedule courses.
   (if (not (dag? (unweighted-graph/adj adj)))
-      (displayln "error: \"Prerequisite cycles detected. Check input!\""
+      (displayln "error: \"prerequisite cycles detected, check input or change the filter threshold for discarding arrows!\""
                  (current-error-port))
       (let ((schedule (build-and-solve courses
                                     years

@@ -54,7 +54,7 @@
                      second
                      distance))
 
-;; Map our JSON hash to course struct for readability.
+;; Map our JSON hash to course struct for code readability.
 (provide hash-to-struct)
 (define (hash-to-struct h)
   (for/list ((c h))
