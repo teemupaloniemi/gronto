@@ -87,12 +87,11 @@
                            min-cred-sem
                            max-cred-sem))
 
-  ;; Check result.
-  (define result (solver-check mod))
-
-  ;; Return the schedule (model) and result.
-  (hash->list (model result)))
-
+  ;; Check and return a solution (might be unsatisfiable).
+  (define res (solver-check mod))
+  (if (sat? res)
+    (cons #t (hash->list (model res)))
+    (cons #f '())))
 
 (define (gen-dot adj max-sem sem-pairs courses outputport)
 
@@ -158,25 +157,23 @@
 
   ;; If there are no prerequisite-cycles, try to schedule courses.
   (when (not (dag? (unweighted-graph/adj adj)))
-    (displayln "error: \"prerequisite cycles detected, check input or change the filter threshold for discarding arrows!\""
-               (current-error-port))
+    (displayln "error: \"prerequisite graph contains cycles\"")
     (exit 1)) ;; EXIT_FAILURE
 
   (when (dag? (unweighted-graph/adj adj))
-    (let ((schedule (build-and-solve courses
+    (let ((solution (build-and-solve courses
                                      years
                                      sems
                                      min-cred
                                      max-cred)))
-      (when (equal? schedule '())
-        (displayln "error: \"schedule is empty, maybe solver failed?\""
-                   (current-error-port))
+      (when (not (car solution))
+        (displayln "error: \"no satisfiable solution could be found\"")
         (exit 2)) ;; EXIT_FAILURE
 
-      (when (not (equal? schedule '()))
+      (when (car solution)
         (gen-dot adj
                  (* years sems)
-                 schedule
+                 (cdr solution)
                  courses
                  outputport)
         (exit 0))))) ;; EXIT_SUCCESS

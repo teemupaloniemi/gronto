@@ -29,33 +29,33 @@
 
 (define (color-attr colors color-count v)
   (if (and color-count (hash-ref colors v #f))
-      (let* ([percent (/ (hash-ref colors v #f) color-count)]
-             [str (~a #:max-width 5 (exact->inexact percent))]
-             [triple (format "~a 1.0 1.0" str)])
-        `([color ,triple]))
-      null))
+    (let* ([percent (/ (hash-ref colors v #f) color-count)]
+           [str (~a #:max-width 5 (exact->inexact percent))]
+           [triple (format "~a 1.0 1.0" str)])
+      `([color ,triple]))
+    null))
 
 (define (weight-attr weighted? g e)
   (if weighted?
-      (let ([weight (edge-weight g (first e) (second e))])
-        `([label ,(sanitize-name weight)]))
-      null))
+    (let ([weight (edge-weight g (first e) (second e))])
+      `([label ,(sanitize-name weight)]))
+    null))
 
 (define (vertex-attrs-get-val attrs v)
   (for/list ([attr (in-list attrs)])
-    (define get (cadr attr))
-    (list (car attr) (get v))))
+            (define get (cadr attr))
+            (list (car attr) (get v))))
 
 (define (edge-attrs-get-val attrs e)
   (for/list ([attr (in-list attrs)])
-    (define get (cadr attr))
-    (list (car attr) (get (first e) (second e)))))
+            (define get (cadr attr))
+            (list (car attr) (get (first e) (second e)))))
 
 (define (attrs->string attrs [sep ","] [after-last ""])
   (define attrs* (remove-duplicates attrs #:key car))
   (define attr-strs
     (for/list ([attr (in-list attrs*)])
-      (format "~a=~s" (car attr) (cadr attr))))
+              (format "~a=~s" (car attr) (cadr attr))))
   (string-join attr-strs sep #:after-last after-last))
 
 ;; Return a graphviz definition for a graph
@@ -65,11 +65,11 @@
                     rank
                     nsubs
                     draw-arrows
-                  #:colors [colors #f]
-                  #:graph-attributes [graph-attrs null]
-                  #:edge-attributes [edge-attrs null]
-                  #:vertex-attributes [vertex-attrs null]
-                  #:output [port #f])
+                    #:colors [colors #f]
+                    #:graph-attributes [graph-attrs null]
+                    #:edge-attributes [edge-attrs null]
+                    #:vertex-attributes [vertex-attrs null]
+                    #:output [port #f])
   (define (generate-graph)
     (parameterize ([current-output-port (or port (current-output-port))])
       (define weighted? (weighted-graph? g))
@@ -78,8 +78,8 @@
       (define (node-id-table-ref! node)
         (hash-ref! node-id-table node
                    (λ ()
-                     (begin0 (format "node~a" node-count)
-                       (set! node-count (add1 node-count))))))
+                      (begin0 (format "node~a" node-count)
+                              (set! node-count (add1 node-count))))))
       (printf "digraph G {\n")
       ;; (printf "label=\"Aikataulu\";\n")
       (printf "labelloc=\"t\";\n")
@@ -91,12 +91,12 @@
       ; Add vertices, color them using evenly spaced HSV colors if given colors
       (define color-count (and colors (add1 (apply max (hash-values colors)))))
       (for ([v (in-vertices g)])
-        (define attrs
-          (append (vertex-attrs-get-val vertex-attrs v)
-                  (color-attr colors color-count v)))
-        (printf "\t~a [~a];\n"
-                (id v #:default (node-id-table-ref! v))
-                (attrs->string attrs)))
+           (define attrs
+             (append (vertex-attrs-get-val vertex-attrs v)
+                     (color-attr colors color-count v)))
+           (printf "\t~a [~a];\n"
+                   (id v #:default (node-id-table-ref! v))
+                   (attrs->string attrs)))
 
       ;; Create grouped subgraphs for each semester.
       (define subs (build-list nsubs (lambda (x) (+ 1 x))))
@@ -113,8 +113,8 @@
            (printf "}}\n"))
 
       (for ((s subs))
-          (when (< s nsubs)
-              (printf "t~a:s -> h~a:n [style=invisible, arrowhead=none];\n" s (+ 1 s))))
+           (when (< s nsubs)
+             (printf "t~a:s -> h~a:n [style=invisible, arrowhead=none];\n" s (+ 1 s))))
 
       ; Write undirected edges as one subgraph
       (printf "  subgraph U {\n")
@@ -126,14 +126,14 @@
                                (has-edge? g (second e) (first e))
                                (equal? (edge-weight g (first e) (second e))
                                        (edge-weight g (second e) (first e)))))
-          (define attrs
-            (append (edge-attrs-get-val edge-attrs e)
-                    (weight-attr weighted? g e)))
-          (printf "    ~a:s -> ~a:n [~a];\n"
-                  (node-id-table-ref! (first e))
-                  (node-id-table-ref! (second e))
-                  (attrs->string attrs))
-          (set-add (set-add added e) (list (second e) (first e)))))
+                  (define attrs
+                    (append (edge-attrs-get-val edge-attrs e)
+                            (weight-attr weighted? g e)))
+                  (printf "    ~a:s -> ~a:n [~a];\n"
+                          (node-id-table-ref! (first e))
+                          (node-id-table-ref! (second e))
+                          (attrs->string attrs))
+                  (set-add (set-add added e) (list (second e) (first e)))))
       (printf "  }\n")
 
       ; Write directed edges as another subgraph
@@ -141,29 +141,29 @@
         (printf "  subgraph D {\n")
         (printf "    edge [color=\"#00000012\"];\n")
         (for ([e (in-edges g)] #:unless (set-member? undirected-edges e))
-          (define attrs
-            (append (edge-attrs-get-val edge-attrs e)
-                    (weight-attr weighted? g e)))
-          (printf "    ~a:s -> ~a:n [~a];\n"
-                  (second e)
-                  (first e)
-                  (attrs->string attrs)))
+             (define attrs
+               (append (edge-attrs-get-val edge-attrs e)
+                       (weight-attr weighted? g e)))
+             (printf "    ~a:s -> ~a:n [~a];\n"
+                     (second e)
+                     (first e)
+                     (attrs->string attrs)))
         (printf "  }\n"))
       (printf "}\n")))
 
   (if port
-      (generate-graph)
-      (with-output-to-string generate-graph)))
+    (generate-graph)
+    (with-output-to-string generate-graph)))
 
 
 (provide print-dot-graph)
 (define (print-dot-graph edges courses port)
   ;; Print each edge with label, width, and color
   (parameterize ([current-output-port
-                  (or (open-output-file port
-                                        #:exists
-                                        'replace)
-                      (current-output-port))])
+                   (or (open-output-file port
+                                         #:exists
+                                         'replace)
+                       (current-output-port))])
     (displayln "digraph distances {")
 
     (displayln "    node [shape=box style=filled fillcolor=lightblue];")

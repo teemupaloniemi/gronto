@@ -265,22 +265,26 @@
 (define (H graph threshold)
 
   ;; filter arrows that are below the threshold.
-  (let ((filtered-graph (filter (lambda (x) (< (course-pair-distance x)
-                                               threshold))
-                                graph)))
+  (define filtered-graph (filter (lambda (x) (< (course-pair-distance x)
+                                                threshold))
+                                 graph))
 
-    ;; Remove bidirectional arrows. "remove-bidirectional"-function returns
-    ;; the shortest arrow of the two and will result in duplicate arrows.
-    (remove-duplicates (map (lambda (x) (remove-bidirectional filtered-graph
-                                                              x))
-                            filtered-graph)
-                       (lambda (x y) (and
-                                       (equal? (course-pair-first x)
-                                               (course-pair-first y))
-                                       (equal? (course-pair-second x)
-                                               (course-pair-second y))
-                                       (= (course-pair-distance x)
-                                          (course-pair-distance y)))))))
+  (define filtered-non-reflexive-graph (filter (lambda (x) (not (equal? (course-pair-first x)
+                                                                        (course-pair-second x))))
+                                               filtered-graph))
+
+  ;; Remove bidirectional arrows. "remove-bidirectional"-function returns
+  ;; the shortest arrow of the two and will result in duplicate arrows.
+  (remove-duplicates (map (lambda (x) (remove-bidirectional filtered-non-reflexive-graph
+                                                            x))
+                          filtered-non-reflexive-graph)
+                     (lambda (x y) (and
+                                     (equal? (course-pair-first x)
+                                             (course-pair-first y))
+                                     (equal? (course-pair-second x)
+                                             (course-pair-second y))
+                                     (= (course-pair-distance x)
+                                        (course-pair-distance y))))))
 
 
 ;; get-prerequisites : CP* x S --> S*
@@ -343,7 +347,7 @@
                             filter-threshold))
 
   (when (equal? filtered-graph '())
-    (displayln "error: \"prerequisite-graph is empty, maybe check data or adjust threshold?\"")
+    (displayln "error: \"prerequisite-graph is empty\"")
     (exit 1)) ;; EXIT_FAILURE
 
   (when (not (equal? filtered-graph '()))
