@@ -342,18 +342,20 @@
   (define filtered-graph (H graph
                             filter-threshold))
 
-  ;; Enjoy visualization
-  (if (equal? filtered-graph
-              '())
+  (when (equal? filtered-graph '())
     (displayln "error: \"prerequisite-graph is empty, maybe check data or adjust threshold?\"")
+    (exit 1)) ;; EXIT_FAILURE
+
+  (when (not (equal? filtered-graph '()))
+    ;; Visualize
     (print-dot-graph filtered-graph
                      course-structs
-                     graph-file))
-
-  ;; Save results
-  (save-results output-file
-                filtered-graph
-                course-hashes
-                course-structs))
+                     graph-file)
+    ;; Save results
+    (save-results output-file
+                  filtered-graph
+                  course-hashes
+                  course-structs)
+    (exit 0))) ;; EXIT_SUCCESS
 
 (main (current-command-line-arguments))

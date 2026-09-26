@@ -157,21 +157,28 @@
                    courses))
 
   ;; If there are no prerequisite-cycles, try to schedule courses.
-  (if (not (dag? (unweighted-graph/adj adj)))
+  (when (not (dag? (unweighted-graph/adj adj)))
     (displayln "error: \"prerequisite cycles detected, check input or change the filter threshold for discarding arrows!\""
                (current-error-port))
+    (exit 1)) ;; EXIT_FAILURE
+
+  (when (dag? (unweighted-graph/adj adj))
     (let ((schedule (build-and-solve courses
                                      years
                                      sems
                                      min-cred
                                      max-cred)))
-      (if (equal? schedule '())
+      (when (equal? schedule '())
         (displayln "error: \"schedule is empty, maybe solver failed?\""
                    (current-error-port))
+        (exit 2)) ;; EXIT_FAILURE
+
+      (when (not (equal? schedule '()))
         (gen-dot adj
                  (* years sems)
                  schedule
                  courses
-                 outputport)))))
+                 outputport)
+        (exit 0))))) ;; EXIT_SUCCESS
 
 (main (current-command-line-arguments))
