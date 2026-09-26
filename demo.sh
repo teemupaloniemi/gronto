@@ -19,10 +19,10 @@ CORES=$(nproc)/2 make
 
 # Initial computation of prerequisite graph with large threshold
 # (practically this means no filtering).
-i=128
+i=32
 echo "filter threshold set to $i..."
 racket ./src/prerequisites.rkt data/input.json tmp/prerequisites.dot tmp/output.json $i
-racket ./src/scheduler.rkt tmp/output.json tmp/schedule.dot 3 4 0 20
+racket ./src/scheduler.rkt tmp/output.json tmp/schedule.dot 2 4 0 20
 e=$?
 
 if [ $e -ne 0 ]
@@ -43,7 +43,7 @@ then
         i=$((i*3))
       fi
     done
-    racket ./src/scheduler.rkt tmp/output.json tmp/schedule.dot 3 4 0 20
+    racket ./src/scheduler.rkt tmp/output.json tmp/schedule.dot 2 4 0 20
     e=$?
   done
 
@@ -52,14 +52,14 @@ then
   # Detailed linear search.
   echo "--- detailed search ---"
   a=$i
-  t=$((i/10))
+  t=$((i/20))
   e=0
   while [ $e -eq 0 ]
   do
     i=$((i+t))
     echo "increasing filter threshold to $i..."
     racket ./src/prerequisites.rkt data/input.json tmp/prerequisites.dot tmp/output.json $i
-    racket ./src/scheduler.rkt tmp/output.json tmp/schedule.dot 3 4 0 20
+    racket ./src/scheduler.rkt tmp/output.json tmp/schedule.dot 2 4 0 20
     e=$?
   done
   echo "in-valid schedule found"
@@ -67,7 +67,7 @@ then
 fi
 
 racket ./src/prerequisites.rkt data/input.json tmp/prerequisites.dot tmp/output.json $i
-racket ./src/scheduler.rkt tmp/output.json tmp/schedule.dot 3 4 0 20
+racket ./src/scheduler.rkt tmp/output.json tmp/schedule.dot 2 4 0 20
 
 # Visualize, if files have changed
 if [ "$prerequisites_sha256" != "$(sha256sum tmp/prerequisites.dot)" ]; then
