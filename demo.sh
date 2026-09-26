@@ -22,7 +22,7 @@ CORES=$(nproc)/2 make
 #   [out] "tmp/prerequisites.dot" result dot graph path
 #   [out] "tmp/output.json"       amended version of input courses
 #   [in]  "30"                    threshold for prerequisiteness (experimental)
-racket ./src/prerequisites.rkt data/input.json tmp/prerequisites.dot tmp/output.json 30
+racket ./src/prerequisites.rkt data/input.json tmp/prerequisites.dot tmp/output.json 200
 
 # Schedule the courses (if possible*)
 # Params:
