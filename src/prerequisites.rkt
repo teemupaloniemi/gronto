@@ -347,7 +347,7 @@
                             filter-threshold))
 
   (when (equal? filtered-graph '())
-    (displayln "error: \"prerequisite-graph is empty\"")
+    (displayln "error: \"prerequisite graph is empty\"")
     (exit 1)) ;; EXIT_FAILURE
 
   (when (not (equal? filtered-graph '()))
